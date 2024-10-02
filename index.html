@@ -4,10 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Перенаправление на snake.html</title>
+    <style>
+        .center-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .custom-button {
+            padding: 20px 40px; /* Это размер кнопки, можно изменять */
+            background-color: #4CAF50; /* Это цвет кнопки, легко меняется */
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .custom-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
+<h1> Discord: goosemma </h1>
 <body>
-    <button onclick="window.location.href='snake.html'">к змейке</button>
-    <h1>discord: goosemma<h1>
-    
+    <div class="center-button">
+        <button class="custom-button" onclick="window.location.href='snake.html'">к змейке</button>
+    </div>
+    <h1 style="text-align:center;">discord: goosemma</h1>
 </body>
 </html>
