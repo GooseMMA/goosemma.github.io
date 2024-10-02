@@ -60,7 +60,6 @@
     <h2>Score: <span id="score">0</span></h2>
     <canvas id="gameCanvas"></canvas>
 
-    <!-- Центрированное сообщение о проигрыше -->
     <div id="gameOverText">
         <h2>Game Over!</h2>
         <button onclick="restartGame()">Play Again</button>
@@ -86,40 +85,29 @@
         let gameSpeed = 200; // Скорость игры в миллисекундах
         let gameInterval; // Интервал для обновления игры
 
-        // Координаты для отслеживания свайпа
         let touchStartX = 0;
         let touchStartY = 0;
 
-        // Управление игрой: отслеживаем нажатия клавиш
         document.addEventListener('keydown', changeDirection);
 
-        // Предотвращаем стандартное поведение стрелок (прокрутка страницы)
         window.addEventListener("keydown", function(event) {
             if ([37, 38, 39, 40].includes(event.keyCode)) {
                 event.preventDefault();
             }
         }, false);
 
-        // Обработчик начала касания для свайпов
         canvas.addEventListener('touchstart', handleTouchStart, false);
-        // Обработчик завершения касания для свайпов
         canvas.addEventListener('touchend', handleTouchEnd, false);
 
-      // Функция для изменения размера canvas с возможностью задать ширину и высоту
-function resizeCanvas(customWidth, customHeight) {
-    // Если параметры не переданы, используем размеры экрана
-    let width = customWidth || Math.floor(window.innerWidth / gridSize) * gridSize;
-    let height = customHeight || Math.floor(window.innerHeight / gridSize) * gridSize;
+        // Автоматическое изменение размера поля под экран устройства
+        function resizeCanvas() {
+            let width = Math.floor(window.innerWidth / gridSize) * gridSize;
+            let height = Math.floor(window.innerHeight / gridSize) * gridSize;
+            canvas.width = width;
+            canvas.height = height;
+        }
 
-    canvas.width = Math.floor(width / gridSize) * gridSize;
-    canvas.height = Math.floor(height / gridSize) * gridSize;
-}
-
-// Вызываем функцию с кастомными значениями (например 800x600)
-resizeCanvas(800, 600);
-
-// Оставляем обработчик изменения размера экрана, если требуется
-window.addEventListener('resize', () => resizeCanvas(800, 600));
+        window.addEventListener('resize', resizeCanvas);
 
         // Функция для обновления положения змейки
         function update() {
@@ -127,7 +115,6 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
 
             changingDirection = false;
 
-            // Создаем новую голову змейки
             const head = { x: snake[0].x + dx, y: snake[0].y + dy };
             snake.unshift(head);
 
@@ -143,22 +130,22 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
             clearCanvas();
             drawFood();
             drawSnake();
-            // Проверка на окончание игры
+
             if (didGameEnd()) {
                 gameOver = true;
-                gameOverText.style.display = 'block'; // Показываем текст Game Over
-                clearInterval(gameInterval); // Остановка обновления игры
+                gameOverText.style.display = 'block'; 
+                clearInterval(gameInterval);
                 return;
             }
         }
 
-        // Функция для очистки канваса
+        // Очистка канваса
         function clearCanvas() {
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        // Функция для рисования змейки
+        // Рисование змейки
         function drawSnake() {
             ctx.fillStyle = 'green';
             snake.forEach(part => {
@@ -167,25 +154,24 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
             });
         }
 
-        // Функция для рисования еды
+        // Рисование еды
         function drawFood() {
             ctx.fillStyle = 'red';
             ctx.fillRect(food.x, food.y, gridSize, gridSize);
         }
 
-        // Функция для генерации еды
+        // Генерация новой еды
         function generateFood() {
             food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
             food.y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
 
-            // Убедимся, что еда не генерируется на змейке
             snake.forEach(part => {
                 const isOnSnake = part.x == food.x && part.y == food.y;
                 if (isOnSnake) generateFood();
             });
         }
 
-        // Функция для изменения направления движения змейки
+        // Изменение направления змейки
         function changeDirection(event) {
             const LEFT_KEY = 37;
             const RIGHT_KEY = 39;
@@ -222,7 +208,6 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
             }
         }
 
-        // Обработка свайпов для изменения направления
         function handleTouchStart(evt) {
             touchStartX = evt.changedTouches[0].clientX;
             touchStartY = evt.changedTouches[0].clientY;
@@ -239,24 +224,18 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
             const deltaY = endY - startY;
 
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                // Свайп по горизонтали
                 if (deltaX > 0 && dx === 0) {
-                    // Свайп вправо
                     dx = gridSize;
                     dy = 0;
                 } else if (deltaX < 0 && dx === 0) {
-                    // Свайп влево
                     dx = -gridSize;
                     dy = 0;
                 }
             } else {
-                // Свайп по вертикали
                 if (deltaY > 0 && dy === 0) {
-                    // Свайп вниз
                     dx = 0;
                     dy = gridSize;
                 } else if (deltaY < 0 && dy === 0) {
-                    // Свайп вверх
                     dx = 0;
                     dy = -gridSize;
                 }
@@ -283,7 +262,7 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
             return false;
         }
 
-        // Функция перезапуска игры
+        // Перезапуск игры
         function restartGame() {
             gameOver = false;
             snake = [
@@ -297,13 +276,14 @@ window.addEventListener('resize', () => resizeCanvas(800, 600));
             scoreElement.innerText = score;
             gameOverText.style.display = 'none';
             generateFood();
-            clearInterval(gameInterval); // Остановка предыдущего интервала
-            gameInterval = setInterval(update, gameSpeed); // Установка нового интервала
+            clearInterval(gameInterval);
+            gameInterval = setInterval(update, gameSpeed);
         }
 
         // Запуск игры
+        resizeCanvas();
         generateFood();
-        gameInterval = setInterval(update, gameSpeed); // Установка интервала
+        gameInterval = setInterval(update, gameSpeed);
     </script>
 </body>
 </html>
