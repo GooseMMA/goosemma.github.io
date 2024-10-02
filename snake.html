@@ -105,10 +105,21 @@
         // Обработчик завершения касания для свайпов
         canvas.addEventListener('touchend', handleTouchEnd, false);
 
-        // Адаптируем размер canvas под размер экрана
-       
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+      // Функция для изменения размера canvas с возможностью задать ширину и высоту
+function resizeCanvas(customWidth, customHeight) {
+    // Если параметры не переданы, используем размеры экрана
+    let width = customWidth || Math.floor(window.innerWidth / gridSize) * gridSize;
+    let height = customHeight || Math.floor(window.innerHeight / gridSize) * gridSize;
+
+    canvas.width = Math.floor(width / gridSize) * gridSize;
+    canvas.height = Math.floor(height / gridSize) * gridSize;
+}
+
+// Вызываем функцию с кастомными значениями (например 800x600)
+resizeCanvas(800, 600);
+
+// Оставляем обработчик изменения размера экрана, если требуется
+window.addEventListener('resize', () => resizeCanvas(800, 600));
 
         // Функция для обновления положения змейки
         function update() {
