@@ -106,11 +106,7 @@
         canvas.addEventListener('touchend', handleTouchEnd, false);
 
         // Адаптируем размер canvas под размер экрана
-        function resizeCanvas() {
-            canvas.width = Math.floor(window.innerWidth / gridSize) * gridSize;
-            canvas.height = Math.floor(window.innerHeight / gridSize) * gridSize;
-        }
-
+       
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
