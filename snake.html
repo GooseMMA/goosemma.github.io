@@ -99,15 +99,14 @@
         canvas.addEventListener('touchstart', handleTouchStart, false);
         canvas.addEventListener('touchend', handleTouchEnd, false);
 
-        // Автоматическое изменение размера поля под экран устройства
-        function resizeCanvas() {
-            let width = Math.floor(window.innerWidth / gridSize) * gridSize;
-            let height = Math.floor(window.innerHeight / gridSize) * gridSize;
+        // Устанавливаем статический размер поля (например, 800x600)
+        function setStaticCanvasSize(width, height) {
             canvas.width = width;
             canvas.height = height;
         }
 
-        window.addEventListener('resize', resizeCanvas);
+        // Вызываем функцию для задания размеров поля
+        setStaticCanvasSize(800, 600); // Здесь вы можете изменить размеры на нужные
 
         // Функция для обновления положения змейки
         function update() {
@@ -281,7 +280,6 @@
         }
 
         // Запуск игры
-        resizeCanvas();
         generateFood();
         gameInterval = setInterval(update, gameSpeed);
     </script>
