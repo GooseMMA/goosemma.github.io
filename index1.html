@@ -1,9 +1,13 @@
+Чтобы кнопка всегда оставалась на экране, даже когда вы прокручиваете страницу, и располагалась в левом верхнем углу, вам нужно использовать фиксированное позиционирование. Вот как это можно сделать:
+
+Пример для Домашнего чизкейка:
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чизкейк с малиной</title>
+    <title>Домашний чизкейк</title>
     <style>
         body, html {
             margin: 0;
@@ -78,7 +82,9 @@
         }
 
         .back-button {
-            margin-top: 20px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
             padding: 10px 20px;
             font-size: 1em;
             color: white;
@@ -86,7 +92,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-align: center;
+            z-index: 10;
         }
 
         .back-button:hover {
@@ -98,7 +104,7 @@
     <div class="background" id="background"></div>
 
     <div class="container">
-        <h5><strong>Чизкейк с малиной</strong></h5>
+        <h5><strong>Домашний чизкейк</strong></h5>
         <div class="ingredients">
             <strong>Нам понадобится:</strong><br><br>
             <strong>(Для теста)</strong><br>
@@ -107,19 +113,21 @@
             - яйца - 2 шт. <br>
             - мука - сколько возьмёт в себя тесто, у меня было около 400 гр <br><br>
             <strong>(Для заливки)</strong><br>
-            - малина - 100 гр <br>
+            - ягоды (у меня красная смородина и немного черноплодной рябины) - 100 гр <br>
             - яйца - 2 шт. <br>
             - сметана 15% - 400 грамм <br>
             - сахар - 150 гр <br>
             - мука - 50-60 гр <br>
         </div>
-        <button class="back-button" onclick="window.location.href='index.html'">Вернуться назад</button>
     </div>
+
+    <button class="back-button" onclick="window.location.href='index.html'">Вернуться назад</button>
 
     <script>
         const background = document.getElementById('background');
         const numDiamonds = 30;
 
+        // Создаем ромбы и добавляем их в фон
         for (let i = 0; i < numDiamonds; i++) {
             const diamond = document.createElement('div');
             diamond.classList.add('diamond', 'animate');
@@ -127,8 +135,9 @@
             diamond.style.top = `${Math.random() * 100}vh`;
             background.appendChild(diamond);
 
+            // Добавляем реакцию на нажатие
             diamond.addEventListener('click', () => {
-                diamond.style.backgroundColor = '#ffd700';
+                diamond.style.backgroundColor = '#ffd700'; // Золотистый цвет при клике
                 diamond.style.transform = 'rotate(45deg) scale(1.5)';
                 setTimeout(() => {
                     diamond.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
@@ -139,3 +148,12 @@
     </script>
 </body>
 </html>
+
+Объяснение:
+
+	•	Я добавил кнопку “Вернуться назад” с классом .back-button, которая фиксируется в левом верхнем углу экрана. Она будет всегда видна при прокрутке страницы.
+	•	Я использовал свойство CSS position: fixed, чтобы кнопка оставалась на месте даже при прокрутке.
+	•	Установил top: 20px и left: 20px, чтобы кнопка была в левом верхнем углу.
+	•	Кнопка будет оставаться поверх всех других элементов на странице благодаря z-index: 10.
+
+Теперь для других страниц с рецептами можно использовать аналогичный подход, просто добавив кнопку “Вернуться назад” на каждую страницу рецепта.
