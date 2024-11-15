@@ -30,6 +30,7 @@
             text-align: center;
             color: #333;
             margin-bottom: 20px;
+            font-size: 24px; /* Уменьшенный размер для телефона */
         }
 
         .step {
@@ -37,7 +38,7 @@
         }
 
         .step img {
-            max-width: 100%; /* Уменьшенные изображения */
+            max-width: 100%;
             height: auto;
             display: block;
             margin: 10px auto;
@@ -48,6 +49,7 @@
         .step p {
             margin: 0;
             text-align: justify;
+            font-size: 16px; /* Оптимальный размер для текста */
         }
 
         /* Кнопка "Вернуться назад" */
@@ -116,6 +118,27 @@
 
         .diamond.animate {
             animation: float 4s ease-in-out infinite;
+        }
+
+        /* Адаптивные стили для телефонов */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .step p {
+                font-size: 14px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
