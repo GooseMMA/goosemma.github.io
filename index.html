@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рецепт чизкейка</title>
+    <title>Рецепт домашнего чизкейка</title>
     <style>
         /* Основные стили страницы */
-        body, html {
+        body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #f5f5dc;
-            overflow-x: hidden; /* Убираем горизонтальную прокрутку */
+            line-height: 1.6;
         }
 
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
@@ -29,50 +29,22 @@
             margin-bottom: 20px;
         }
 
-        .ingredients, .steps {
-            margin-bottom: 20px;
-        }
-
-        .ingredients strong {
-            display: block;
-            margin: 10px 0 5px;
-            color: #333;
-        }
-
         .step {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-            align-items: center;
+            margin-bottom: 30px;
         }
 
         .step img {
             max-width: 100%;
             height: auto;
-            margin-top: 10px;
+            display: block;
+            margin: 10px 0;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .step-text {
-            max-width: 100%;
+        .step p {
+            margin: 0;
             text-align: justify;
-        }
-
-        /* Адаптивность */
-        @media (min-width: 768px) {
-            .step {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-
-            .step img {
-                max-width: 40%;
-            }
-
-            .step-text {
-                max-width: 55%;
-            }
         }
     </style>
 </head>
@@ -80,84 +52,58 @@
     <div class="container">
         <h1>Рецепт домашнего чизкейка</h1>
 
-        <div class="ingredients">
-            <strong>Ингредиенты для теста:</strong>
-            - масло сливочное: 180-200 г (1 пачка)<br>
-            - сахар-песок: 200 г<br>
-            - яйца: 2 шт.<br>
-            - мука: около 400 г (добавляйте постепенно)<br>
-
-            <strong>Ингредиенты для заливки:</strong>
-            - ягоды (красная смородина, черноплодная рябина): 100 г<br>
-            - яйца: 2 шт.<br>
-            - сметана 15%: 400 г<br>
-            - сахар: 150 г<br>
-            - мука: 50-60 г<br>
+        <div class="step">
+            <p><strong>1. Если ягоды у вас замороженные:</strong> Ставим их размораживаться в тёплую воду, пока делаем тесто.</p>
         </div>
 
-        <div class="steps">
-            <div class="step">
-                <div class="step-text">
-                    <strong>1. Подготовьте ягоды:</strong><br>
-                    Если ягоды замороженные, разморозьте их в тёплой воде, пока готовите тесто.
-                </div>
-            </div>
+        <div class="step">
+            <p><strong>2. Подготавливаем ингредиенты для теста:</strong> Смешиваем яйца, сахар и подтаявшее масло комнатной температуры, но не топлёное.</p>
+            <img src="1.jpg" alt="Ингредиенты для теста">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>2. Приготовьте основу:</strong><br>
-                    Смешайте яйца, сахар и подтаявшее масло комнатной температуры. Не растапливайте масло до жидкого состояния.
-                </div>
-                <img src="1.jpg" alt="Подготовка теста">
-            </div>
+        <div class="step">
+            <p><strong>3. Тщательно перемешиваем до консистенции:</strong> как на фото. Далее добавляем муку и замешиваем руками тесто.</p>
+            <img src="2.jpg" alt="Консистенция теста">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>3. Замешайте тесто:</strong><br>
-                    Тщательно перемешайте смесь до однородной консистенции. Затем добавляйте муку и замешивайте руками мягкое, эластичное тесто.
-                </div>
-                <img src="2.jpg" alt="Замес теста">
-            </div>
+        <div class="step">
+            <p><strong>4. Добавляем муку:</strong> до консистенции, как на фото. Тесто должно быть мягким, эластичным и не липнущим к рукам.</p>
+            <img src="3.jpg" alt="Готовое тесто">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>4. Распределите тесто:</strong><br>
-                    Выложите тесто в форму, распределяя пальцами так, чтобы оно доходило до краёв. Наколите вилкой и уберите в холодильник.
-                </div>
-                <img src="3.jpg" alt="Тесто в форме">
-            </div>
+        <div class="step">
+            <p><strong>5. Распределяем тесто по форме:</strong> Пальцами так, чтобы оно доходило до краёв бортиков, и накалываем его вилкой. Убираем форму с тестом в холодильник на время, пока будем делать заливку.</p>
+            <img src="4.jpg" alt="Тесто в форме">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>5. Подготовьте заливку:</strong><br>
-                    Смешайте сметану, яйца и сахар. Постепенно добавляйте муку через ситечко, чтобы избежать комков. Консистенция должна быть как у кефира.
-                </div>
-                <img src="4.jpg" alt="Заливка">
-            </div>
+        <div class="step">
+            <p><strong>6. Подготавливаем ингредиенты для заливки:</strong> Соединяем сметану, яйца и сахар.</p>
+            <img src="5.jpg" alt="Ингредиенты для заливки">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>6. Сборка пирога:</strong><br>
-                    Достаньте тесто из холодильника, равномерно распределите размороженные ягоды по форме, залейте заливкой и добавьте ещё немного ягод сверху.
-                </div>
-                <img src="5.jpg" alt="Сборка пирога">
-            </div>
+        <div class="step">
+            <p><strong>7. Муку добавляем постепенно:</strong> через ситечко. Заливка должна получиться консистенции кефира.</p>
+            <img src="6.jpg" alt="Готовая заливка">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>7. Выпечка:</strong><br>
-                    Выпекайте чизкейк в разогретой до 180°C духовке около 40 минут. Готовность определяется затвердеванием теста и подрумяниванием заливки.
-                </div>
-                <img src="6.jpg" alt="Готовый чизкейк">
-            </div>
+        <div class="step">
+            <p><strong>8. Достаем форму с тестом из холодильника:</strong> Хаотично выкладываем туда немного размороженных ягод.</p>
+            <img src="7.jpg" alt="Ягоды на тесте">
+        </div>
 
-            <div class="step">
-                <div class="step-text">
-                    <strong>8. Подача:</strong><br>
-                    Охладите готовый чизкейк перед подачей. Приятного аппетита!
-                </div>
-                <img src="7.jpg" alt="Подача чизкейка">
-            </div>
+        <div class="step">
+            <p><strong>9. Заливаем форму с тестом:</strong> и сверху кладём ещё ягод.</p>
+            <img src="8.jpg" alt="Ягоды и заливка">
+        </div>
+
+        <div class="step">
+            <p><strong>10. Ставим в заранее разогретую до 180°C духовку:</strong> Примерно на 40 минут. Ждём, пока тесто затвердеет до состояния печенья, а заливка подрумянится и станет плотной.</p>
+            <img src="9.jpg" alt="Чизкейк в духовке">
+        </div>
+
+        <div class="step">
+            <p><strong>11. Вынимаем готовый чизкейк:</strong> Охлаждаем его перед подачей. Приятного аппетита!</p>
+            <img src="10.jpg" alt="Готовый чизкейк">
         </div>
     </div>
 </body>
