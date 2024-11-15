@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чизкейк с черникой</title>
+    <style>
+        /* Основные стили страницы */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e8e4d9;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .step, .ingredients {
+            margin-bottom: 30px;
+        }
+
+        .step img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .step p, .ingredients p {
+            margin: 0;
+            text-align: justify;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            background-color: #d6d1c5;
+            color: #333;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #bfb8aa;
+            transform: scale(1.05);
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .diamond {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(180, 180, 180, 0.8);
+            transform: rotate(45deg);
+            pointer-events: auto;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .diamond:hover {
+            background-color: #ffd700;
+            transform: scale(1.5) rotate(45deg);
+        }
+
+        .diamond.clicked {
+            background-color: #ff4500;
+            transform: scale(2) rotate(45deg);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-10px) rotate(45deg);
+            }
+            50% {
+                transform: translateY(10px) rotate(45deg);
+            }
+        }
+
+        .diamond.animate {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .step p, .ingredients p {
+                font-size: 14px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="history.back()">← Вернуться назад</button>
+    <div class="background" id="background"></div>
+    <div class="container">
+        <h1>Чизкейк с черникой</h1>
+
+        <div class="ingredients">
+            <h2>Ингредиенты:</h2>
+            <p><strong>Для теста:</strong></p>
+            <p>- Печенье песочное — 300 г</p>
+            <p>- Масло сливочное — 150 г</p>
+            <p>- Сахар — 50 г</p>
+            <p><strong>Для начинки:</strong></p>
+            <p>- Сыр творожный — 600 г</p>
+            <p>- Сливки 30% — 250 мл</p>
+            <p>- Яйца — 3 шт.</p>
+            <p>- Сахар — 150 г</p>
+            <p>- Ванильный экстракт — 1 ч. ложка</p>
+            <p>- Черника свежая или замороженная — 200 г</p>
+        </div>
+
+        <div class="step">
+            <p><strong>1. Подготовка основы:</strong> Печенье измельчаем в крошку с помощью блендера. Добавляем растопленное сливочное масло и сахар, тщательно перемешиваем.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>2. Формируем корж:</strong> Выложите смесь в форму диаметром 24 см, застеленную пергаментной бумагой. Тщательно распределите смесь по дну и бортикам формы. Уберите в холодильник для застывания.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>3. Приготовление начинки:</strong> В миске соедините творожный сыр, яйца, сливки, сахар и ванильный экстракт. Хорошо перемешайте до однородной массы.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>4. Добавляем чернику:</strong> Добавьте чернику в начинку, аккуратно перемешайте ложкой, чтобы ягоды не помялись.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>5. Заливаем начинку:</strong> Вылейте начинку на подготовленную основу в форме.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>6. Выпекаем:</strong> Поместите форму в разогретую до 160°C духовку и выпекайте около 1 часа. Чизкейк должен быть упругим, но не твердым. Оставьте его остывать в духовке с приоткрытой дверцей, затем перенесите в холодильник на 3-4 часа.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>7. Подаем:</strong> После охлаждения украсьте чизкейк свежей черникой и подавайте к столу!</p>
+        </div>
+    </div>
+
+    <script>
+        const background = document.getElementById('background');
+        const numDiamonds = 60;
+
+        for (let i = 0; i < numDiamonds; i++) {
+            const diamond = document.createElement('div');
+            diamond.classList.add('diamond', 'animate');
+            diamond.style.left = `${Math.random() * 100}vw`;
+            diamond.style.top = `${Math.random() * 200}vh`;
+            background.appendChild(diamond);
+
+            diamond.addEventListener('click', () => {
+                diamond.classList.add('clicked');
+                setTimeout(() => diamond.classList.remove('clicked'), 500);
+            });
+        }
+    </script>
+</body>
+</html>
