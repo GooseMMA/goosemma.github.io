@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рецептики</title>
-    
+    <title>Рецепт чизкейка</title>
     <style>
         /* Основные стили страницы */
         body, html {
@@ -12,121 +11,155 @@
             padding: 0;
             height: 100%;
             font-family: Arial, sans-serif;
-            background-color: #f5f5dc; /* Бежевый фон */
+            background-color: #f5f5dc;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             padding: 20px;
             background-color: #fff;
-            border: 1px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: left;
-            position: relative;
-            z-index: 1; /* Поверх анимации */
         }
 
-        h5 {
-            font-size: 1.5em;
-            color: #333;
-            margin: 0 0 10px;
+        h1 {
             text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
 
-        .ingredients {
-            font-size: 1em;
-            line-height: 1.6;
-            color: #555;
+        .ingredients, .steps {
+            margin-bottom: 20px;
         }
 
         .ingredients strong {
-            font-size: 1.1em;
+            display: block;
+            margin: 10px 0 5px;
             color: #333;
         }
 
-        /* Фон с анимированными ромбами */
-        .background {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: 0; /* Под рецептом */
+        .step {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            align-items: center;
         }
 
-        .diamond {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            transform: rotate(45deg);
-            transition: transform 0.2s, background-color 0.2s;
-            pointer-events: none;
+        .step img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(-10px) rotate(45deg);
+        .step-text {
+            max-width: 100%;
+            text-align: justify;
+        }
+
+        @media (min-width: 768px) {
+            .step {
+                flex-direction: row;
+                justify-content: space-between;
             }
-            50% {
-                transform: translateY(10px) rotate(45deg);
-            }
-        }
 
-        .diamond.animate {
-            animation: float 3s ease-in-out infinite;
+            .step img {
+                max-width: 40%;
+            }
+
+            .step-text {
+                max-width: 55%;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="background" id="background"></div>
-
     <div class="container">
-        <h5><strong>Домашний чизкейк</strong></h5>
+        <h1>Рецепт домашнего чизкейка</h1>
+
         <div class="ingredients">
-            <strong>Нам понадобится:</strong><br><br>
-            <strong>(Для теста)</strong><br>
-            - масло сливочное - 180-200 гр (1 пачка) <br>
-            - сахар-песок - 200 гр <br>
-            - яйца - 2 шт. <br>
-            - мука - сколько возьмёт в себя тесто, у меня было около 400 гр <br><br>
-            
-            <strong>(Для заливки)</strong><br>
-            - ягоды (у меня красная смородина и немного черноплодной рябины) - 100 гр <br>
-            - яйца - 2 шт. <br>
-            - сметана 15% - 400 грамм <br>
-            - сахар - 150 гр <br>
-            - мука - 50-60 гр <br>
+            <strong>Ингредиенты для теста:</strong>
+            - масло сливочное: 180-200 г (1 пачка)<br>
+            - сахар-песок: 200 г<br>
+            - яйца: 2 шт.<br>
+            - мука: около 400 г (добавляйте постепенно)<br>
+
+            <strong>Ингредиенты для заливки:</strong>
+            - ягоды (красная смородина, черноплодная рябина): 100 г<br>
+            - яйца: 2 шт.<br>
+            - сметана 15%: 400 г<br>
+            - сахар: 150 г<br>
+            - мука: 50-60 г<br>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-text">
+                    <strong>1. Подготовьте ягоды:</strong><br>
+                    Если ягоды замороженные, разморозьте их в тёплой воде, пока готовите тесто.
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>2. Приготовьте основу:</strong><br>
+                    Смешайте яйца, сахар и подтаявшее масло комнатной температуры. Не растапливайте масло до жидкого состояния.
+                </div>
+                <img src="path/to/image1.jpg" alt="Подготовка теста">
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>3. Замешайте тесто:</strong><br>
+                    Тщательно перемешайте смесь до однородной консистенции. Затем добавляйте муку и замешивайте руками мягкое, эластичное тесто.
+                </div>
+                <img src="path/to/image2.jpg" alt="Замес теста">
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>4. Распределите тесто:</strong><br>
+                    Выложите тесто в форму, распределяя пальцами так, чтобы оно доходило до краёв. Наколите вилкой и уберите в холодильник.
+                </div>
+                <img src="path/to/image3.jpg" alt="Тесто в форме">
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>5. Подготовьте заливку:</strong><br>
+                    Смешайте сметану, яйца и сахар. Постепенно добавляйте муку через ситечко, чтобы избежать комков. Консистенция должна быть как у кефира.
+                </div>
+                <img src="path/to/image4.jpg" alt="Заливка">
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>6. Сборка пирога:</strong><br>
+                    Достаньте тесто из холодильника, равномерно распределите размороженные ягоды по форме, залейте заливкой и добавьте ещё немного ягод сверху.
+                </div>
+                <img src="path/to/image5.jpg" alt="Сборка пирога">
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>7. Выпечка:</strong><br>
+                    Выпекайте чизкейк в разогретой до 180°C духовке около 40 минут. Готовность определяется затвердеванием теста и подрумяниванием заливки.
+                </div>
+                <img src="path/to/image6.jpg" alt="Готовый чизкейк">
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <strong>8. Подача:</strong><br>
+                    Охладите готовый чизкейк перед подачей. Приятного аппетита!
+                </div>
+                <img src="path/to/image7.jpg" alt="Подача чизкейка">
+            </div>
         </div>
     </div>
-
-    <script>
-        const background = document.getElementById('background');
-        const numDiamonds = 30;
-
-        // Создаем ромбы и добавляем их в фон
-        for (let i = 0; i < numDiamonds; i++) {
-            const diamond = document.createElement('div');
-            diamond.classList.add('diamond', 'animate');
-            diamond.style.left = `${Math.random() * 100}vw`;
-            diamond.style.top = `${Math.random() * 100}vh`;
-            background.appendChild(diamond);
-
-            // Добавляем реакцию на нажатие
-            diamond.addEventListener('click', () => {
-                diamond.style.backgroundColor = '#ffd700'; // Золотистый цвет при клике
-                diamond.style.transform = 'rotate(45deg) scale(1.5)';
-                setTimeout(() => {
-                    diamond.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                    diamond.style.transform = 'rotate(45deg) scale(1)';
-                }, 200);
-            });
-        }
-    </script>
- 
 </body>
 </html>
