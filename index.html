@@ -10,9 +10,8 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #f5f5dc;
+            background-color: #e8e4d9; /* Чуть более тёмный бежевый фон */
             line-height: 1.6;
-            cursor: none; /* Убираем стандартный курсор */
             overflow-x: hidden;
         }
 
@@ -68,13 +67,18 @@
             height: 20px;
             background-color: rgba(180, 180, 180, 0.8); /* Потемневшие ромбики */
             transform: rotate(45deg);
-            pointer-events: none;
+            pointer-events: auto; /* Ромбики теперь интерактивны */
             transition: transform 0.3s, background-color 0.3s;
         }
 
         .diamond:hover {
             background-color: #ffd700; /* Золотистый цвет при наведении */
             transform: scale(1.5) rotate(45deg);
+        }
+
+        .diamond.clicked {
+            background-color: #ff4500; /* Красноватый цвет при клике */
+            transform: scale(2) rotate(45deg);
         }
 
         /* Анимация плавного движения ромбиков */
@@ -89,19 +93,6 @@
 
         .diamond.animate {
             animation: float 4s ease-in-out infinite;
-        }
-
-        /* Стиль для кастомного курсора */
-        .custom-cursor {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background-color: #333;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000; /* Поверх всего */
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
         }
     </style>
 </head>
@@ -168,13 +159,10 @@
         </div>
     </div>
 
-    <!-- Элемент для кастомного курсора -->
-    <div class="custom-cursor" id="customCursor"></div>
-
     <script>
         // Добавляем ромбики на фон
         const background = document.getElementById('background');
-        const numDiamonds = 60; // Увеличено количество ромбиков
+        const numDiamonds = 60; // Количество ромбиков
 
         for (let i = 0; i < numDiamonds; i++) {
             const diamond = document.createElement('div');
@@ -182,15 +170,13 @@
             diamond.style.left = `${Math.random() * 100}vw`;
             diamond.style.top = `${Math.random() * 200}vh`; // Высота 200% для больших страниц
             background.appendChild(diamond);
+
+            // Добавляем интерактивность: обработчик клика
+            diamond.addEventListener('click', () => {
+                diamond.classList.add('clicked');
+                setTimeout(() => diamond.classList.remove('clicked'), 500);
+            });
         }
-
-        // Кастомный курсор
-        const customCursor = document.getElementById('customCursor');
-
-        document.addEventListener('mousemove', (e) => {
-            customCursor.style.left = `${e.clientX}px`;
-            customCursor.style.top = `${e.clientY + window.scrollY}px`; // Учитываем прокрутку
-        });
     </script>
 </body>
 </html>
