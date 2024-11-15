@@ -84,7 +84,8 @@
             background-color: rgba(255, 255, 255, 0.8); /* Цвет ромбиков */
             transform: rotate(45deg);
             transition: transform 0.2s, background-color 0.2s;
-            pointer-events: none;
+            pointer-events: all; /* Убираем блокировку событий на ромбики */
+            user-select: none; /* Запрещаем выделение текста */
         }
 
         @keyframes float {
@@ -142,8 +143,21 @@
             diamond.style.top = `${Math.random() * 100}vh`;
             background.appendChild(diamond);
 
-            // Добавляем реакцию на нажатие
+            // Добавляем реакцию на клик
             diamond.addEventListener('click', () => {
+                // Изменяем цвет и увеличиваем размер при клике
+                diamond.style.backgroundColor = '#ffd700'; // Золотистый цвет при клике
+                diamond.style.transform = 'rotate(45deg) scale(1.5)';
+                
+                // Возвращаем ромбик в исходное состояние через 200 мс
+                setTimeout(() => {
+                    diamond.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    diamond.style.transform = 'rotate(45deg) scale(1)';
+                }, 200);
+            });
+
+            // Добавляем реакцию на сенсорное взаимодействие (для мобильных устройств)
+            diamond.addEventListener('touchstart', () => {
                 diamond.style.backgroundColor = '#ffd700'; // Золотистый цвет при клике
                 diamond.style.transform = 'rotate(45deg) scale(1.5)';
                 setTimeout(() => {
