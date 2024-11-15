@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карамельный Чизкейк</title>
+    <style>
+        /* Основные стили страницы */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e8e4d9;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .step, .ingredients {
+            margin-bottom: 30px;
+        }
+
+        .step img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .step p, .ingredients p {
+            margin: 0;
+            text-align: justify;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            background-color: #d6d1c5;
+            color: #333;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #bfb8aa;
+            transform: scale(1.05);
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .diamond {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(180, 180, 180, 0.8);
+            transform: rotate(45deg);
+            pointer-events: auto;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .diamond:hover {
+            background-color: #ffd700;
+            transform: scale(1.5) rotate(45deg);
+        }
+
+        .diamond.clicked {
+            background-color: #ff4500;
+            transform: scale(2) rotate(45deg);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-10px) rotate(45deg);
+            }
+            50% {
+                transform: translateY(10px) rotate(45deg);
+            }
+        }
+
+        .diamond.animate {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .step p, .ingredients p {
+                font-size: 14px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="history.back()">← Вернуться назад</button>
+    <div class="background" id="background"></div>
+    <div class="container">
+        <h1>Карамельный Чизкейк</h1>
+
+        <div class="ingredients">
+            <h2>Ингредиенты:</h2>
+            <p><strong>Для теста:</strong></p>
+            <p>- Печенье песочное — 400 г</p>
+            <p>- Масло сливочное — 150 г</p>
+            <p>- Какао-порошок — 20 г</p>
+            <p><strong>Для начинки:</strong></p>
+            <p>- Сыр творожный — 600 г</p>
+            <p>- Сливки 30% — 220 мл</p>
+            <p>- Яйца куриные — 3 шт.</p>
+            <p>- Сахар — 150 г</p>
+            <p>- Ванильная эссенция — 1 ч. ложка</p>
+            <p><strong>Для карамели:</strong></p>
+            <p>- Арахис жареный — 250 г</p>
+            <p>- Сахар — 150 г</p>
+            <p>- Сливки — 100 мл</p>
+            <p>- Масло сливочное — 70 г</p>
+            <p>- Соль — 0,5 ч. ложки</p>
+        </div>
+
+        <div class="step">
+            <p><strong>1. Подготовка основы:</strong> Печенье измельчаем блендером до состояния крошки. Добавляем какао, растопленное сливочное масло и хорошо перемешиваем.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>2. Формируем корж:</strong> Выкладываем тесто в форму для запекания (диаметром 24 см), застеленную пергаментной бумагой. Формируем дно и бортики. Убираем в холодильник.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>3. Готовим начинку:</strong> В творожный сыр добавляем яйца, сливки, сахар, ванильную эссенцию. Всё хорошо перемешиваем с помощью миксера до однородной массы.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>4. Заливаем начинку:</strong> Выложите приготовленную начинку на основу чизкейка в форме.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>5. Выпекаем чизкейк:</strong> Разогреваем духовку до 130°C и выпекаем чизкейк в течение 1,5 часов. Не повышаем температуру, чтобы не потрескался.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>6. Охлаждаем:</strong> Остужаем чизкейк прямо в духовке, затем убираем в холодильник на 30 минут.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>7. Готовим карамель:</strong> В сотейнике на минимальном огне растапливаем сахар, не перемешивая.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>8. Добавляем масло:</strong> В растопленный сахар добавляем сливочное масло и быстро перемешиваем.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>9. Добавляем сливки:</strong> Вливаем горячие сливки, добавляем соль, перемешиваем и снимаем с огня.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>10. Пробиваем карамель:</strong> Пробиваем сливочную карамель блендером до однородности.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>11. Добавляем арахис:</strong> Засыпаем в карамель жареный арахис, перемешиваем и даём остыть.</p>
+        </div>
+
+        <div class="step">
+            <p><strong>12. Украшаем:</strong> Карамельный арахис выкладываем поверх чизкейка, равномерно распределяем. Завариваем чай. Приятного аппетита!</p>
+        </div>
+    </div>
+
+    <script>
+        const background = document.getElementById('background');
+        const numDiamonds = 60;
+
+        for (let i = 0; i < numDiamonds; i++) {
+            const diamond = document.createElement('div');
+            diamond.classList.add('diamond', 'animate');
+            diamond.style.left = `${Math.random() * 100}vw`;
+            diamond.style.top = `${Math.random() * 200}vh`;
+            background.appendChild(diamond);
+
+            diamond.addEventListener('click', () => {
+                diamond.classList.add('clicked');
+                setTimeout(() => diamond.classList.remove('clicked'), 500);
+            });
+        }
+    </script>
+</body>
+</html>
