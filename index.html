@@ -12,6 +12,7 @@
             font-family: Arial, sans-serif;
             background-color: #f5f5dc;
             line-height: 1.6;
+            cursor: none; /* Убираем стандартный курсор */
         }
 
         .container {
@@ -21,6 +22,8 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1; /* Поверх ромбиков */
         }
 
         h1 {
@@ -34,10 +37,10 @@
         }
 
         .step img {
-            max-width: 100%;
+            max-width: 80%; /* Уменьшаем размер изображений */
             height: auto;
             display: block;
-            margin: 10px 0;
+            margin: 10px auto;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -46,9 +49,60 @@
             margin: 0;
             text-align: justify;
         }
+
+        /* Стиль для фона с ромбами */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0; /* Под рецептом */
+        }
+
+        .diamond {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(200, 200, 200, 0.8); /* Ромбики потемнее, чем фон */
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+
+        /* Анимация плавного движения ромбиков */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-10px) rotate(45deg);
+            }
+            50% {
+                transform: translateY(10px) rotate(45deg);
+            }
+        }
+
+        .diamond.animate {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Стиль для кастомного курсора */
+        .custom-cursor {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background-color: #333;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000; /* Поверх всего */
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
     </style>
 </head>
 <body>
+    <!-- Фон с ромбами -->
+    <div class="background" id="background"></div>
+
+    <!-- Контейнер с рецептом -->
     <div class="container">
         <h1>Рецепт домашнего чизкейка</h1>
 
@@ -106,5 +160,30 @@
             <img src="10.jpg" alt="Готовый чизкейк">
         </div>
     </div>
+
+    <!-- Элемент для кастомного курсора -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <script>
+        // Добавляем ромбики на фон
+        const background = document.getElementById('background');
+        const numDiamonds = 30;
+
+        for (let i = 0; i < numDiamonds; i++) {
+            const diamond = document.createElement('div');
+            diamond.classList.add('diamond', 'animate');
+            diamond.style.left = `${Math.random() * 100}vw`;
+            diamond.style.top = `${Math.random() * 100}vh`;
+            background.appendChild(diamond);
+        }
+
+        // Кастомный курсор
+        const customCursor = document.getElementById('customCursor');
+
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.pageX}px`;
+            customCursor.style.top = `${e.pageY}px`;
+        });
+    </script>
 </body>
 </html>
