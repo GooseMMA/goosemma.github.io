@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #e8e4d9; /* Чуть более тёмный бежевый фон */
+            background-color: #e8e4d9;
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -23,18 +23,26 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
-            z-index: 1; /* Поверх ромбиков */
+            z-index: 1;
         }
 
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
-            font-size: 24px; /* Уменьшенный размер для телефона */
+            font-size: 24px;
         }
 
-        .step {
+        .ingredients, .step {
             margin-bottom: 30px;
+        }
+
+        .ingredients ul {
+            padding-left: 20px;
+        }
+
+        .ingredients ul li {
+            margin-bottom: 10px;
         }
 
         .step img {
@@ -49,16 +57,15 @@
         .step p {
             margin: 0;
             text-align: justify;
-            font-size: 16px; /* Оптимальный размер для текста */
+            font-size: 16px;
         }
 
-        /* Кнопка "Вернуться назад" */
         .back-button {
             position: fixed;
             top: 10px;
             left: 10px;
             padding: 10px 15px;
-            background-color: #d6d1c5; /* Чуть темнее фона страницы */
+            background-color: #d6d1c5;
             color: #333;
             text-decoration: none;
             font-size: 14px;
@@ -66,16 +73,15 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            z-index: 10; /* Поверх всего остального */
+            z-index: 10;
             transition: background-color 0.3s, transform 0.3s;
         }
 
         .back-button:hover {
-            background-color: #bfb8aa; /* Ещё более тёмный оттенок */
-            transform: scale(1.05); /* Лёгкое увеличение */
+            background-color: #bfb8aa;
+            transform: scale(1.05);
         }
 
-        /* Стиль для фона с ромбами */
         .background {
             position: absolute;
             top: 0;
@@ -83,30 +89,29 @@
             width: 100%;
             height: 200%;
             overflow: hidden;
-            z-index: 0; /* Под рецептом */
+            z-index: 0;
         }
 
         .diamond {
             position: absolute;
             width: 20px;
             height: 20px;
-            background-color: rgba(180, 180, 180, 0.8); /* Потемневшие ромбики */
+            background-color: rgba(180, 180, 180, 0.8);
             transform: rotate(45deg);
-            pointer-events: auto; /* Ромбики теперь интерактивны */
+            pointer-events: auto;
             transition: transform 0.3s, background-color 0.3s;
         }
 
         .diamond:hover {
-            background-color: #ffd700; /* Золотистый цвет при наведении */
+            background-color: #ffd700;
             transform: scale(1.5) rotate(45deg);
         }
 
         .diamond.clicked {
-            background-color: #ff4500; /* Красноватый цвет при клике */
+            background-color: #ff4500;
             transform: scale(2) rotate(45deg);
         }
 
-        /* Анимация плавного движения ромбиков */
         @keyframes float {
             0%, 100% {
                 transform: translateY(-10px) rotate(45deg);
@@ -120,7 +125,6 @@
             animation: float 4s ease-in-out infinite;
         }
 
-        /* Адаптивные стили для телефонов */
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -143,15 +147,31 @@
     </style>
 </head>
 <body>
-    <!-- Кнопка "Вернуться назад" -->
     <button class="back-button" onclick="history.back()">← Вернуться назад</button>
 
-    <!-- Фон с ромбами -->
     <div class="background" id="background"></div>
 
-    <!-- Контейнер с рецептом -->
     <div class="container">
         <h1>Рецепт домашнего чизкейка</h1>
+
+        <div class="ingredients">
+            <h2>Ингредиенты</h2>
+            <p><strong>Для теста:</strong></p>
+            <ul>
+                <li>Масло сливочное – 180-200 гр (1 пачка)</li>
+                <li>Сахар-песок – 200 гр</li>
+                <li>Яйца – 2 шт.</li>
+                <li>Мука – около 400 гр (сколько возьмёт тесто)</li>
+            </ul>
+            <p><strong>Для заливки:</strong></p>
+            <ul>
+                <li>Ягоды (красная смородина и немного черноплодной рябины) – 100 гр</li>
+                <li>Яйца – 2 шт.</li>
+                <li>Сметана 15% – 400 гр</li>
+                <li>Сахар – 150 гр</li>
+                <li>Мука – 50-60 гр</li>
+            </ul>
+        </div>
 
         <div class="step">
             <p><strong>1. Если ягоды у вас замороженные:</strong> Ставим их размораживаться в тёплую воду, пока делаем тесто.</p>
@@ -209,18 +229,16 @@
     </div>
 
     <script>
-        // Добавляем ромбики на фон
         const background = document.getElementById('background');
-        const numDiamonds = 60; // Количество ромбиков
+        const numDiamonds = 60;
 
         for (let i = 0; i < numDiamonds; i++) {
             const diamond = document.createElement('div');
             diamond.classList.add('diamond', 'animate');
             diamond.style.left = `${Math.random() * 100}vw`;
-            diamond.style.top = `${Math.random() * 200}vh`; // Высота 200% для больших страниц
+            diamond.style.top = `${Math.random() * 200}vh`;
             background.appendChild(diamond);
 
-            // Добавляем интерактивность: обработчик клика
             diamond.addEventListener('click', () => {
                 diamond.classList.add('clicked');
                 setTimeout(() => diamond.classList.remove('clicked'), 500);
