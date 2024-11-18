@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
     <style>
+        /* Основные стили */
         html, body {
             margin: 0;
             padding: 0;
@@ -17,19 +18,21 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #fafafa;
+            background: url('your-animation.gif') no-repeat center center fixed; /* Замените на вашу гифку */
+            background-size: cover;
             font-family: Arial, sans-serif;
             position: relative;
         }
 
         canvas {
-            background-color: #000;
+            background-color: #3e3e3e; /* Цвет по умолчанию */
             display: block;
             border: 2px solid #ccc;
         }
 
         h1, h2 {
-            color: #333;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
         }
 
         #gameOverText {
@@ -42,28 +45,33 @@
         }
 
         #gameOverText h2 {
-            margin: 0;
-            padding: 0;
             color: red;
         }
 
         #gameOverText button {
-            margin-top: 10px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
         }
 
-        #speedControl {
+        #controls {
             margin-top: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        #speedControl label {
+        #controls label {
             font-size: 14px;
             margin-bottom: 5px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+        }
+
+        #controls input, #controls select {
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -72,9 +80,18 @@
     <h2>Score: <span id="score">0</span></h2>
     <canvas id="gameCanvas"></canvas>
 
-    <div id="speedControl">
+    <div id="controls">
         <label for="speedSlider">Game Speed (ms): <span id="speedValue">200</span></label>
         <input type="range" id="speedSlider" min="100" max="250" step="10" value="200">
+
+        <label for="colorPicker">Select Field Color:</label>
+        <select id="colorPicker">
+            <option value="#3e3e3e">Gray</option>
+            <option value="#2e8b57">Green</option>
+            <option value="#1e90ff">Blue</option>
+            <option value="#ffa500">Orange</option>
+            <option value="#8a2be2">Purple</option>
+        </select>
     </div>
 
     <div id="gameOverText">
@@ -83,12 +100,14 @@
     </div>
 
     <script>
+        // Переменные
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
         const gameOverText = document.getElementById('gameOverText');
         const speedSlider = document.getElementById('speedSlider');
         const speedValue = document.getElementById('speedValue');
+        const colorPicker = document.getElementById('colorPicker');
 
         let gridSize = 20; 
         let snake = [
@@ -105,32 +124,14 @@
         let gameSpeed = 200;
         let gameInterval;
 
-        let touchStartX = 0;
-        let touchStartY = 0;
+        // Настройка холста
+        canvas.width = 300;
+        canvas.height = 500;
 
-        document.addEventListener('keydown', changeDirection);
-
-        window.addEventListener("keydown", function(event) {
-            if ([37, 38, 39, 40].includes(event.keyCode)) {
-                event.preventDefault();
-            }
-        }, false);
-
-        canvas.addEventListener('touchstart', handleTouchStart, false);
-        canvas.addEventListener('touchend', handleTouchEnd, false);
-
-        function setStaticCanvasSize(width, height) {
-            canvas.width = width;
-            canvas.height = height;
-        }
-
-        setStaticCanvasSize(300, 500);
-
+        // Обновление игры
         function update() {
             if (gameOver) return;
-
             changingDirection = false;
-
             const head = { x: snake[0].x + dx, y: snake[0].y + dy };
             snake.unshift(head);
 
@@ -154,11 +155,13 @@
             }
         }
 
+        // Очистка холста
         function clearCanvas() {
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = canvas.style.backgroundColor || "#3e3e3e";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
+        // Рисуем змею
         function drawSnake() {
             ctx.fillStyle = 'green';
             snake.forEach(part => {
@@ -167,91 +170,19 @@
             });
         }
 
+        // Рисуем еду
         function drawFood() {
             ctx.fillStyle = 'red';
             ctx.fillRect(food.x, food.y, gridSize, gridSize);
         }
 
+        // Генерация еды
         function generateFood() {
             food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
             food.y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
-
-            snake.forEach(part => {
-                const isOnSnake = part.x == food.x && part.y == food.y;
-                if (isOnSnake) generateFood();
-            });
         }
 
-        function changeDirection(event) {
-            const LEFT_KEY = 37;
-            const RIGHT_KEY = 39;
-            const UP_KEY = 38;
-            const DOWN_KEY = 40;
-
-            if (changingDirection || gameOver) return;
-            changingDirection = true;
-
-            const keyPressed = event.keyCode;
-            const goingUp = dy === -gridSize;
-            const goingDown = dy === gridSize;
-            const goingRight = dx === gridSize;
-            const goingLeft = dx === -gridSize;
-
-            if (keyPressed === LEFT_KEY && !goingRight) {
-                dx = -gridSize;
-                dy = 0;
-            }
-
-            if (keyPressed === UP_KEY && !goingDown) {
-                dx = 0;
-                dy = -gridSize;
-            }
-
-            if (keyPressed === RIGHT_KEY && !goingLeft) {
-                dx = gridSize;
-                dy = 0;
-            }
-
-            if (keyPressed === DOWN_KEY && !goingUp) {
-                dx = 0;
-                dy = gridSize;
-            }
-        }
-
-        function handleTouchStart(evt) {
-            touchStartX = evt.changedTouches[0].clientX;
-            touchStartY = evt.changedTouches[0].clientY;
-        }
-
-        function handleTouchEnd(evt) {
-            const touchEndX = evt.changedTouches[0].clientX;
-            const touchEndY = evt.changedTouches[0].clientY;
-            handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
-        }
-
-        function handleSwipe(startX, startY, endX, endY) {
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
-
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                if (deltaX > 0 && dx === 0) {
-                    dx = gridSize;
-                    dy = 0;
-                } else if (deltaX < 0 && dx === 0) {
-                    dx = -gridSize;
-                    dy = 0;
-                }
-            } else {
-                if (deltaY > 0 && dy === 0) {
-                    dx = 0;
-                    dy = gridSize;
-                } else if (deltaY < 0 && dy === 0) {
-                    dx = 0;
-                    dy = -gridSize;
-                }
-            }
-        }
-
+        // Проверка конца игры
         function didGameEnd() {
             const hitLeftWall = snake[0].x < 0;
             const hitRightWall = snake[0].x >= canvas.width;
@@ -270,6 +201,7 @@
             return false;
         }
 
+        // Перезапуск игры
         function restartGame() {
             gameOver = false;
             snake = [
@@ -287,7 +219,7 @@
             gameInterval = setInterval(update, gameSpeed);
         }
 
-        // Обновляем скорость игры при изменении ползунка
+        // Обновление скорости игры
         speedSlider.addEventListener('input', function() {
             gameSpeed = parseInt(this.value);
             speedValue.innerText = gameSpeed;
@@ -295,6 +227,12 @@
             gameInterval = setInterval(update, gameSpeed);
         });
 
+        // Изменение цвета поля
+        colorPicker.addEventListener('change', function() {
+            canvas.style.backgroundColor = this.value;
+        });
+
+        // Начало игры
         generateFood();
         gameInterval = setInterval(update, gameSpeed);
     </script>
