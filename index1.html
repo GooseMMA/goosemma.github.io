@@ -1,249 +1,172 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рецепт домашнего чизкейка</title>
-    <style>
-        /* Основные стили страницы */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #e8e4d9;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .ingredients, .step {
-            margin-bottom: 30px;
-        }
-
-        .ingredients ul {
-            padding-left: 20px;
-        }
-
-        .ingredients ul li {
-            margin-bottom: 10px;
-        }
-
-        .step img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .step p {
-            margin: 0;
-            text-align: justify;
-            font-size: 16px;
-        }
-
-        .back-button {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            padding: 10px 15px;
-            background-color: #d6d1c5;
-            color: #333;
-            text-decoration: none;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            z-index: 10;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .back-button:hover {
-            background-color: #bfb8aa;
-            transform: scale(1.05);
-        }
-
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 200%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .diamond {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: rgba(180, 180, 180, 0.8);
-            transform: rotate(45deg);
-            pointer-events: auto;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .diamond:hover {
-            background-color: #ffd700;
-            transform: scale(1.5) rotate(45deg);
-        }
-
-        .diamond.clicked {
-            background-color: #ff4500;
-            transform: scale(2) rotate(45deg);
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(-10px) rotate(45deg);
-            }
-            50% {
-                transform: translateY(10px) rotate(45deg);
-            }
-        }
-
-        .diamond.animate {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            .step p {
-                font-size: 14px;
-            }
-
-            .back-button {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бильярд</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #2f2f2f;
+    }
+    canvas {
+      border: 5px solid #1a1a1a;
+      background-color: #4e8b3f;
+    }
+  </style>
 </head>
 <body>
-    <button class="back-button" onclick="history.back()">← Вернуться назад</button>
 
-    <div class="background" id="background"></div>
+<canvas id="billiards"></canvas>
 
-    <div class="container">
-        <h1>Рецепт домашнего чизкейка</h1>
+<script>
+// Настройки холста и игры
+const canvas = document.getElementById('billiards');
+const ctx = canvas.getContext('2d');
 
-        <div class="ingredients">
-            <h2>Ингредиенты</h2>
-            <p><strong>Для теста:</strong></p>
-            <ul>
-                <li>Масло сливочное – 180-200 гр (1 пачка)</li>
-                <li>Сахар-песок – 200 гр</li>
-                <li>Яйца – 2 шт.</li>
-                <li>Мука – около 400 гр (сколько возьмёт тесто)</li>
-            </ul>
-            <p><strong>Для заливки:</strong></p>
-            <ul>
-                <li>Ягоды (красная смородина и немного черноплодной рябины) – 100 гр</li>
-                <li>Яйца – 2 шт.</li>
-                <li>Сметана 15% – 400 гр</li>
-                <li>Сахар – 150 гр</li>
-                <li>Мука – 50-60 гр</li>
-            </ul>
-        </div>
+// Получаем размер экрана
+const tableWidth = window.innerWidth * 0.9;  // 90% ширины экрана
+const tableHeight = window.innerHeight * 0.8;  // 80% высоты экрана
 
-        <div class="step">
-            <p><strong>1. Если ягоды у вас замороженные:</strong> Ставим их размораживаться в тёплую воду, пока делаем тесто.</p>
-        </div>
+canvas.width = tableWidth;
+canvas.height = tableHeight;
 
-        <div class="step">
-            <p><strong>2. Подготавливаем ингредиенты для теста:</strong> Смешиваем яйца, сахар и подтаявшее масло комнатной температуры, но не топлёное.</p>
-            <img src="1.jpg" alt="Ингредиенты для теста">
-        </div>
+// Константы для игры
+const ballRadius = 10;
+const friction = 0.99;
+const cushionBounce = 0.8; // Отражение от бортиков
 
-        <div class="step">
-            <p><strong>3. Тщательно перемешиваем до консистенции:</strong> как на фото. Далее добавляем муку и замешиваем руками тесто.</p>
-            <img src="2.jpg" alt="Консистенция теста">
-        </div>
+// Мячи на столе
+let balls = [
+  { x: tableWidth / 4, y: tableHeight / 2, dx: 0, dy: 0, color: "white", moving: false }
+];
 
-        <div class="step">
-            <p><strong>4. Добавляем муку:</strong> до консистенции, как на фото. Тесто должно быть мягким, эластичным и не липнущим к рукам.</p>
-            <img src="3.jpg" alt="Готовое тесто">
-        </div>
+// Для отрисовки траектории удара
+let isAiming = false;
+let aimLine = { x1: tableWidth / 4, y1: tableHeight / 2, x2: tableWidth / 4, y2: tableHeight / 2 };
 
-        <div class="step">
-            <p><strong>5. Распределяем тесто по форме:</strong> Пальцами так, чтобы оно доходило до краёв бортиков, и накалываем его вилкой. Убираем форму с тестом в холодильник на время, пока будем делать заливку.</p>
-            <img src="4.jpg" alt="Тесто в форме">
-        </div>
+function drawTable() {
+  ctx.fillStyle = '#4e8b3f';
+  ctx.fillRect(0, 0, tableWidth, tableHeight);
 
-        <div class="step">
-            <p><strong>6. Подготавливаем ингредиенты для заливки:</strong> Соединяем сметану, яйца и сахар.</p>
-            <img src="5.jpg" alt="Ингредиенты для заливки">
-        </div>
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 10;
+  ctx.strokeRect(0, 0, tableWidth, tableHeight);
+}
 
-        <div class="step">
-            <p><strong>7. Муку добавляем постепенно:</strong> через ситечко. Заливка должна получиться консистенции кефира.</p>
-            <img src="6.jpg" alt="Готовая заливка">
-        </div>
+function drawBall(ball) {
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
+  ctx.fillStyle = ball.color;
+  ctx.fill();
+  ctx.strokeStyle = 'black';
+  ctx.stroke();
+}
 
-        <div class="step">
-            <p><strong>8. Достаем форму с тестом из холодильника:</strong> Хаотично выкладываем туда немного размороженных ягод.</p>
-            <img src="7.jpg" alt="Ягоды на тесте">
-        </div>
+function drawCueLine() {
+  if (isAiming) {
+    ctx.beginPath();
+    ctx.moveTo(aimLine.x1, aimLine.y1);
+    ctx.lineTo(aimLine.x2, aimLine.y2);
+    ctx.strokeStyle = 'yellow';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
 
-        <div class="step">
-            <p><strong>9. Заливаем форму с тестом:</strong> и сверху кладём ещё ягод.</p>
-            <img src="8.jpg" alt="Ягоды и заливка">
-        </div>
+function updateBall(ball) {
+  ball.x += ball.dx;
+  ball.y += ball.dy;
 
-        <div class="step">
-            <p><strong>10. Ставим в заранее разогретую до 180°C духовку:</strong> Примерно на 40 минут. Ждём, пока тесто затвердеет до состояния печенья, а заливка подрумянится и станет плотной.</p>
-            <img src="9.jpg" alt="Чизкейк в духовке">
-        </div>
+  // Отражение от стенок
+  if (ball.x - ballRadius < 0 || ball.x + ballRadius > tableWidth) {
+    ball.dx = -ball.dx * cushionBounce;
+  }
+  if (ball.y - ballRadius < 0 || ball.y + ballRadius > tableHeight) {
+    ball.dy = -ball.dy * cushionBounce;
+  }
 
-        <div class="step">
-            <p><strong>11. Вынимаем готовый чизкейк:</strong> Охлаждаем его перед подачей. Приятного аппетита!</p>
-            <img src="10.jpg" alt="Готовый чизкейк">
-        </div>
-    </div>
+  // Трение
+  if (Math.abs(ball.dx) < 0.1) ball.dx = 0;
+  if (Math.abs(ball.dy) < 0.1) ball.dy = 0;
 
-    <script>
-        const background = document.getElementById('background');
-        const numDiamonds = 60;
+  ball.dx *= friction;
+  ball.dy *= friction;
+}
 
-        for (let i = 0; i < numDiamonds; i++) {
-            const diamond = document.createElement('div');
-            diamond.classList.add('diamond', 'animate');
-            diamond.style.left = `${Math.random() * 100}vw`;
-            diamond.style.top = `${Math.random() * 200}vh`;
-            background.appendChild(diamond);
+function update() {
+  // Обновляем все мячи
+  balls.forEach(ball => {
+    if (ball.moving) {
+      updateBall(ball);
+    }
+  });
 
-            diamond.addEventListener('click', () => {
-                diamond.classList.add('clicked');
-                setTimeout(() => diamond.classList.remove('clicked'), 500);
-            });
-        }
-    </script>
+  // Отрисовка
+  drawTable();
+  balls.forEach(ball => drawBall(ball));
+  drawCueLine();
+
+  requestAnimationFrame(update);
+}
+
+function shootBall() {
+  if (!balls[0].moving) {
+    balls[0].dx = (aimLine.x2 - aimLine.x1) / 10;
+    balls[0].dy = (aimLine.y2 - aimLine.y1) / 10;
+    balls[0].moving = true;
+  }
+}
+
+// Обработчик движения мыши на десктопе
+function handleMouseMove(event) {
+  const mouseX = event.offsetX;
+  const mouseY = event.offsetY;
+
+  if (mouseX >= 0 && mouseX <= tableWidth && mouseY >= 0 && mouseY <= tableHeight) {
+    isAiming = true;
+    aimLine.x2 = mouseX;
+    aimLine.y2 = mouseY;
+  }
+}
+
+// Обработчик сенсорного ввода на мобильных устройствах
+function handleTouchMove(event) {
+  const touch = event.touches[0];
+  const touchX = touch.clientX;
+  const touchY = touch.clientY;
+
+  if (touchX >= 0 && touchX <= tableWidth && touchY >= 0 && touchY <= tableHeight) {
+    isAiming = true;
+    aimLine.x2 = touchX;
+    aimLine.y2 = touchY;
+  }
+}
+
+function handleTouchStart(event) {
+  shootBall();
+}
+
+function handleClick(event) {
+  shootBall();
+}
+
+// Добавляем обработчики событий для мобильных и десктопных устройств
+if ('ontouchstart' in window) {
+  canvas.addEventListener('touchmove', handleTouchMove);
+  canvas.addEventListener('touchstart', handleTouchStart);
+} else {
+  canvas.addEventListener('mousemove', handleMouseMove);
+  canvas.addEventListener('click', handleClick);
+}
+
+update();
+</script>
+
 </body>
 </html>
