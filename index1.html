@@ -58,51 +58,54 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    .settings {
-      margin-top: 20px;
-      font-size: 18px;
+    /* Оформление окна с результатами */
+    .gameOverScreen {
+      display: none;
+      text-align: center;
       color: #fff;
     }
 
-    .settings label {
-      font-size: 20px;
+    .gameOverScreen h2 {
+      font-size: 40px;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
     }
 
-    .settings input {
-      margin-left: 10px;
-    }
-
-    .settings button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #27ae60;
-      border: none;
+    .gameOverScreen button {
+      font-size: 24px;
+      padding: 15px 30px;
+      margin: 10px;
+      background-color: #e74c3c;
+      color: #fff;
+      border: 2px solid #c0392b;
       border-radius: 5px;
-      color: #fff;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    .settings button:hover {
-      background-color: #2ecc71;
+    .gameOverScreen button:hover {
+      background-color: #c0392b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
+
   </style>
 </head>
 <body>
 
 <canvas id="gameCanvas" width="320" height="480"></canvas>
 
+<!-- Главное меню -->
 <div class="menu" id="menu">
   <h1>Flappy Bird</h1>
   <button id="startBtn">Начать Игру</button>
-  <button id="settingsBtn">Настройки</button>
+</div>
 
-  <div class="settings" id="settings" style="display: none;">
-    <h2>Настройки</h2>
-    <label for="sound">Звук: </label>
-    <input type="checkbox" id="sound" checked>
-    <button id="backBtn">Назад</button>
-  </div>
+<!-- Окно с результатами -->
+<div class="gameOverScreen" id="gameOverScreen">
+  <h2>Ваши очки: <span id="scoreDisplay">0</span></h2>
+  <button id="retryBtn">Начать заново</button>
+  <button id="exitBtn">Выйти в меню</button>
 </div>
 
 <audio id="jumpSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
@@ -114,11 +117,11 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const menu = document.getElementById('menu');
-const settingsMenu = document.getElementById('settings');
+const gameOverScreen = document.getElementById('gameOverScreen');
+const scoreDisplay = document.getElementById('scoreDisplay');
 const startBtn = document.getElementById('startBtn');
-const settingsBtn = document.getElementById('settingsBtn');
-const backBtn = document.getElementById('backBtn');
-const soundCheckbox = document.getElementById('sound');
+const retryBtn = document.getElementById('retryBtn');
+const exitBtn = document.getElementById('exitBtn');
 
 let soundEnabled = true; // По умолчанию звук включен
 let gameInterval;
@@ -253,8 +256,8 @@ function drawScore() {
 function gameOver() {
   clearInterval(gameInterval);
   stopBgMusic();
-  alert('Игра окончена! Ваши очки: ' + score);
-  resetGame();
+  scoreDisplay.textContent = score;
+  gameOverScreen.style.display = 'block';
 }
 
 function resetGame() {
@@ -264,6 +267,7 @@ function resetGame() {
   birdSpeed = 0;
   bird = new Bird();
   gameInterval = null;
+  gameOverScreen.style.display = 'none';
   menu.style.display = 'block';
 }
 
@@ -277,23 +281,8 @@ function startGame() {
 }
 
 startBtn.addEventListener('click', startGame);
-settingsBtn.addEventListener('click', () => {
-  menu.style.display = 'none';
-  settingsMenu.style.display = 'block';
-});
-backBtn.addEventListener('click', () => {
-  settingsMenu.style.display = 'none';
-  menu.style.display = 'block';
-});
-
-soundCheckbox.addEventListener('change', () => {
-  soundEnabled = soundCheckbox.checked;
-  if (!soundEnabled) {
-    stopBgMusic();
-  } else {
-    playBgMusic();
-  }
-});
+retryBtn.addEventListener('click', startGame);
+exitBtn.addEventListener('click', resetGame);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === ' ') {
