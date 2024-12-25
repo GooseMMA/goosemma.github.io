@@ -22,30 +22,69 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
+    /* Оформление меню */
     .menu {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .menu h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #f1c40f;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
     }
 
     .menu button {
-      font-size: 20px;
+      font-size: 24px;
       padding: 15px 30px;
       margin: 10px;
-      background-color: #fff;
-      border: 2px solid #000;
+      background-color: #f1c40f;
+      color: #fff;
+      border: 2px solid #f39c12;
       border-radius: 5px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     .menu button:hover {
-      background-color: #ddd;
+      background-color: #e67e22;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .settings {
       margin-top: 20px;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .settings label {
+      font-size: 20px;
+    }
+
+    .settings input {
+      margin-left: 10px;
+    }
+
+    .settings button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #27ae60;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .settings button:hover {
+      background-color: #2ecc71;
     }
   </style>
 </head>
@@ -88,8 +127,8 @@ let pipes = [];
 let pipeGap = 120;
 let birdY = canvas.height / 2;
 let birdSpeed = 0;
-let gravity = 0.6;
-let lift = -12;
+let gravity = 0.2; // Упростим гравитацию
+let lift = -5; // Упростим силу прыжка
 let score = 0;
 
 // Звуки
