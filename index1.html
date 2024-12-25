@@ -3,169 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Бильярд</title>
+  <title>Flappy Bird</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #70c5ce;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #2f2f2f;
+      overflow: hidden;
     }
+
     canvas {
-      border: 5px solid #1a1a1a;
-      background-color: #4e8b3f;
+      background: #70c5ce;
+      border: 2px solid #000;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .menu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .menu button {
+      font-size: 20px;
+      padding: 15px 30px;
+      margin: 10px;
+      background-color: #fff;
+      border: 2px solid #000;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .menu button:hover {
+      background-color: #ddd;
+    }
+
+    .settings {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-<canvas id="billiards"></canvas>
+<canvas id="gameCanvas" width="320" height="480"></canvas>
+
+<div class="menu" id="menu">
+  <h1>Flappy Bird</h1>
+  <button id="startBtn">Начать Игру</button>
+  <button id="settingsBtn">Настройки</button>
+
+  <div class="settings" id="settings" style="display: none;">
+    <h2>Настройки</h2>
+    <label for="sound">Звук: </label>
+    <input type="checkbox" id="sound" checked>
+    <button id="backBtn">Назад</button>
+  </div>
+</div>
+
+<audio id="jumpSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+<audio id="pointSound" src="https://www.soundjay.com/button/beep-03.wav"></audio>
+<audio id="bgMusic" loop="true" src="https://www.soundjay.com/button/button-17.mp3"></audio>
 
 <script>
-// Настройки холста и игры
-const canvas = document.getElementById('billiards');
+// Основные настройки
+const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const menu = document.getElementById('menu');
+const settingsMenu = document.getElementById('settings');
+const startBtn = document.getElementById('startBtn');
+const settingsBtn = document.getElementById('settingsBtn');
+const backBtn = document.getElementById('backBtn');
+const soundCheckbox = document.getElementById('sound');
 
-// Получаем размер экрана
-const tableWidth = window.innerWidth * 0.9;  // 90% ширины экрана
-const tableHeight = window.innerHeight * 0.8;  // 80% высоты экрана
+let soundEnabled = true; // По умолчанию звук включен
+let gameInterval;
+let bird;
+let pipes = [];
+let pipeGap = 120;
+let birdY = canvas.height / 2;
+let birdSpeed = 0;
+let gravity = 0.6;
+let lift = -12;
+let score = 0;
 
-canvas.width = tableWidth;
-canvas.height = tableHeight;
+// Звуки
+const jumpSound = document.getElementById('jumpSound');
+const pointSound = document.getElementById('pointSound');
+const bgMusic = document.getElementById('bgMusic');
 
-// Константы для игры
-const ballRadius = 10;
-const friction = 0.99;
-const cushionBounce = 0.8; // Отражение от бортиков
-
-// Мячи на столе
-let balls = [
-  { x: tableWidth / 4, y: tableHeight / 2, dx: 0, dy: 0, color: "white", moving: false }
-];
-
-// Для отрисовки траектории удара
-let isAiming = false;
-let aimLine = { x1: tableWidth / 4, y1: tableHeight / 2, x2: tableWidth / 4, y2: tableHeight / 2 };
-
-function drawTable() {
-  ctx.fillStyle = '#4e8b3f';
-  ctx.fillRect(0, 0, tableWidth, tableHeight);
-
-  ctx.strokeStyle = '#333';
-  ctx.lineWidth = 10;
-  ctx.strokeRect(0, 0, tableWidth, tableHeight);
+// Функции для звуков
+function playJumpSound() {
+  if (soundEnabled) jumpSound.play();
 }
 
-function drawBall(ball) {
+function playPointSound() {
+  if (soundEnabled) pointSound.play();
+}
+
+function playBgMusic() {
+  if (soundEnabled) bgMusic.play();
+}
+
+function stopBgMusic() {
+  bgMusic.pause();
+}
+
+function Bird() {
+  this.width = 30;
+  this.height = 30;
+  this.x = 50;
+  this.y = birdY;
+  this.color = '#FF0';
+}
+
+Bird.prototype.draw = function() {
   ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = ball.color;
+  ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+  ctx.fillStyle = this.color;
   ctx.fill();
-  ctx.strokeStyle = 'black';
   ctx.stroke();
-}
+};
 
-function drawCueLine() {
-  if (isAiming) {
-    ctx.beginPath();
-    ctx.moveTo(aimLine.x1, aimLine.y1);
-    ctx.lineTo(aimLine.x2, aimLine.y2);
-    ctx.strokeStyle = 'yellow';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
-}
+Bird.prototype.update = function() {
+  this.y += birdSpeed;
+  birdSpeed += gravity;
 
-function updateBall(ball) {
-  ball.x += ball.dx;
-  ball.y += ball.dy;
-
-  // Отражение от стенок
-  if (ball.x - ballRadius < 0 || ball.x + ballRadius > tableWidth) {
-    ball.dx = -ball.dx * cushionBounce;
-  }
-  if (ball.y - ballRadius < 0 || ball.y + ballRadius > tableHeight) {
-    ball.dy = -ball.dy * cushionBounce;
+  if (this.y + this.height / 2 >= canvas.height) {
+    this.y = canvas.height - this.height / 2;
+    birdSpeed = 0;
   }
 
-  // Трение
-  if (Math.abs(ball.dx) < 0.1) ball.dx = 0;
-  if (Math.abs(ball.dy) < 0.1) ball.dy = 0;
+  if (this.y - this.height / 2 <= 0) {
+    this.y = this.height / 2;
+    birdSpeed = 0;
+  }
 
-  ball.dx *= friction;
-  ball.dy *= friction;
+  this.draw();
+};
+
+Bird.prototype.flap = function() {
+  birdSpeed = lift;
+  playJumpSound();
+};
+
+function Pipe() {
+  this.width = 50;
+  this.height = Math.random() * (canvas.height - pipeGap);
+  this.x = canvas.width;
+  this.color = '#008000';
 }
+
+Pipe.prototype.draw = function() {
+  ctx.fillStyle = this.color;
+  ctx.fillRect(this.x, 0, this.width, this.height);
+  ctx.fillRect(this.x, this.height + pipeGap, this.width, canvas.height - this.height - pipeGap);
+};
+
+Pipe.prototype.update = function() {
+  this.x -= 2;
+
+  if (this.x + this.width < 0) {
+    pipes.shift();
+  }
+
+  this.draw();
+};
 
 function update() {
-  // Обновляем все мячи
-  balls.forEach(ball => {
-    if (ball.moving) {
-      updateBall(ball);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  bird.update();
+
+  if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
+    pipes.push(new Pipe());
+  }
+
+  pipes.forEach((pipe) => {
+    pipe.update();
+
+    if (pipe.x + pipe.width < bird.x && !pipe.passed) {
+      pipe.passed = true;
+      score++;
+      playPointSound();
+    }
+
+    if (
+      bird.x + bird.width / 2 > pipe.x &&
+      bird.x - bird.width / 2 < pipe.x + pipe.width &&
+      (bird.y - bird.height / 2 < pipe.height || bird.y + bird.height / 2 > pipe.height + pipeGap)
+    ) {
+      gameOver();
     }
   });
 
-  // Отрисовка
-  drawTable();
-  balls.forEach(ball => drawBall(ball));
-  drawCueLine();
-
-  requestAnimationFrame(update);
+  drawScore();
 }
 
-function shootBall() {
-  if (!balls[0].moving) {
-    balls[0].dx = (aimLine.x2 - aimLine.x1) / 10;
-    balls[0].dy = (aimLine.y2 - aimLine.y1) / 10;
-    balls[0].moving = true;
+function drawScore() {
+  ctx.font = '30px Arial';
+  ctx.fillStyle = '#000';
+  ctx.fillText(`Score: ${score}`, 10, 30);
+}
+
+function gameOver() {
+  clearInterval(gameInterval);
+  stopBgMusic();
+  alert('Игра окончена! Ваши очки: ' + score);
+  resetGame();
+}
+
+function resetGame() {
+  pipes = [];
+  score = 0;
+  birdY = canvas.height / 2;
+  birdSpeed = 0;
+  bird = new Bird();
+  gameInterval = null;
+  menu.style.display = 'block';
+}
+
+function startGame() {
+  bird = new Bird();
+  pipes = [];
+  score = 0;
+  gameInterval = setInterval(update, 1000 / 60);
+  playBgMusic();
+  menu.style.display = 'none';
+}
+
+startBtn.addEventListener('click', startGame);
+settingsBtn.addEventListener('click', () => {
+  menu.style.display = 'none';
+  settingsMenu.style.display = 'block';
+});
+backBtn.addEventListener('click', () => {
+  settingsMenu.style.display = 'none';
+  menu.style.display = 'block';
+});
+
+soundCheckbox.addEventListener('change', () => {
+  soundEnabled = soundCheckbox.checked;
+  if (!soundEnabled) {
+    stopBgMusic();
+  } else {
+    playBgMusic();
   }
-}
+});
 
-// Обработчик движения мыши на десктопе
-function handleMouseMove(event) {
-  const mouseX = event.offsetX;
-  const mouseY = event.offsetY;
-
-  if (mouseX >= 0 && mouseX <= tableWidth && mouseY >= 0 && mouseY <= tableHeight) {
-    isAiming = true;
-    aimLine.x2 = mouseX;
-    aimLine.y2 = mouseY;
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    bird.flap();
   }
-}
+});
 
-// Обработчик сенсорного ввода на мобильных устройствах
-function handleTouchMove(event) {
-  const touch = event.touches[0];
-  const touchX = touch.clientX;
-  const touchY = touch.clientY;
-
-  if (touchX >= 0 && touchX <= tableWidth && touchY >= 0 && touchY <= tableHeight) {
-    isAiming = true;
-    aimLine.x2 = touchX;
-    aimLine.y2 = touchY;
-  }
-}
-
-function handleTouchStart(event) {
-  shootBall();
-}
-
-function handleClick(event) {
-  shootBall();
-}
-
-// Добавляем обработчики событий для мобильных и десктопных устройств
-if ('ontouchstart' in window) {
-  canvas.addEventListener('touchmove', handleTouchMove);
-  canvas.addEventListener('touchstart', handleTouchStart);
-} else {
-  canvas.addEventListener('mousemove', handleMouseMove);
-  canvas.addEventListener('click', handleClick);
-}
-
-update();
+document.addEventListener('click', () => {
+  bird.flap();
+});
 </script>
 
 </body>
