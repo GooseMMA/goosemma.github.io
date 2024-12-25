@@ -7,6 +7,7 @@
   <style>
     body {
       margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
       background-color: #70c5ce;
       display: flex;
@@ -14,6 +15,7 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      flex-direction: column;
     }
 
     canvas {
@@ -34,14 +36,14 @@
     }
 
     .menu h1 {
-      font-size: 48px;
+      font-size: 24px;
       margin-bottom: 20px;
       color: #f1c40f;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
     }
 
     .menu button {
-      font-size: 24px;
+      font-size: 20px;
       padding: 15px 30px;
       margin: 10px;
       background-color: #f1c40f;
@@ -51,6 +53,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 60%;
     }
 
     .menu button:hover {
@@ -66,13 +69,13 @@
     }
 
     .gameOverScreen h2 {
-      font-size: 40px;
+      font-size: 30px;
       color: #fff;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
     }
 
     .gameOverScreen button {
-      font-size: 24px;
+      font-size: 20px;
       padding: 15px 30px;
       margin: 10px;
       background-color: #e74c3c;
@@ -82,6 +85,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 60%;
     }
 
     .gameOverScreen button:hover {
@@ -89,6 +93,27 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
+    /* Поддержка адаптивности */
+    @media (max-width: 480px) {
+      canvas {
+        width: 100%;
+        height: auto;
+      }
+      
+      .menu h1 {
+        font-size: 18px;
+      }
+      
+      .menu button, .gameOverScreen button {
+        font-size: 18px;
+        padding: 10px 20px;
+        width: 80%;
+      }
+
+      .gameOverScreen h2 {
+        font-size: 24px;
+      }
+    }
   </style>
 </head>
 <body>
