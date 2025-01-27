@@ -1,323 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flappy Bird</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #70c5ce;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      flex-direction: column;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            height: 100%;
+        }
 
-    canvas {
-      background: #70c5ce;
-      border: 2px solid #000;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh; /* Занимает весь экран */
+            color: white;
+            background-color: #003366; /* Темно-синий */
+            transition: background-position 0.5s ease;
+        }
 
-    /* Оформление меню */
-    .menu {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-    }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+        }
 
-    .menu h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #f1c40f;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
-    }
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 0;
+        }
 
-    .menu button {
-      font-size: 20px;
-      padding: 15px 30px;
-      margin: 10px;
-      background-color: #f1c40f;
-      color: #fff;
-      border: 2px solid #f39c12;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      width: 60%;
-    }
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 40px;
+            text-align: center;
+        }
 
-    .menu button:hover {
-      background-color: #e67e22;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
+        .products-container {
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+        }
 
-    /* Оформление окна с результатами */
-    .gameOverScreen {
-      display: none;
-      text-align: center;
-      color: #fff;
-    }
+        .product-row {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
 
-    .gameOverScreen h2 {
-      font-size: 30px;
-      color: #fff;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
-    }
+        .product {
+            min-width: 250px;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.5s ease;
+            position: relative;
+            text-align: center;
+            background-color: #e6f7ff; /* Светло-синий */
+        }
 
-    .gameOverScreen button {
-      font-size: 20px;
-      padding: 15px 30px;
-      margin: 10px;
-      background-color: #e74c3c;
-      color: #fff;
-      border: 2px solid #c0392b;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      width: 60%;
-    }
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
 
-    .gameOverScreen button:hover {
-      background-color: #c0392b;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
+        .product:hover {
+            background-color: #cce0ff; /* Еще светлее */
+        }
 
-    /* Поддержка адаптивности */
-    @media (max-width: 480px) {
-      canvas {
-        width: 100%;
-        height: auto;
-      }
-      
-      .menu h1 {
-        font-size: 18px;
-      }
-      
-      .menu button, .gameOverScreen button {
-        font-size: 18px;
-        padding: 10px 20px;
-        width: 80%;
-      }
+        .product-title {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
 
-      .gameOverScreen h2 {
-        font-size: 24px;
-      }
-    }
-  </style>
+        .product-price {
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .button {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: #004d99; /* Средне-синий */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            z-index: 10;
+            opacity: 0.8;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0066cc; /* Ярко-синий */
+            opacity: 1;
+        }
+
+        .button-left {
+            left: 10px;
+        }
+
+        .button-right {
+            right: 10px;
+        }
+
+        .footer {
+            background-color: #f4f4f4;
+            color: #333;
+            font-size: 0.9em; /* Уменьшено */
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Плавное изменение цвета фона */
+        body {
+            background: linear-gradient(to bottom, #003366, #004d99, #0066cc); /* Синие оттенки */
+            background-size: 100% 300%;
+            background-position: 0 0;
+            transition: background-position 0.5s ease;
+        }
+
+        .scrolling {
+            background-position: 0 -300%;
+        }
+    </style>
 </head>
 <body>
 
-<canvas id="gameCanvas" width="320" height="480"></canvas>
-
-<!-- Главное меню -->
-<div class="menu" id="menu">
-  <h1>Flappy Bird</h1>
-  <button id="startBtn">Начать Игру</button>
+<div class="header" id="welcomeSection">
+    <div>
+        <h1>Добро пожаловать в наш магазин!</h1>
+        <p>TODO: Описание того, что мы продаем</p>
+    </div>
 </div>
 
-<!-- Окно с результатами -->
-<div class="gameOverScreen" id="gameOverScreen">
-  <h2>Ваши очки: <span id="scoreDisplay">0</span></h2>
-  <button id="retryBtn">Начать заново</button>
-  <button id="exitBtn">Выйти в меню</button>
+<div class="section-title">Секция товаров 1</div>
+<div class="products-container" id="productsContainer1">
+    <button class="button button-left" onclick="scrollProducts('productsContainer1', -1)"><</button>
+    <button class="button button-right" onclick="scrollProducts('productsContainer1', 1)">></button>
+    <div class="product-row" id="productRow1">
+        <!-- Примеры товаров -->
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 1">
+            <div class="product-title">Товар 1</div>
+            <div class="product-price">$10.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 2">
+            <div class="product-title">Товар 2</div>
+            <div class="product-price">$15.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 3">
+            <div class="product-title">Товар 3</div>
+            <div class="product-price">$20.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 4">
+            <div class="product-title">Товар 4</div>
+            <div class="product-price">$25.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 5">
+            <div class="product-title">Товар 5</div>
+            <div class="product-price">$30.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 6">
+            <div class="product-title">Товар 6</div>
+            <div class="product-price">$35.00</div>
+        </div>
+    </div>
 </div>
 
-<audio id="jumpSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
-<audio id="pointSound" src="https://www.soundjay.com/button/beep-03.wav"></audio>
-<audio id="bgMusic" loop="true" src="https://www.soundjay.com/button/button-17.mp3"></audio>
+<div class="section-title">Секция товаров 2</div>
+<div class="products-container" id="productsContainer2">
+    <button class="button button-left" onclick="scrollProducts('productsContainer2', -1)"><</button>
+    <button class="button button-right" onclick="scrollProducts('productsContainer2', 1)">></button>
+    <div class="product-row" id="productRow2">
+        <!-- Примеры товаров -->
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 7">
+            <div class="product-title">Товар 7</div>
+            <div class="product-price">$40.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 8">
+            <div class="product-title">Товар 8</div>
+            <div class="product-price">$45.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 9">
+            <div class="product-title">Товар 9</div>
+            <div class="product-price">$50.00</div>
+        </div>
+        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+            <img src="https://via.placeholder.com/250" alt="Product 10">
+            <div class="product-title">Товар 10</div>
+            <div class="product-price">$55.00</div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Аннотация: Здесь можно добавить логотип вашей фирмы, правила пользования и контактные данные.</p>
+    <p>Логотип компании | Правила пользования | Контактные данные</p>
+</div>
 
 <script>
-// Основные настройки
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const menu = document.getElementById('menu');
-const gameOverScreen = document.getElementById('gameOverScreen');
-const scoreDisplay = document.getElementById('scoreDisplay');
-const startBtn = document.getElementById('startBtn');
-const retryBtn = document.getElementById('retryBtn');
-const exitBtn = document.getElementById('exitBtn');
+    let currentScrollPosition = {};
+    
+    // Функция для изменения фона при скролле
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY;
+        if (scrollPosition > 100) {
+            document.body.classList.add('scrolling');
+        } else {
+            document.body.classList.remove('scrolling');
+        }
+    });
 
-let soundEnabled = true; // По умолчанию звук включен
-let gameInterval;
-let bird;
-let pipes = [];
-let pipeGap = 120;
-let birdY = canvas.height / 2;
-let birdSpeed = 0;
-let gravity = 0.2; // Упростим гравитацию
-let lift = -5; // Упростим силу прыжка
-let score = 0;
-
-// Звуки
-const jumpSound = document.getElementById('jumpSound');
-const pointSound = document.getElementById('pointSound');
-const bgMusic = document.getElementById('bgMusic');
-
-// Функции для звуков
-function playJumpSound() {
-  if (soundEnabled) jumpSound.play();
-}
-
-function playPointSound() {
-  if (soundEnabled) pointSound.play();
-}
-
-function playBgMusic() {
-  if (soundEnabled) bgMusic.play();
-}
-
-function stopBgMusic() {
-  bgMusic.pause();
-}
-
-function Bird() {
-  this.width = 30;
-  this.height = 30;
-  this.x = 50;
-  this.y = birdY;
-  this.color = '#FF0';
-}
-
-Bird.prototype.draw = function() {
-  ctx.beginPath();
-  ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
-  ctx.fillStyle = this.color;
-  ctx.fill();
-  ctx.stroke();
-};
-
-Bird.prototype.update = function() {
-  this.y += birdSpeed;
-  birdSpeed += gravity;
-
-  if (this.y + this.height / 2 >= canvas.height) {
-    this.y = canvas.height - this.height / 2;
-    birdSpeed = 0;
-  }
-
-  if (this.y - this.height / 2 <= 0) {
-    this.y = this.height / 2;
-    birdSpeed = 0;
-  }
-
-  this.draw();
-};
-
-Bird.prototype.flap = function() {
-  birdSpeed = lift;
-  playJumpSound();
-};
-
-function Pipe() {
-  this.width = 50;
-  this.height = Math.random() * (canvas.height - pipeGap);
-  this.x = canvas.width;
-  this.color = '#008000';
-}
-
-Pipe.prototype.draw = function() {
-  ctx.fillStyle = this.color;
-  ctx.fillRect(this.x, 0, this.width, this.height);
-  ctx.fillRect(this.x, this.height + pipeGap, this.width, canvas.height - this.height - pipeGap);
-};
-
-Pipe.prototype.update = function() {
-  this.x -= 2;
-
-  if (this.x + this.width < 0) {
-    pipes.shift();
-  }
-
-  this.draw();
-};
-
-function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  bird.update();
-
-  if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
-    pipes.push(new Pipe());
-  }
-
-  pipes.forEach((pipe) => {
-    pipe.update();
-
-    if (pipe.x + pipe.width < bird.x && !pipe.passed) {
-      pipe.passed = true;
-      score++;
-      playPointSound();
+    // Функция для эффекта ховера
+    function hoverEffect(element) {
+        element.style.backgroundColor = '#cce0ff'; /* Еще светлее */
     }
 
-    if (
-      bird.x + bird.width / 2 > pipe.x &&
-      bird.x - bird.width / 2 < pipe.x + pipe.width &&
-      (bird.y - bird.height / 2 < pipe.height || bird.y + bird.height / 2 > pipe.height + pipeGap)
-    ) {
-      gameOver();
+    function hoverEffectOut(element) {
+        element.style.backgroundColor = '#e6f7ff'; /* Светло-синий */
     }
-  });
 
-  drawScore();
-}
-
-function drawScore() {
-  ctx.font = '30px Arial';
-  ctx.fillStyle = '#000';
-  ctx.fillText(`Score: ${score}`, 10, 30);
-}
-
-function gameOver() {
-  clearInterval(gameInterval);
-  stopBgMusic();
-  scoreDisplay.textContent = score;
-  gameOverScreen.style.display = 'block';
-}
-
-function resetGame() {
-  pipes = [];
-  score = 0;
-  birdY = canvas.height / 2;
-  birdSpeed = 0;
-  bird = new Bird();
-  gameInterval = null;
-  gameOverScreen.style.display = 'none';
-  menu.style.display = 'block';
-}
-
-function startGame() {
-  bird = new Bird();
-  pipes = [];
-  score = 0;
-  gameInterval = setInterval(update, 1000 / 60);
-  playBgMusic();
-  menu.style.display = 'none';
-}
-
-startBtn.addEventListener('click', startGame);
-retryBtn.addEventListener('click', startGame);
-exitBtn.addEventListener('click', resetGame);
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === ' ') {
-    bird.flap();
-  }
-});
-
-document.addEventListener('click', () => {
-  bird.flap();
-});
+    // Функция для прокрутки товаров
+    function scrollProducts(containerId, direction) {
+        const productRow = document.getElementById(`productRow${containerId.charAt(containerId.length - 1)}`);
+        if (!currentScrollPosition[containerId]) {
+            currentScrollPosition[containerId] = 0;
+        }
+        currentScrollPosition[containerId] -= direction * 250; // Изменение направления прокрутки
+        if (currentScrollPosition[containerId] > 0) {
+            currentScrollPosition[containerId] = 0;
+        } else {
+            const maxScroll = productRow.scrollWidth - productRow.parentElement.clientWidth;
+            if (-currentScrollPosition[containerId] > maxScroll) {
+                currentScrollPosition[containerId] = -maxScroll;
+            }
+        }
+        productRow.style.transform = `translateX(${currentScrollPosition[containerId]}px)`;
+    }
 </script>
 
 </body>
