@@ -62,6 +62,7 @@
             position: relative;
             text-align: center;
             background-color: #e6f7ff; /* Светло-синий */
+            cursor: pointer;
         }
 
         .product img {
@@ -133,6 +134,65 @@
         .scrolling {
             background-position: 0 -300%;
         }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Кнопка Discord */
+        .discord-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #7289da;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+
+        .discord-button:hover {
+            background-color: #5a70c2;
+        }
     </style>
 </head>
 <body>
@@ -150,36 +210,46 @@
     <button class="button button-right" onclick="scrollProducts('productsContainer1', 1)">></button>
     <div class="product-row" id="productRow1">
         <!-- Примеры товаров -->
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 1" data-description="Описание товара 1" data-price="$10.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 1">
             <div class="product-title">Товар 1</div>
             <div class="product-price">$10.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 2" data-description="Описание товара 2" data-price="$15.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 2">
             <div class="product-title">Товар 2</div>
             <div class="product-price">$15.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 3" data-description="Описание товара 3" data-price="$20.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 3">
             <div class="product-title">Товар 3</div>
             <div class="product-price">$20.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 4" data-description="Описание товара 4" data-price="$25.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 4">
             <div class="product-title">Товар 4</div>
             <div class="product-price">$25.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 5" data-description="Описание товара 5" data-price="$30.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 5">
             <div class="product-title">Товар 5</div>
             <div class="product-price">$30.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 6" data-description="Описание товара 6" data-price="$35.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 6">
             <div class="product-title">Товар 6</div>
             <div class="product-price">$35.00</div>
         </div>
+    </div>
+</div>
+
+<!-- Модальное окно -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalProductName"></h2>
+        <p id="modalProductDescription"></p>
+        <p><strong>Цена:</strong> <span id="modalProductPrice"></span></p>
     </div>
 </div>
 
@@ -189,22 +259,22 @@
     <button class="button button-right" onclick="scrollProducts('productsContainer2', 1)">></button>
     <div class="product-row" id="productRow2">
         <!-- Примеры товаров -->
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 7" data-description="Описание товара 7" data-price="$40.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 7">
             <div class="product-title">Товар 7</div>
             <div class="product-price">$40.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 8" data-description="Описание товара 8" data-price="$45.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 8">
             <div class="product-title">Товар 8</div>
             <div class="product-price">$45.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 9" data-description="Описание товара 9" data-price="$50.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 9">
             <div class="product-title">Товар 9</div>
             <div class="product-price">$50.00</div>
         </div>
-        <div class="product" onmouseover="hoverEffect(this)" onmouseout="hoverEffectOut(this)">
+        <div class="product" data-name="Товар 10" data-description="Описание товара 10" data-price="$55.00" onclick="showProductInfo(this)">
             <img src="https://via.placeholder.com/250" alt="Product 10">
             <div class="product-title">Товар 10</div>
             <div class="product-price">$55.00</div>
@@ -217,6 +287,11 @@
     <p>Логотип компании | Правила пользования | Контактные данные</p>
 </div>
 
+<!-- Кнопка Discord -->
+<button class="discord-button" id="discordButton" onclick="window.open('https://discord.gg/YOUR_SERVER_LINK')">
+    <img src="https://via.placeholder.com/30x30/ffffff/000000?text=D" alt="Discord" style="width: 100%; height: 100%;">
+</button>
+
 <script>
     let currentScrollPosition = {};
     
@@ -225,8 +300,10 @@
         const scrollPosition = window.scrollY;
         if (scrollPosition > 100) {
             document.body.classList.add('scrolling');
+            document.getElementById('discordButton').style.display = 'block'; // Показываем кнопку Discord
         } else {
             document.body.classList.remove('scrolling');
+            document.getElementById('discordButton').style.display = 'none'; // Скрываем кнопку Discord
         }
     });
 
@@ -256,6 +333,46 @@
         }
         productRow.style.transform = `translateX(${currentScrollPosition[containerId]}px)`;
     }
+
+    // Функция для показа информации о товаре
+    function showProductInfo(productElement) {
+        const modal = document.getElementById("productModal");
+        const modalProductName = document.getElementById("modalProductName");
+        const modalProductDescription = document.getElementById("modalProductDescription");
+        const modalProductPrice = document.getElementById("modalProductPrice");
+
+        modalProductName.textContent = productElement.getAttribute('data-name');
+        modalProductDescription.textContent = productElement.getAttribute('data-description');
+        modalProductPrice.textContent = productElement.getAttribute('data-price');
+
+        modal.style.display = "block";
+    }
+
+    // Функция для закрытия модального окна
+    function closeModal() {
+        const modal = document.getElementById("productModal");
+        modal.style.display = "none";
+    }
+
+    // Добавление нового товара
+    function addProduct(containerId, imageSrc, productName, productDescription, productPrice) {
+        const productRow = document.getElementById(`productRow${containerId.charAt(containerId.length - 1)}`);
+        const newProduct = document.createElement('div');
+        newProduct.className = 'product';
+        newProduct.setAttribute('data-name', productName);
+        newProduct.setAttribute('data-description', productDescription);
+        newProduct.setAttribute('data-price', productPrice);
+        newProduct.innerHTML = `
+            <img src="${imageSrc}" alt="${productName}">
+            <div class="product-title">${productName}</div>
+            <div class="product-price">${productPrice}</div>
+        `;
+        newProduct.onclick = () => showProductInfo(newProduct);
+        productRow.appendChild(newProduct);
+    }
+
+    // Пример добавления нового товара через JS
+    // addProduct('productsContainer1', 'https://via.placeholder.com/250', 'Новый товар', 'Описание нового товара', '$25.00');
 </script>
 
 </body>
