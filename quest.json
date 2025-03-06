@@ -1,0 +1,112 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Создайте HTML-структуру для кнопки с текстом 'Нажми меня'.",
+      "solution": "<button>Нажми меня</button>",
+      "type": "html"
+    },
+    {
+      "id": 2,
+      "question": "Добавьте стиль для кнопки, чтобы она была красной с белым текстом. (Записать в 1 строку)",
+      "solution": "button { background-color: red; color: white; }",
+      "type": "css"
+    },
+    {
+      "id": 3,
+      "question": "Добавьте обработчик события на кнопку, чтобы при нажатии выводилось сообщение 'Кнопка нажата!'.",
+      "solution": "document.querySelector('button').addEventListener('click', () => alert('Кнопка нажата!'));",
+      "type": "javascript"
+    },
+    {
+      "id": 4,
+      "question": "Создайте HTML-структуру для абзаца с текстом 'Это простой абзац'.",
+      "solution": "<p>Это простой абзац</p>",
+      "type": "html"
+    },
+    {
+      "id": 5,
+      "question": "Добавьте стиль для абзаца, чтобы он был зеленым и использовал шрифт Arial.",
+      "solution": "p { color: green; font-family: Arial; }",
+      "type": "css"
+    },
+    {
+      "id": 6,
+      "question": "Создайте кнопку, которая при нажатии скрывает абзац.",
+      "solution": "document.querySelector('button').addEventListener('click', () => document.querySelector('p').style.display = 'none');",
+      "type": "javascript"
+    },
+    {
+      "id": 7,
+      "question": "Создайте HTML-структуру для заголовка первого уровня с текстом 'Супер заголовок'.",
+      "solution": "<h1>Супер заголовок</h1>",
+      "type": "html"
+    },
+    {
+      "id": 8,
+      "question": "Добавьте стиль для заголовка, чтобы он был синим и центрировался на странице.",
+      "solution": "h1 { color: blue; text-align: center; }",
+      "type": "css"
+    },
+    {
+      "id": 9,
+      "question": "Добавьте обработчик события на кнопку, который меняет текст заголовка на 'Заголовок изменён!'.",
+      "solution": "document.querySelector('button').addEventListener('click', () => document.querySelector('h1').innerText = 'Заголовок изменён!');",
+      "type": "javascript"
+    },
+    {
+      "id": 10,
+      "question": "Создайте HTML-структуру для списка с тремя элементами: 'Элемент 1', 'Элемент 2', 'Элемент 3'.",
+      "solution": "<ul><li>Элемент 1</li><li>Элемент 2</li><li>Элемент 3</li></ul>",
+      "type": "html"
+    },
+    {
+      "id": 11,
+      "question": "Добавьте стиль для списка, чтобы он был с отступом и имел маркеры в виде квадратов.",
+      "solution": "ul { padding-left: 20px; list-style-type: square; }",
+      "type": "css"
+    },
+    {
+      "id": 12,
+      "question": "Добавьте обработчик события на кнопку, который удаляет первый элемент списка при нажатии.",
+      "solution": "document.querySelector('button').addEventListener('click', () => document.querySelector('ul li').remove());",
+      "type": "javascript"
+    },
+    {
+      "id": 13,
+      "question": "Создайте HTML-структуру для текстового поля ввода с меткой 'Введите ваше имя'.",
+      "solution": "<label for='name'>Введите ваше имя:</label><input type='text' id='name' />",
+      "type": "html"
+    },
+    {
+      "id": 14,
+      "question": "Добавьте стиль для текстового поля, чтобы оно имело ширину 200 пикселей и имело рамку 1 пиксель.",
+      "solution": "input { width: 200px; border: 1px solid black; }",
+      "type": "css"
+    },
+    {
+      "id": 15,
+      "question": "Добавьте обработчик события на кнопку, который выводит введённое имя на экран в виде уведомления.",
+      "solution": "document.querySelector('button').addEventListener('click', () => alert(Вы ввели: ${document.getElementById('name').value}));",
+      "type": "javascript"
+    },
+    {
+      "id": 16,
+      "question": "Создайте HTML-структуру для формы с кнопкой отправки и текстовым полем.",
+      "solution": "<form><input type='text' /><button type='submit'>Отправить</button></form>",
+      "type": "html"
+    },
+    {
+      "id": 17,
+      "question": "Добавьте стиль для формы, чтобы она выравнивалась по центру страницы.",
+      "solution": "form { display: flex; flex-direction: column; align-items: center; margin: auto; }",
+      "type": "css"
+    },
+    {
+      "id": 18,
+      "question": "Добавьте обработчик события на форму, чтобы предотвратить её отправку и выводить сообщение 'Форма отправлена!'.",
+      "solution": "document.querySelector('form').addEventListener('submit', (event) => { event.preventDefault(); alert('Форма отправлена!'); });",
+      "type": "javascript"
+    }
+  ]
+}
