@@ -3,204 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чизкейк с черникой</title>
+    <title>Генератор анимации шариков</title>
     <style>
-        /* Основные стили страницы */
         body {
-            margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #e8e4d9;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .step, .ingredients {
-            margin-bottom: 30px;
-        }
-
-        .step img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .step p, .ingredients p {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
             margin: 0;
-            text-align: justify;
+            padding: 20px;
         }
-
-        .back-button {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            padding: 10px 15px;
-            background-color: #d6d1c5;
-            color: #333;
-            font-size: 14px;
+        #controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        #canvas {
+            border: 1px solid #ccc;
+            max-width: 100%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
             border: none;
             border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            z-index: 10;
-            transition: background-color 0.3s, transform 0.3s;
         }
-
-        .back-button:hover {
-            background-color: #bfb8aa;
-            transform: scale(1.05);
-        }
-
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 200%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .diamond {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: rgba(180, 180, 180, 0.8);
-            transform: rotate(45deg);
-            pointer-events: auto;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .diamond:hover {
-            background-color: #ffd700;
-            transform: scale(1.5) rotate(45deg);
-        }
-
-        .diamond.clicked {
-            background-color: #ff4500;
-            transform: scale(2) rotate(45deg);
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(-10px) rotate(45deg);
-            }
-            50% {
-                transform: translateY(10px) rotate(45deg);
-            }
-        }
-
-        .diamond.animate {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            .step p, .ingredients p {
-                font-size: 14px;
-            }
-
-            .back-button {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <button class="back-button" onclick="history.back()">← Вернуться назад</button>
-    <div class="background" id="background"></div>
-    <div class="container">
-        <h1>Чизкейк с черникой</h1>
-
-        <div class="ingredients">
-            <h2>Ингредиенты:</h2>
-            <p><strong>Для теста:</strong></p>
-            <p>- Печенье песочное — 300 г</p>
-            <p>- Масло сливочное — 150 г</p>
-            <p>- Сахар — 50 г</p>
-            <p><strong>Для начинки:</strong></p>
-            <p>- Сыр творожный — 600 г</p>
-            <p>- Сливки 30% — 250 мл</p>
-            <p>- Яйца — 3 шт.</p>
-            <p>- Сахар — 150 г</p>
-            <p>- Ванильный экстракт — 1 ч. ложка</p>
-            <p>- Черника свежая или замороженная — 200 г</p>
-        </div>
-
-        <div class="step">
-            <p><strong>1. Подготовка основы:</strong> Печенье измельчаем в крошку с помощью блендера. Добавляем растопленное сливочное масло и сахар, тщательно перемешиваем.</p>
-        </div>
-
-        <div class="step">
-            <p><strong>2. Формируем корж:</strong> Выложите смесь в форму диаметром 24 см, застеленную пергаментной бумагой. Тщательно распределите смесь по дну и бортикам формы. Уберите в холодильник для застывания.</p>
-        </div>
-
-        <div class="step">
-            <p><strong>3. Приготовление начинки:</strong> В миске соедините творожный сыр, яйца, сливки, сахар и ванильный экстракт. Хорошо перемешайте до однородной массы.</p>
-        </div>
-
-        <div class="step">
-            <p><strong>4. Добавляем чернику:</strong> Добавьте чернику в начинку, аккуратно перемешайте ложкой, чтобы ягоды не помялись.</p>
-        </div>
-
-        <div class="step">
-            <p><strong>5. Заливаем начинку:</strong> Вылейте начинку на подготовленную основу в форме.</p>
-        </div>
-
-        <div class="step">
-            <p><strong>6. Выпекаем:</strong> Поместите форму в разогретую до 160°C духовку и выпекайте около 1 часа. Чизкейк должен быть упругим, но не твердым. Оставьте его остывать в духовке с приоткрытой дверцей, затем перенесите в холодильник на 3-4 часа.</p>
-        </div>
-
-        <div class="step">
-            <p><strong>7. Подаем:</strong> После охлаждения украсьте чизкейк свежей черникой и подавайте к столу!</p>
-        </div>
+    <div id="controls">
+        <label>Цвет шарика: <input type="color" id="ballColor" value="#ff0000"></label>
+        <label>Действие: 
+            <select id="ballAction">
+                <option value="bounce">Отскакивать</option>
+                <option value="break">Разрушаться</option>
+            </select>
+        </label>
+        <label>Объект столкновения: 
+            <select id="collisionObject">
+                <option value="wall">Стена</option>
+                <option value="cube">Куб</option>
+            </select>
+        </label>
+        <button onclick="startAnimation()">Запустить</button>
+        <button onclick="downloadVideo()" id="downloadBtn" disabled>Скачать видео</button>
     </div>
+    <canvas id="canvas"></canvas>
 
+    <!-- Подключение библиотек -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ccapture.js/1.1.0/CCapture.all.min.js"></script>
     <script>
-        const background = document.getElementById('background');
-        const numDiamonds = 60;
+        // Настройка Matter.js
+        const Engine = Matter.Engine;
+        const World = Matter.World;
+        const Bodies = Matter.Bodies;
+        const engine = Engine.create();
+        const world = engine.world;
 
-        for (let i = 0; i < numDiamonds; i++) {
-            const diamond = document.createElement('div');
-            diamond.classList.add('diamond', 'animate');
-            diamond.style.left = `${Math.random() * 100}vw`;
-            diamond.style.top = `${Math.random() * 200}vh`;
-            background.appendChild(diamond);
+        // Настройка Canvas
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 800;
+        canvas.height = 600;
 
-            diamond.addEventListener('click', () => {
-                diamond.classList.add('clicked');
-                setTimeout(() => diamond.classList.remove('clicked'), 500);
+        // Переменные для анимации
+        let ball, collisionObj;
+        let particles = [];
+        let capturer = new CCapture({ format: 'webm', framerate: 30 });
+        let recording = false;
+        let frameCount = 0;
+        const maxFrames = 180; // 6 секунд при 30 fps
+
+        // Функция запуска анимации
+        function startAnimation() {
+            // Очистка мира
+            World.clear(world);
+            particles = [];
+            frameCount = 0;
+
+            // Параметры пользователя
+            const color = document.getElementById('ballColor').value;
+            const action = document.getElementById('ballAction').value;
+            const collision = document.getElementById('collisionObject').value;
+
+            // Создание шарика
+            ball = Bodies.circle(400, 50, 20, { 
+                restitution: action === 'bounce' ? 0.8 : 0, 
+                render: { fillStyle: color }
             });
+            World.add(world, ball);
+
+            // Создание объекта столкновения
+            if (collision === 'wall') {
+                collisionObj = Bodies.rectangle(400, 600, 810, 60, { isStatic: true });
+            } else if (collision === 'cube') {
+                collisionObj = Bodies.rectangle(400, 500, 100, 100, { isStatic: true });
+            }
+            World.add(world, collisionObj);
+
+            // Старт записи
+            capturer = new CCapture({ format: 'webm', framerate: 30 });
+            capturer.start();
+            recording = true;
+            document.getElementById('downloadBtn').disabled = true;
+
+            animate();
         }
+
+        // Создание частиц при разрушении
+        function createParticles(x, y, color) {
+            for (let i = 0; i < 10; i++) {
+                const particle = Bodies.circle(x, y, 5, {
+                    restitution: 0.5,
+                    friction: 0.1,
+                    render: { fillStyle: color },
+                    timeScale: 0.5
+                });
+                Matter.Body.setVelocity(particle, {
+                    x: (Math.random() - 0.5) * 10,
+                    y: (Math.random() - 0.5) * 10
+                });
+                particles.push(particle);
+                World.add(world, particle);
+            }
+        }
+
+        // Основной цикл анимации
+        function animate() {
+            Engine.update(engine);
+
+            // Очистка canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Отрисовка шарика
+            ctx.beginPath();
+            ctx.arc(ball.position.x, ball.position.y, 20, 0, Math.PI * 2);
+            ctx.fillStyle = ball.render.fillStyle;
+            ctx.fill();
+
+            // Отрисовка объекта столкновения
+            ctx.fillStyle = '#666';
+            ctx.fillRect(
+                collisionObj.position.x - collisionObj.bounds.max.x + collisionObj.position.x,
+                collisionObj.position.y - collisionObj.bounds.max.y + collisionObj.position.y,
+                collisionObj.bounds.max.x - collisionObj.bounds.min.x,
+                collisionObj.bounds.max.y - collisionObj.bounds.min.y
+            );
+
+            // Обработка столкновения
+            if (Matter.Bounds.overlaps(ball.bounds, collisionObj.bounds)) {
+                if (document.getElementById('ballAction').value === 'break' && particles.length === 0) {
+                    createParticles(ball.position.x, ball.position.y, ball.render.fillStyle);
+                    World.remove(world, ball);
+                }
+            }
+
+            // Отрисовка частиц
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.position.x, p.position.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = p.render.fillStyle;
+                ctx.fill();
+            });
+
+            // Запись кадров
+            if (recording) {
+                capturer.capture(canvas);
+                frameCount++;
+                if (frameCount >= maxFrames) {
+                    stopRecording();
+                    return;
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Остановка записи и активация скачивания
+        function stopRecording() {
+            recording = false;
+            capturer.stop();
+            capturer.save(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ball_animation.webm';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        // Функция скачивания видео
+        function downloadVideo() {
+            if (!recording) {
+                startAnimation(); // Перезапуск для скачивания
+            }
+        }
+
+        // Адаптивность canvas
+        function resizeCanvas() {
+            const maxWidth = window.innerWidth - 40;
+            const maxHeight = window.innerHeight - 200;
+            canvas.width = Math.min(800, maxWidth);
+            canvas.height = Math.min(600, maxHeight);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
     </script>
 </body>
 </html>
