@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -159,6 +120,7 @@
             border-radius: 8px;
             border: 2px solid #fff;
             transition: transform 0.3s;
+            cursor: pointer; /* Указывает, что изображение кликабельно */
         }
 
         .gallery img:hover {
@@ -171,6 +133,44 @@
             color: #fff;
             text-shadow: 1px 1px #000;
             font-family: 'Minecraft Rus', sans-serif;
+        }
+
+        /* Стили для увеличенного изображения */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9); /* Затемнённый фон */
+            justify-content: center;
+            align-items: center;
+            z-index: 200; /* Выше всех элементов */
+        }
+
+        .image-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .image-modal-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Сохраняет пропорции изображения */
+            border-radius: 8px;
+            border: 2px solid #fff;
+        }
+
+        .close-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+            cursor: pointer;
         }
 
         .join-button {
@@ -249,7 +249,7 @@
         }
 
         .scroll-top:hover {
-            background: rgba(255, ത2, 255, 0.4);
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .scroll-top::before {
@@ -360,6 +360,14 @@
             </div>
         </div>
 
+        <!-- Модальное окно для увеличенного изображения -->
+        <div class="image-modal" id="imageModal">
+            <div class="image-modal-content">
+                <span class="close-image" id="closeImage">&times;</span>
+                <img id="enlargedImage" src="" alt="Увеличенное изображение">
+            </div>
+        </div>
+
         <footer>
             <p>© 2025 Нартский Эпос Minecraft Сервер. Все права защищены.</p>
         </footer>
@@ -375,7 +383,7 @@
             });
         });
 
-        // Управление модальным окном
+        // Управление модальным окном для кнопки "Играть сейчас"
         const joinButton = document.getElementById('joinButton');
         const modal = document.getElementById('modal');
         const closeModal = document.getElementById('closeModal');
@@ -406,6 +414,29 @@
         const scrollTop = document.getElementById('scrollTop');
         scrollTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Управление увеличением изображений
+        const galleryImages = document.querySelectorAll('.gallery img');
+        const imageModal = document.getElementById('imageModal');
+        const enlargedImage = document.getElementById('enlargedImage');
+        const closeImage = document.getElementById('closeImage');
+
+        galleryImages.forEach(image => {
+            image.addEventListener('click', () => {
+                enlargedImage.src = image.src;
+                imageModal.style.display = 'flex';
+            });
+        });
+
+        closeImage.addEventListener('click', () => {
+            imageModal.style.display = 'none';
+        });
+
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
         });
     </script>
 </body>
