@@ -1,0 +1,412 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Нартский Эпос - Minecraft Сервер</title>
+    <link href="https://fonts.cdnfonts.com/css/minecraft-rus" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4?styles=16419" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Minecraft Rus', sans-serif; /* Русский шрифт Minecraft */
+        }
+
+        body {
+            background: #1a1a1a; /* Тёмный фон для контраста */
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .parallax {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: url('https://www.minecraft.net/content/dam/minecraftnet/franchise/component-library/parallaxC/scene_default/day/Focus_Cherry.png') repeat-y center top;
+            background-size: 100% auto;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.65); /* Тёмная накладка для читаемости */
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: #3c2f2f;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 4px solid #9b1b1b;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px #000;
+        }
+
+        nav {
+            margin: 10px 0;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+            font-family: 'Minecraft', sans-serif; /* Английский шрифт менее жирный */
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #9b1b1b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 120px; /* Отступ для фиксированного хедера */
+        }
+
+        section {
+            margin: 40px 0;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #9b1b1b;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            color: #9b1b1b;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px #000;
+            font-family: 'Minecraft Rus', sans-serif;
+        }
+
+        section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        section strong {
+            color: #ff5555; /* Яркий цвет для выделенных слов */
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            text-align: center;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            transition: transform 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+            font-family: 'Minecraft Rus', sans-serif;
+        }
+
+        .join-button {
+            display: inline-block;
+            background: #9b1b1b;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .join-button:hover {
+            background: #7a1515;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 102;
+        }
+
+        .modal-content {
+            background: #3c2f2f;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #9b1b1b;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            background: #9b1b1b;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Minecraft Rus', sans-serif;
+            font-size: 1rem;
+        }
+
+        .modal-content button:hover {
+            background: #7a1515;
+        }
+
+        .scroll-top {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            z-index: 101;
+        }
+
+        .scroll-top:hover {
+            background: rgba(255, ത2, 255, 0.4);
+        }
+
+        .scroll-top::before {
+            content: '↑';
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+        }
+
+        footer {
+            background: #3c2f2f;
+            padding: 20px;
+            text-align: center;
+            border-top: 4px solid #9b1b1b;
+            margin-top: 40px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.9rem;
+                margin: 0 10px;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            section p {
+                font-size: 1rem;
+            }
+
+            .container {
+                margin-top: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax"></div>
+    <div class="overlay">
+        <header>
+            <h1>Нартский Эпос - Minecraft Сервер</h1>
+            <nav>
+                <a href="#about">О сервере</a>
+                <a href="#features">Особенности</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#join">Присоединиться</a>
+            </nav>
+        </header>
+
+        <div class="scroll-top" id="scrollTop"></div>
+
+        <div class="container">
+            <section id="about">
+                <h2>О сервере</h2>
+                <p>Добро пожаловать на сервер "Нартский Эпос"! Погрузитесь в мир кавказских легенд, где вас ждут эпические приключения, вдохновлённые древними сказаниями нартов. Наш сервер сочетает уникальный сюжет, захватывающий паркур и увлекательные квесты в атмосфере Minecraft.</p>
+            </section>
+
+            <section id="features">
+                <h2>Особенности</h2>
+                <p>
+                    - <strong>Сюжетная линия</strong>: Пройдите путь нартского героя, сражаясь с мифическими существами и раскрывая тайны древних легенд.<br>
+                    - <strong>Паркур</strong>: Испытайте свои навыки на сложных трассах, вдохновлённых горными пейзажами Кавказа.<br>
+                    - <strong>Квесты</strong>: Участвуйте в заданиях, основанных на нартских сказаниях, с наградами и уникальными предметами.<br>
+                    - <strong>Дизайн</strong>: Мир сервера оформлен с использованием официальных текстур Minecraft, дополненных тематикой Нартского эпоса.
+                </p>
+            </section>
+
+            <section id="gallery">
+                <h2>Галерея</h2>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="https://www.minecraft.net/content/dam/games/minecraft/screenshots/1-21-tricky-trials-update.jpg" alt="Паркур-трасса">
+                        <div class="gallery-caption">Паркур</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://www.minecraft.net/content/dam/games/minecraft/screenshots/1-21-tricky-trials-update-2.jpg" alt="Мифический храм">
+                        <div class="gallery-caption">Храм</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://www.minecraft.net/content/dam/games/minecraft/screenshots/1-21-tricky-trials-3.jpg" alt="Квестовая деревня">
+                        <div class="gallery-caption">Деревня</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="join">
+                <h2>Присоединиться</h2>
+                <p>Готовы стать частью легенды? Сервер находится в стадии тестирования и скоро будет доступен!</p>
+                <p><strong>Статус</strong>: В разработке<br>
+                <strong>Версия</strong>: 1.20.1</p>
+                <a href="#" class="join-button" id="joinButton">Играть сейчас!</a>
+            </section>
+        </div>
+
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <p>Сервер сейчас недоступен</p>
+                <button id="closeModal">Закрыть</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 Нартский Эпос Minecraft Сервер. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Плавная прокрутка к секциям
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = document.querySelector(this.getAttribute('href'));
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Управление модальным окном
+        const joinButton = document.getElementById('joinButton');
+        const modal = document.getElementById('modal');
+        const closeModal = document.getElementById('closeModal');
+
+        joinButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Parallax-эффект для фона
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.pageYOffset;
+            const parallax = document.querySelector('.parallax');
+            parallax.style.transform = `translateY(${scrollPosition * 0.4}px)`; /* Медленный эффект */
+        });
+
+        // Прокрутка наверх
+        const scrollTop = document.getElementById('scrollTop');
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
