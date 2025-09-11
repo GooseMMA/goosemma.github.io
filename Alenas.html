@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Аленас — судовые трубопроводы</title>
+
+  <!-- Шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ------------------------
+       БАЗА
+       ------------------------ */
+    :root{
+      --sea-700:#003554;
+      --sea-600:#005f8a;
+      --sea-500:#0077b6;
+      --accent:#e6f7ff;
+      --muted:#8aa6bf;
+      --light-bg:#f6fbfe;
+      --glass: rgba(255,255,255,0.06);
+      --card-radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Roboto',sans-serif;scroll-behavior:smooth}
+    a{color:inherit}
+    img{max-width:100%;display:block}
+
+    /* ------------------------
+       ТЕМЫ (по умолчанию светлая)
+       ------------------------ */
+    body.light{background:var(--light-bg);color:var(--sea-700)}
+    body.dark{background:#061826;color:#e6f7ff}
+    /* header background adapts */
+    header.light{background:linear-gradient(90deg,var(--sea-700),var(--sea-600));color:#fff}
+    header.dark{background:linear-gradient(90deg,#001220,#00263b);color:#fff}
+
+    /* ------------------------
+       HEADER
+       ------------------------ */
+    header{
+      position:sticky;top:0;z-index:1100;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;
+      transition:background .3s,box-shadow .2s;
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand img{height:48px;width:auto;border-radius:6px}
+    nav{display:flex;gap:10px;align-items:center}
+    nav a{padding:8px 12px;border-radius:8px;font-weight:600;color:inherit;opacity:.95}
+    nav a:hover{background:rgba(255,255,255,0.06)}
+    .cta-top{
+      background: #ffd36b;color:#16323f;padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;
+      text-decoration:none;display:inline-flex;gap:8px;align-items:center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    /* ------------------------
+       HERO
+       ------------------------ */
+    .hero{
+      min-height:72vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02)),
+        url('') center/cover no-repeat; /* можно вставить фон-изображение */
+      color:#fff;
+    }
+    .hero .card{
+      background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(255,255,255,0.02));
+      padding:34px;border-radius:16px;max-width:1100px;width:100%;backdrop-filter: blur(4px);
+      display:flex;gap:30px;align-items:center;
+    }
+    .hero-left{flex:1;min-width:280px}
+    .hero h1{font-size:34px;margin:0 0 12px}
+    .hero p{margin:0;color:var(--accent);opacity:.95}
+    .hero-actions{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn-primary{
+      background:var(--sea-500);color:white;padding:12px 18px;border-radius:10px;font-weight:800;border:none;
+      box-shadow: 0 8px 24px rgba(0,119,182,0.18);cursor:pointer;text-decoration:none;
+    }
+    .btn-ghost{background:transparent;color:white;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.12)}
+
+    /* right column example (logo / summary) */
+    .hero-right{width:320px;text-align:center}
+    .hero-right .mini{background:rgba(255,255,255,0.03);padding:14px;border-radius:12px}
+    .hero-right h4{margin:6px 0 0;font-size:16px}
+
+    /* ------------------------
+       Секции (контент)
+       ------------------------ */
+    section{padding:64px 20px}
+    .container{max-width:1100px;margin:0 auto}
+
+    h2{font-size:22px;margin:0 0 18px;color:inherit}
+    p.lead{color:var(--muted);margin:0 0 18px;line-height:1.6}
+
+    /* ------------------------
+       Почему выбирают нас (features)
+       ------------------------ */
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .feature{
+      background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+      border-radius:12px;padding:18px;min-height:120px;display:flex;gap:12px;align-items:flex-start;
+      box-shadow: 0 6px 18px rgba(5,30,48,0.06);
+    }
+    .feature .ico{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:var(--sea-500);color:#fff;font-weight:700}
+
+    /* ------------------------
+       Услуги (cards grid)
+       ------------------------ */
+    .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .service{
+      background:#fff;border-radius:12px;padding:20px;box-shadow:0 12px 30px rgba(5,30,48,0.06);min-height:200px;
+    }
+    body.dark .service{background:rgba(255,255,255,0.03)}
+    .service h3{margin:0 0 6px;font-size:18px}
+    .service p{color:var(--muted);margin:0}
+
+    /* ------------------------
+       Галерея
+       ------------------------ */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .gallery-item{position:relative;border-radius:12px;overflow:hidden;cursor:pointer;background:#ddd}
+    .gallery-item img{width:100%;height:240px;object-fit:cover;transition:transform .45s ease}
+    .gallery-item:hover img{transform:scale(1.08)}
+    .gallery-caption{
+      position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(0deg, rgba(0,0,0,0.55), rgba(0,0,0,0));
+      color:#fff;font-weight:700;opacity:0;transform:translateY(6px);transition:all .28s
+    }
+    .gallery-item:hover .gallery-caption{opacity:1;transform:translateY(0)}
+
+    /* LIGHTBOX */
+    .lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,8,16,0.85);z-index:2200}
+    .lightbox img{max-width:92%;max-height:92%;border-radius:12px}
+    .lightbox .close{position:absolute;top:20px;right:24px;font-size:32px;color:#fff;cursor:pointer}
+
+    /* ------------------------
+       Партнёры
+       ------------------------ */
+    .partners{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center}
+    .partner{width:120px;height:60px;display:grid;place-items:center;background:rgba(0,0,0,0.03);border-radius:8px;padding:8px}
+
+    /* ------------------------
+       Сертификаты
+       ------------------------ */
+    .certificates .cert-btn{padding:10px 14px;border-radius:10px;background:var(--sea-500);color:#fff;border:none;margin-right:10px;cursor:pointer}
+
+    /* ------------------------
+       Контакты
+       ------------------------ */
+    .contact-box{max-width:620px;margin:10px auto;padding:20px;border-radius:12px;background:linear-gradient(180deg,#fff, #f7fdff);box-shadow:0 10px 28px rgba(6,24,40,0.06)}
+    body.dark .contact-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+    .contact-top{display:flex;gap:16px;align-items:center;justify-content:center}
+    .contact-number{font-size:22px;font-weight:800;color:var(--sea-700)}
+    .contact-sub{color:var(--muted);margin-top:6px}
+    .contact-actions{display:flex;gap:12px;justify-content:center;margin-top:14px}
+    .round-btn{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;text-decoration:none}
+    .round-phone{background:var(--sea-500)}
+    .round-wa{background:#25d366}
+    .round-tg{background:#0088cc}
+
+    /* ------------------------
+       CTA перед футером
+       ------------------------ */
+    .cta-hero{margin:36px auto;padding:26px;border-radius:12px;background:linear-gradient(90deg,var(--sea-600),var(--sea-500));color:#fff;display:flex;align-items:center;gap:20px;justify-content:space-between;max-width:1100px}
+    .cta-hero .left{font-weight:700}
+    .cta-hero .right .btn{background:#ffd36b;color:#16323f;padding:12px 16px;border-radius:10px;text-decoration:none}
+
+    /* ------------------------
+       FOOTER
+       ------------------------ */
+    footer{padding:18px;background:linear-gradient(90deg,var(--sea-700),var(--sea-600));color:#fff;text-align:center}
+
+    /* ------------------------
+       МЕДИА
+       ------------------------ */
+    @media(max-width:880px){
+      .hero .card{flex-direction:column}
+      .hero-right{width:100%}
+    }
+  </style>
+</head>
+<body class="light">
+
+  <!-- HEADER -->
+  <header class="light">
+    <div class="brand">
+      <img src="logo.jpg" alt="Аленас — логотип">
+      <div style="line-height:1">
+        <div style="font-weight:800">ООО «Аленас»</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.85);margin-top:2px">Судовые трубопроводы — изготовление, монтаж, ремонт</div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#about">О компании</a>
+      <a href="#services">Услуги</a>
+      <a href="#gallery">Галерея</a>
+      <a href="#certificates">Сертификаты</a>
+      <a href="#contacts">Контакты</a>
+      <!-- кнопка в стиле примера: скроллит к контактам -->
+      <a class="cta-top" href="#contacts">📞 +7 (911) 868-77-54</a>
+      <button class="theme-toggle" title="Сменить тему" style="margin-left:8px;padding:8px 10px;border-radius:9px;border:none;background:transparent;color:#fff;cursor:pointer">🌓</button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="card container">
+      <div class="hero-left">
+        <h1>Производство и обслуживание судовых трубопроводов</h1>
+        <p class="lead">Мы изготавливаем, монтируем и ремонтируем судовые трубопроводы для любых систем и назначений. Надёжность, соответствие стандартам и длительный срок службы — наша главная цель.</p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="#contacts">Связаться — позвонить/WhatsApp/Telegram</a>
+          <a class="btn-ghost" href="#certificates">Посмотреть сертификаты</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="mini">
+          <div style="font-size:12px;color:var(--muted)">Телефон / мессенджеры</div>
+          <div style="font-size:20px;font-weight:800;margin-top:8px">+7 (911) 868-77-54</div>
+          <div style="margin-top:10px;font-size:13px;color:var(--muted)">Можно звонить или написать в WhatsApp и Telegram по тому же номеру</div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+            <a class="round-btn round-phone" href="tel:+79118687754" title="Позвонить">📞</a>
+            <a class="round-btn round-wa" href="https://wa.me/79118687754" title="WhatsApp">WA</a>
+            <a class="round-btn round-tg" href="https://t.me/79118687754" title="Telegram">TG</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- О КОМПАНИИ -->
+  <section id="about">
+    <div class="container">
+      <h2>О компании</h2>
+      <p class="lead">Наша компания специализируется на изготовлении судовых трубопроводов и предоставляет полный спектр услуг по работе с трубопроводами для различных систем и назначений.</p>
+
+      <p>Изготовление судовых трубопроводов — это одна из наших основных компетенций. Мы производим трубопроводы, соответствующие самым высоким стандартам качества и безопасности, обеспечивая надежность и долговечность вашей судовой системы.</p>
+
+      <p>Кроме того, наши специалисты осуществляют монтаж судовых трубопроводов любой сложности. Мы гарантируем профессиональный монтаж, который обеспечит оптимальную работу вашего судна.</p>
+
+      <p>Ремонт судовых трубопроводов — это также важная часть наших услуг. Мы выполняем демонтаж, ремонт и восстановление трубопроводов, включая переборочные стаканы и штуцерные стаканы. Наши специалисты умело обеспечивают надежность и безопасность трубопроводов, что критически важно для судовой работы.</p>
+
+      <p>Мы также предлагаем изготовление подвесок трубопровода, обеспечивая правильное расположение и поддержание ваших трубопроводов.</p>
+
+      <p>Наши услуги включают также испытание трубопроводов и систем холодильных установок, а также заземление труб под электрокабель, обеспечивая безопасность работы на вашем судне.</p>
+    </div>
+  </section>
+
+  <!-- Почему выбирают нас -->
+  <section>
+    <div class="container">
+      <h2>Почему выбирают нас</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="ico">10+</div>
+          <div>
+            <div style="font-weight:700">Опыт и экспертиза</div>
+            <div style="color:var(--muted)">Более 10 лет в судостроительной и судообслуживающей отрасли.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ico">ISO</div>
+          <div>
+            <div style="font-weight:700">Сертифицировано</div>
+            <div style="color:var(--muted)">Сертификаты качества ISO и РМРС — подтверждение надежности.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ico">⚙</div>
+          <div>
+            <div style="font-weight:700">Полный цикл</div>
+            <div style="color:var(--muted)">Изготовление, монтаж, ремонт, испытания — всё в одном месте.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ico">⏱</div>
+          <div>
+            <div style="font-weight:700">Сроки и ответственность</div>
+            <div style="color:var(--muted)">Строгие сроки выполнения и прозрачная отчётность.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- УСЛУГИ -->
+  <section id="services">
+    <div class="container">
+      <h2>Наши услуги</h2>
+      <div class="services">
+        <div class="service">
+          <h3>Изготовление судовых трубопроводов</h3>
+          <p>Производим трубопроводы по чертежам и техзаданиям, используем сертифицированные материалы и контроль качества на каждом этапе.</p>
+        </div>
+        <div class="service">
+          <h3>Монтаж трубопроводов</h3>
+          <p>Профессиональный монтаж любой сложности: от прокладки и крепления до комплексной интеграции в судовую систему.</p>
+        </div>
+        <div class="service">
+          <h3>Ремонт и восстановление</h3>
+          <p>Демонтаж, ремонт, восстановление трубопроводов, переборочные и штуцерные стаканы — быстро и качественно.</p>
+        </div>
+        <div class="service">
+          <h3>Изготовление подвесок</h3>
+          <p>Проектираем и изготавливаем подвески и крепления для правильного расположения и виброизоляции трубопроводов.</p>
+        </div>
+        <div class="service">
+          <h3>Испытания и заземление</h3>
+          <p>Гидравлические и пневматические испытания, испытания холодильных установок, выполнение заземления труб под электрокабель.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ГАЛЕРЕЯ -->
+  <section id="gallery">
+    <div class="container">
+      <h2>Галерея работ</h2>
+      <div class="gallery">
+        <!-- Заменяй фото в папке gallery/ -->
+        <div class="gallery-item" data-caption="Изготовление трубопровода — пример 1">
+          <img src="gallery/photo1.jpg" alt="Фото 1">
+          <div class="gallery-caption">Изготовление трубопровода — пример 1</div>
+        </div>
+        <div class="gallery-item" data-caption="Монтаж на судне">
+          <img src="gallery/photo2.jpg" alt="Фото 2">
+          <div class="gallery-caption">Монтаж на судне</div>
+        </div>
+        <div class="gallery-item" data-caption="Ремонт и восстановление">
+          <img src="gallery/photo3.jpg" alt="Фото 3">
+          <div class="gallery-caption">Ремонт и восстановление</div>
+        </div>
+        <div class="gallery-item" data-caption="Подвески и крепления">
+          <img src="gallery/photo4.jpg" alt="Фото 4">
+          <div class="gallery-caption">Подвески и крепления</div>
+        </div>
+        <div class="gallery-item" data-caption="Испытания и контроль">
+          <img src="gallery/photo5.jpg" alt="Фото 5">
+          <div class="gallery-caption">Испытания и контроль</div>
+        </div>
+        <div class="gallery-item" data-caption="Прочие работы">
+          <img src="gallery/photo6.jpg" alt="Фото 6">
+          <div class="gallery-caption">Прочие работы</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <div class="close" onclick="closeLightbox(event)">✕</div>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <!-- ПАРТНЁРЫ -->
+  <section>
+    <div class="container">
+      <h2>Наши клиенты и партнёры</h2>
+      <div class="partners">
+        <div class="partner">Логотип 1</div>
+        <div class="partner">Логотип 2</div>
+        <div class="partner">Логотип 3</div>
+        <div class="partner">Логотип 4</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- СЕРТИФИКАТЫ -->
+  <section id="certificates">
+    <div class="container">
+      <h2>Сертификаты</h2>
+      <p class="lead">Ниже — два основных сертификата, открываются прямо на сайте.</p>
+      <div>
+        <button class="cert-btn" onclick="showCert('iso.pdf')">Смотреть ISO</button>
+        <button class="cert-btn" onclick="showCert('rmrs.pdf')">Смотреть РМРС</button>
+      </div>
+      <div style="margin-top:16px">
+        <iframe id="certFrame" src="" style="width:100%;height:520px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA перед футером -->
+  <section>
+    <div class="cta-hero container">
+      <div class="left">Хотите рассчитать работы или получить коммерческое предложение?</div>
+      <div class="right"><a class="btn" href="#contacts">Оставить заявку — связаться</a></div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <section id="contacts">
+    <div class="container">
+      <h2>Контакты</h2>
+      <p class="lead">Свяжитесь с нами удобным способом — по телефону или в мессенджерах. По указанному номеру можно звонить и писать в WhatsApp и Telegram.</p>
+
+      <div class="contact-box">
+        <div class="contact-top">
+          <div style="text-align:center">
+            <div style="font-size:13px;color:var(--muted)">Единый номер</div>
+            <div class="contact-number">+7 (911) 868-77-54</div>
+            <div class="contact-sub">Звонок или сообщение в WhatsApp / Telegram по тому же номеру</div>
+          </div>
+        </div>
+
+        <div class="contact-actions">
+          <a class="round-btn round-phone" href="tel:+79118687754" title="Позвонить">📞</a>
+          <a class="round-btn round-wa" href="https://wa.me/79118687754" title="WhatsApp">WA</a>
+          <a class="round-btn round-tg" href="https://t.me/79118687754" title="Telegram">TG</a>
+          <a class="round-btn" href="mailto:tex-filterkazan@mail.ru" style="background:#6c8190" title="Написать на почту">✉</a>
+        </div>
+
+        <div style="margin-top:14px;text-align:center;color:var(--muted)">Юридическое лицо: ООО «Аленас»</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      ООО «Аленас» © <span id="year"></span> · Тел.: <a href="tel:+79118687754" style="color:#fff;font-weight:700">+7 (911) 868-77-54</a>
+    </div>
+  </footer>
+
+  <!-- Скрипты -->
+  <script>
+    // год в футере
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // тема (сохранение в localStorage)
+    const themeBtn = document.querySelector('.theme-toggle');
+    function setTheme(t){
+      document.body.className = t;
+      document.querySelector('header').className = t;
+      localStorage.setItem('alenas_theme', t);
+    }
+    const saved = localStorage.getItem('alenas_theme') || 'light';
+    setTheme(saved);
+    themeBtn.addEventListener('click', ()=> {
+      setTheme(document.body.classList.contains('light') ? 'dark' : 'light');
+    });
+
+    // Сert iframe
+    function showCert(file){
+      document.getElementById('certFrame').src = file;
+      location.hash = '#certificates';
+    }
+    window.showCert = showCert;
+
+    // Lightbox для галереи
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+
+    document.querySelectorAll('.gallery-item').forEach(item=>{
+      item.addEventListener('click', ()=>{
+        const img = item.querySelector('img').src;
+        const caption = item.getAttribute('data-caption') || '';
+        lbImg.src = img;
+        lbImg.alt = caption;
+        lb.style.display = 'flex';
+      });
+    });
+
+    function closeLightbox(e){
+      // prevent propagation from inner close button
+      if(e && e.target && e.target.classList && e.target.classList.contains('close')) {
+        e.stopPropagation();
+      }
+      lb.style.display = 'none';
+      lbImg.src = '';
+    }
+    window.closeLightbox = closeLightbox;
+
+    // Плавный reveal при скролле (простая реализация)
+    const fades = document.querySelectorAll('section');
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(ent=>{
+        if(ent.isIntersecting) ent.target.style.opacity = 1;
+        else ent.target.style.opacity = 0.15;
+      });
+    }, {threshold: 0.12});
+    fades.forEach(s=>{ s.style.transition='opacity .7s ease'; s.style.opacity=0; io.observe(s); });
+
+    // Подсказка: если у пользователя нет фото — показать заготовки (необязательно)
+  </script>
+</body>
+</html>
