@@ -22,7 +22,7 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:'Roboto',sans-serif;scroll-behavior:smooth}
-    a{color:inherit}
+    a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     /* ------------------------
        ТЕМЫ (по умолчанию светлая)
@@ -48,6 +48,32 @@
       background: #ffd36b;color: #3b3b3b;padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;
       text-decoration:none;display:inline-flex;gap:8px;align-items:center;
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+    /* Мобильное меню (бургер) */
+    .mobile-menu-btn {
+      display: none; /* Скрываем на десктопе */
+      background: transparent;border: none;color: white;font-size: 24px;cursor: pointer;padding: 8px;
+    }
+    .mobile-menu-overlay {
+      display: none; /* Скрыт по умолчанию */
+      position: fixed;inset: 0;background: rgba(6, 24, 38, 0.95);z-index: 2000;
+      flex-direction: column;align-items: center;justify-content: center;
+    }
+    .mobile-menu-list {
+      list-style: none;padding: 0;margin: 0;text-align: center;
+    }
+    .mobile-menu-list li {
+      margin: 16px 0;
+    }
+    .mobile-menu-list a {
+      font-size: 20px;font-weight: 600;color: white;padding: 12px 24px;border-radius: 8px;
+      display: inline-block;transition: background 0.3s;
+    }
+    .mobile-menu-list a:hover, .mobile-menu-list a:focus {
+      background: rgba(255,255,255,0.06);
+    }
+    .close-menu-btn {
+      position: absolute;top: 20px;right: 24px;background: transparent;border: none;color: white;font-size: 28px;cursor: pointer;
     }
     /* ------------------------
        HERO
@@ -153,9 +179,13 @@
        ------------------------ */
     footer{padding:18px;background:linear-gradient(90deg,var(--sea-700),var(--sea-600));color:#fff;text-align:center}
     /* ------------------------
-       МЕДИА
+       МЕДИА (для телефонов)
        ------------------------ */
     @media(max-width:880px){
+      /* Скрываем стандартное меню и показываем бургер */
+      nav {display: none;}
+      .mobile-menu-btn {display: block;}
+      /* Адаптируем hero */
       .hero .card{flex-direction:column}
       .hero-right{width:100%}
     }
@@ -171,16 +201,30 @@
         <div style="font-size:12px;color:rgba(255,255,255,0.85);margin-top:2px">Судовые трубопроводы — изготовление, монтаж, ремонт</div>
       </div>
     </div>
+    <!-- Стандартное меню для десктопа -->
     <nav>
       <a href="#about">О компании</a>
       <a href="#services">Услуги</a>
       <a href="#gallery">Галерея</a>
       <a href="#certificates">Сертификаты</a>
       <a href="#contacts">Контакты</a>
-      <!-- кнопка в стиле примера: скроллит к контактам -->
       <a class="cta-top" href="#contacts">📞 +7 (911) 868-77-54</a>
     </nav>
+    <!-- Кнопка бургера для мобильных -->
+    <button class="mobile-menu-btn" aria-label="Открыть меню">☰</button>
   </header>
+  <!-- Оверлей мобильного меню -->
+  <div class="mobile-menu-overlay">
+    <button class="close-menu-btn" aria-label="Закрыть меню">✕</button>
+    <ul class="mobile-menu-list">
+      <li><a href="#about">О компании</a></li>
+      <li><a href="#services">Услуги</a></li>
+      <li><a href="#gallery">Галерея</a></li>
+      <li><a href="#certificates">Сертификаты</a></li>
+      <li><a href="#contacts">Контакты</a></li>
+      <li><a href="#contacts" class="cta-top" style="display: block; margin: 0 auto; width: fit-content;">📞 +7 (911) 868-77-54</a></li>
+    </ul>
+  </div>
   <!-- HERO -->
   <section class="hero">
     <div class="card container">
@@ -422,7 +466,25 @@
       });
     }, {threshold: 0.12});
     fades.forEach(s=>{ s.style.transition='opacity .7s ease'; s.style.opacity=0; io.observe(s); });
-    // Подсказка: если у пользователя нет фото — показать заготовки (необязательно)
+    // Мобильное меню
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const closeBtn = document.querySelector('.close-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    menuBtn.addEventListener('click', () => {
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // блокируем скролл страницы
+    });
+    closeBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      document.body.style.overflow = ''; // разблокируем скролл
+    });
+    // Закрытие меню при клике на ссылку
+    document.querySelectorAll('.mobile-menu-list a').forEach(link => {
+      link.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+    });
   </script>
 </body>
 </html>
