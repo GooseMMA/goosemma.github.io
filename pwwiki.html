@@ -1,596 +1,215 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>OGPS — Pixel Worlds Craft Wiki</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGPS Pixel Worlds Wiki</title>
 <style>
-:root{
-  --bg:#071019;
-  --panel:#0d1420;
-  --muted:#9fb1c0;
-  --accent:#28d1ff;
-  --accent2:#9b5cff;
-  --card:#0b1622;
-  --glass: rgba(255,255,255,0.03);
-  --radius:12px;
-  --text:#e6eef6;
-  --success:#5cff73;
-  --danger:#ff6b6b;
-}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased}
-.header{
-  display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);
-  background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-}
-#siteIcon{width:44px;height:44px;border-radius:8px;background:linear-gradient(180deg,#062033,#0b2333);object-fit:cover}
-.title{font-weight:700;font-size:18px}
-.controls{margin-left:auto;display:flex;gap:8px;align-items:center}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#001428;border:0;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
-.small{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;color:var(--muted);cursor:pointer}
-#search{flex:1;max-width:520px;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.02);color:var(--text);outline:none}
-.layout{display:grid;grid-template-columns:300px 1fr 360px;gap:12px;padding:12px;height:calc(100vh - 68px)}
-@media (max-width:1000px){
-  .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;height:calc(100vh - 120px)}
-}
-.sidebar{background:var(--panel);border-radius:var(--radius);padding:10px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;min-height:0}
-.list{overflow:auto;flex:1;margin-top:8px;padding-right:6px}
-.item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:all .12s}
-.item:hover{transform:translateX(6px);background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.03)}
-.thumb{width:44px;height:36px;border-radius:6px;background:var(--glass);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.thumb img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
-.name{font-weight:700;font-size:14px}
-.meta-small{font-size:12px;color:var(--muted)}
-
-.main{display:flex;flex-direction:column;min-width:0;background:linear-gradient(180deg, transparent, rgba(255,255,255,0.01));border-radius:var(--radius);padding:8px;border:1px solid rgba(255,255,255,0.03);overflow:hidden}
-.top-controls{display:flex;gap:8px;align-items:center;padding:8px}
-.canvas-wrap{flex:1;position:relative;background:radial-gradient(circle at 10% 10%, rgba(255,255,255,0.015), transparent 40%);border-radius:10px;overflow:hidden}
-.graph-area{position:relative;width:100%;height:100%;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
-svg.connector{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
-.graph-content{position:absolute;left:0;top:0;transform-origin:0 0}
-.node{position:absolute;width:140px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.02);backdrop-filter:blur(2px);text-align:center;cursor:pointer;transition:transform .12s, box-shadow .12s}
-.node:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.5)}
-.node .nimg{width:72px;height:48px;border-radius:6px;overflow:hidden;margin:0 auto 6px}
-.node img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
-.node .nt{font-weight:700;font-size:13px}
-.node.highlight{outline:3px solid rgba(40,209,255,0.14);box-shadow:0 20px 50px rgba(40,209,255,0.03)}
-.panel{background:var(--panel);border-radius:var(--radius);padding:12px;border:1px solid rgba(255,255,255,0.03);overflow:auto;height:100%}
-.card{display:flex;flex-direction:column;gap:10px}
-.card .top{display:flex;gap:12px}
-.card img.main{width:120px;height:84px;border-radius:8px;object-fit:cover;image-rendering:pixelated}
-.card h2{margin:0}
-.tag{padding:6px 10px;border-radius:999px;background:var(--glass);color:var(--muted);font-size:12px}
-.field{font-size:13px;color:var(--muted)}
-.craft-row{display:flex;gap:6px;flex-wrap:wrap}
-.craft-btn{padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);cursor:pointer}
-.footer-actions{display:flex;gap:8px;justify-content:flex-end}
-
-/* suggestions */
-.suggestions{position:absolute;left:16px;right:16px;top:54px;background:var(--panel);border-radius:8px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:60;max-height:320px;overflow:auto;display:none}
-.suggestions .sitem{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer}
-.suggestions .sitem:last-child{border-bottom:0}
-
-/* small screens */
-@media (max-width:1000px){
-  .sidebar{order:0;height:auto}
-  .main{order:1;height:calc(100vh - 320px)}
-  .panel-right{order:2;height:auto}
-}
+  :root {
+    --bg: #0b111c;
+    --panel: #101a2e;
+    --text: #e8f2ff;
+    --muted: #9aaac5;
+    --accent: #28d1ff;
+    --accent2: #9b5cff;
+  }
+  * {box-sizing:border-box;}
+  body {
+    margin:0; font-family: "Segoe UI", system-ui;
+    background: var(--bg); color: var(--text);
+    height:100vh; display:flex; flex-direction:column;
+    overflow:hidden;
+  }
+  header {
+    display:flex; align-items:center; padding:10px 16px;
+    background:var(--panel); gap:10px; border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  input {
+    flex:1; background:#13213c; border:none; border-radius:6px;
+    padding:10px 12px; color:var(--text); font-size:15px;
+  }
+  button {
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    border:none; border-radius:6px; color:#000;
+    font-weight:bold; padding:8px 14px; cursor:pointer;
+  }
+  main {flex:1; display:grid; grid-template-columns:250px 1fr 350px;}
+  #list {background:var(--panel); overflow-y:auto; padding:10px;}
+  #list div {
+    display:flex; align-items:center; gap:10px;
+    padding:6px; border-radius:8px; cursor:pointer;
+    transition:background 0.2s, transform 0.2s;
+  }
+  #list div:hover {background:rgba(255,255,255,0.07); transform:translateX(3px);}
+  #list img {width:32px; height:32px; image-rendering:pixelated;}
+  #details {padding:20px; overflow:auto;}
+  #details img {width:72px; height:72px; image-rendering:pixelated;}
+  h2 {color:var(--accent);}
+  .field {margin:6px 0; color:var(--muted);}
+  .field strong {color:var(--text);}
+  .craft {display:flex; flex-wrap:wrap; gap:6px;}
+  .craft button {
+    background:rgba(255,255,255,0.08); border:none;
+    color:var(--text); border-radius:6px; padding:4px 8px; font-size:14px;
+  }
+  #tree {position:relative; background:#0c1525; border-left:1px solid rgba(255,255,255,0.1);}
+  #tree canvas {width:100%; height:100%; background:#0c1525; cursor:grab;}
+  #tree canvas:active {cursor:grabbing;}
+  @media(max-width:900px){
+    main{grid-template-columns:1fr;}
+    #tree{display:none;}
+  }
 </style>
 </head>
 <body>
-  <div class="header">
-    <img id="siteIcon" src="" alt="icon">
-    <div class="title">OGPS — Pixel Worlds Craft Wiki</div>
-    <input id="search" placeholder="Search items (fuzzy, e.g. gry blok)" autocomplete="off">
-    <div class="controls">
-      <button id="importBtn" class="small">Import JSON</button>
-      <input id="fileInput" type="file" accept=".json" style="display:none">
-      <button id="exportBtn" class="small">Export JSON</button>
-      <button id="showTreeBtn" class="btn">Global Craft Tree</button>
-      <button id="clearCacheBtn" class="small" title="Clear cached images & data">Clear Cache</button>
-    </div>
-  </div>
+<header>
+  <input id="search" placeholder="Search items...">
+  <button id="toggleTree">Show Tree</button>
+</header>
 
-  <div class="layout">
-    <aside class="sidebar">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="font-weight:700">Items</div>
-        <div style="flex:1"></div>
-        <div class="meta-small" id="counts">0 items</div>
-      </div>
-      <div class="list" id="list"></div>
-    </aside>
-
-    <main class="main">
-      <div class="top-controls">
-        <button id="zoomIn" class="small">Zoom +</button>
-        <button id="zoomOut" class="small">Zoom −</button>
-        <button id="reset" class="small">Reset view</button>
-        <div style="flex:1"></div>
-        <div class="meta-small">Click node to open card · Tap + drag to pan · Mousewheel to zoom</div>
-      </div>
-      <div class="canvas-wrap panel">
-        <div class="graph-area" id="graphArea" style="height:100%;">
-          <svg id="svgOverlay" class="connector"></svg>
-          <div id="graphContent" class="graph-content"></div>
-        </div>
-        <div id="suggestions" class="suggestions"></div>
-      </div>
-    </main>
-
-    <aside class="panel panel-right">
-      <div class="card" id="card">
-        <div class="top">
-          <img id="cardImage" class="main" src="" alt="">
-          <div style="flex:1">
-            <h2 id="cardTitle">Select an item</h2>
-            <div id="cardDesc" class="field">Click a node or search an item to view details.</div>
-            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-              <div id="tagComplexity" class="tag">C: —</div>
-              <div id="tagTier" class="tag">T: —</div>
-              <div id="tagRarity" class="tag">—</div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div style="font-weight:700">Item Type</div>
-          <div id="cardType" class="field">—</div>
-        </div>
-
-        <div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:700">Craft</div>
-            <button id="showAllUsing" class="small">Show all crafts using this</button>
-          </div>
-          <div id="cardCraft" class="field" style="margin-top:6px">—</div>
-        </div>
-
-        <div>
-          <div style="font-weight:700">Trivia</div>
-          <ul id="cardTrivia" class="field" style="margin:6px 0 0 16px"></ul>
-        </div>
-
-        <div style="margin-top:auto" class="footer-actions">
-          <button id="btnCenter" class="small">Center on graph</button>
-        </div>
-      </div>
-    </aside>
-  </div>
+<main>
+  <aside id="list"></aside>
+  <section id="details"><h2>Welcome</h2><p>Select an item to view details.</p></section>
+  <section id="tree"><canvas id="treeCanvas"></canvas></section>
+</main>
 
 <script>
-/* ========= Configuration ========= */
-const DATA_URL = 'items.json';
-const CACHE_NAME = 'ogps-cache-v1';
-const IMAGE_FOLDER = 'images/';
+// === GLOBAL ===
+let ITEMS = JSON.parse(localStorage.getItem('PIXEL_ITEMS') || '[]');
+let ITEM_MAP = {};
+const list = document.getElementById('list');
+const details = document.getElementById('details');
+const search = document.getElementById('search');
+const canvas = document.getElementById('treeCanvas');
+const ctx = canvas.getContext('2d');
+let width, height;
+let nodes = [], links = [];
+let offsetX=0, offsetY=0, scale=1;
+let drag=false, startX=0, startY=0;
 
-/* ========= State ========= */
-let ITEMS = [];            // full array
-let ITEM_MAP = {};         // name -> item
-let NODES = {};            // name -> DOM element
-let POS = {};              // name -> {x,y}
-let LINKS = [];            // {from,to,el}
-let graphTransform = {x:40,y:20,scale:1};
-let animHandle = null;
+// === INIT ===
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-/* ========= Helpers ========= */
-const el = sel => document.querySelector(sel);
-const create = (tag, cls) => { const d=document.createElement(tag); if(cls) d.className=cls; return d; };
-function slug(s){ return (s||'').replace(/\s+/g,'_').replace(/[^\w\-]/g,''); }
-function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
-function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
-function safeName(n){ return n.replace(/'/g,"\\'").replace(/"/g,'\\"'); }
-
-/* ========= Fetch & Load data ========= */
-async function loadData(){
-  try{
-    const r = await fetch(DATA_URL, {cache:'no-cache'});
-    if(!r.ok) throw new Error('no json');
-    ITEMS = await r.json();
-    console.log('Loaded items.json', ITEMS.length);
-  }catch(e){
-    console.warn('Failed loading items.json, using fallback.', e);
-    ITEMS = getFallback();
-  }
-  // normalize
-  ITEM_MAP={};
-  ITEMS.forEach(it=>{
-    if(!it.slug) it.slug = slug(it.name);
-    if(!it.image) it.image = IMAGE_FOLDER + it.slug + '.png';
-    ITEM_MAP[it.name] = it;
+if(ITEMS.length===0){
+  fetch('items.json').then(r=>r.json()).then(d=>{
+    ITEMS=d; localStorage.setItem('PIXEL_ITEMS',JSON.stringify(d));
+    buildMap(); renderList();
   });
-  el('#counts').textContent = `${ITEMS.length} items`;
-  renderList();
-  buildGraph();
-  registerSW();
+}else{
+  buildMap(); renderList();
 }
 
-/* small fallback if items.json missing */
-function getFallback(){
-  return [
-    {"name":"Grey Block","slug":"Grey_Block","image":"images/Grey_Block.png","description":"Grey block","complexity":8,"tier":4,"rarity":"Common","itemType":"Blocks","farmability":"Farmable","growthTime":"22m 7s","craft":["Black Block","White Block"],"craftable":true,"trivia":[]},
-    {"name":"Wood Block","slug":"Wood_Block","image":"images/Wood_Block.png","description":"Wood block","complexity":2,"tier":2,"rarity":"Common","itemType":"Blocks","farmability":"Farmable","growthTime":"1m 28s","craft":["Lava","Soil Block"],"craftable":true,"trivia":[]}
-  ];
-}
+function buildMap(){ITEMS.forEach(i=>ITEM_MAP[i.name]=i);}
 
-/* ========= Render left list & suggestions ========= */
-const listDiv = el('#list');
+// === UI ===
 function renderList(filter=''){
-  listDiv.innerHTML='';
-  let arr = ITEMS.slice().sort((a,b)=>a.name.localeCompare(b.name));
-  if(filter){
-    arr = arr.filter(it => fuzzyMatch(filter, it.name));
-  }
-  for(const it of arr){
-    const row = create('div','item');
-    const th = create('div','thumb'); const img = document.createElement('img'); img.src = it.image; img.alt = it.name; img.onerror = ()=>img.style.opacity=0.25;
-    th.appendChild(img);
-    const nm = create('div'); nm.className='name'; nm.textContent=it.name;
-    const meta = create('div'); meta.className='meta-small'; meta.textContent = it.rarity || '';
-    row.appendChild(th); row.appendChild(nm); row.appendChild(meta);
-    row.addEventListener('click', ()=>{ openCard(it.name); panToNode(it.name); });
-    listDiv.appendChild(row);
-  }
+  list.innerHTML='';
+  let f=filter.toLowerCase();
+  ITEMS.filter(i=>i.name.toLowerCase().includes(f)).forEach(i=>{
+    let d=document.createElement('div');
+    d.innerHTML=`<img src="${i.image}"><span>${i.name}</span>`;
+    d.onclick=()=>showItem(i.name);
+    list.appendChild(d);
+  });
 }
 
-/* fuzzy subsequence match */
-function fuzzyMatch(q,s){
-  if(!q) return true;
-  q=q.toLowerCase(); s=s.toLowerCase();
-  if(s.includes(q)) return true;
-  let i=0,j=0;
-  while(i<q.length && j<s.length){ if(q[i]===s[j]) i++; j++; }
-  return i===q.length;
-}
+search.oninput=()=>renderList(search.value);
 
-/* suggestions UI */
-const suggestions = el('#suggestions');
-el('#search').addEventListener('input', (e)=>{
-  const q = e.target.value.trim();
-  if(!q){ suggestions.style.display='none'; renderList(); return; }
-  const scored = ITEMS.map(it=>({it,sc:scoreMatch(q,it.name)})).filter(x=>x.sc>0).sort((a,b)=>b.sc-a.sc).slice(0,12);
-  suggestions.innerHTML=''; suggestions.style.display = scored.length? 'block':'none';
-  for(const s of scored){
-    const r = create('div'); r.className='sitem'; r.innerHTML = `<strong>${s.it.name}</strong><div style="font-size:12px;color:var(--muted)">${(s.it.description||'').slice(0,80)}</div>`;
-    r.addEventListener('click', ()=>{ suggestions.style.display='none'; el('#search').value=''; openCard(s.it.name); panToNode(s.it.name); });
-    suggestions.appendChild(r);
+function showItem(name){
+  const i=ITEM_MAP[name]; if(!i)return;
+  let html=`<img src="${i.image}"><h2>${i.name}</h2>`;
+  html+=`<div class="field"><strong>Complexity:</strong> ${i.complexity??'N/A'}</div>`;
+  html+=`<div class="field"><strong>Tier:</strong> ${i.tier??'N/A'}</div>`;
+  html+=`<div class="field"><strong>Rarity:</strong> ${i.rarity??'N/A'}</div>`;
+  html+=`<div class="field"><strong>Farmability:</strong> ${i.farmability??'N/A'}</div>`;
+  html+=`<div class="field"><strong>Growth Time:</strong> ${i.growthTime??'N/A'}</div>`;
+  if(i.craftable && i.craft.length){
+    html+=`<div class="field"><strong>Craft:</strong></div><div class="craft">`;
+    i.craft.forEach(c=>{ html+=`<button onclick="showItem('${c}')">${c}</button>`;});
+    html+=`</div>`;
   }
-});
-function scoreMatch(q,s){
-  q=q.toLowerCase(); s=s.toLowerCase();
-  if(s.includes(q)) return 100;
-  // subsequence score
-  let i=0,j=0;
-  while(i<q.length && j<s.length){ if(q[i]===s[j]) i++; j++; }
-  return i===q.length?50:0;
+  details.innerHTML=html;
+  drawTreeForItem(i);
 }
 
-/* ========= Graph building & layout ========= */
-function clearGraph(){
-  el('#graphContent').innerHTML=''; el('#svgOverlay').innerHTML=''; NODES={}; POS={}; LINKS=[];
+// === TREE ===
+function resizeCanvas(){
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+  width=canvas.width; height=canvas.height;
+  drawTree();
 }
 
-/* compute levels: nodes with no inputs -> level 0; iterative assignments; cycles fallback */
-function computeLevels(){
-  const inputsMap = {}; const names = ITEMS.map(i=>i.name);
-  for(const it of ITEMS) inputsMap[it.name] = (it.craft||[]).filter(Boolean).slice();
-  const levels = {}; const pending = new Set(names);
-  for(const n of names){
-    const ins = inputsMap[n]||[];
-    if(!ins.length) { levels[n]=0; pending.delete(n); }
-  }
-  let changed=true; let iter=0;
-  while(changed && iter<100){
-    iter++; changed=false;
-    for(const n of Array.from(pending)){
-      const ins = inputsMap[n]||[];
-      if(!ins.length) continue;
-      let ready=true, maxl=0;
-      for(const inp of ins){
-        if(levels[inp]===undefined){ ready=false; break; }
-        maxl = Math.max(maxl, levels[inp]);
-      }
-      if(ready){ levels[n]=maxl+1; pending.delete(n); changed=true; }
-    }
-  }
-  // assign leftover (cycles/unresolved) next incremental levels
-  let maxExisting = Math.max(0, ...Object.values(levels));
-  for(const n of Array.from(pending)){ levels[n] = ++maxExisting; }
-  return levels;
-}
-
-function buildGraph(){
-  clearGraph();
-  const levels = computeLevels();
-  // group by level
-  const grouped = {};
-  for(const k in levels){ const lv = levels[k]; grouped[lv] = grouped[lv]||[]; grouped[lv].push(k); }
-  const levelKeys = Object.keys(grouped).map(Number).sort((a,b)=>a-b);
-  // layout grid
-  const colGap = 260, rowGap = 140;
-  const nodeW = 140, nodeH = 100;
-  // compute content size
-  let maxCols = levelKeys.length;
-  let maxRows = 0;
-  for(const lv of levelKeys) maxRows = Math.max(maxRows, grouped[lv].length);
-  const contentW = Math.max(1200, maxCols * colGap + 300);
-  const contentH = Math.max(600, maxRows * rowGap + 200);
-  const gc = el('#graphContent'); gc.style.width = contentW + 'px'; gc.style.height = contentH + 'px';
-  // create nodes
-  levelKeys.forEach((lvl, ci)=>{
-    const colX = ci * colGap + 80;
-    const names = grouped[lvl];
-    const totalH = (names.length - 1) * rowGap;
-    names.forEach((nm, ri)=>{
-      const y = ri*rowGap + Math.max(60, (contentH - totalH)/2);
-      const x = colX;
-      createNode(nm, x, y);
-      POS[nm] = {x: x + nodeW/2, y: y + nodeH/2};
+function drawTreeForItem(item){
+  // build tree graph
+  nodes=[]; links=[];
+  const visited=new Set();
+  function traverse(name,depth=0,x=0,y=0){
+    if(visited.has(name)) return;
+    visited.add(name);
+    const i=ITEM_MAP[name]; if(!i || !i.craftable) return;
+    nodes.push({name,x:depth,y});
+    i.craft.forEach((c,j)=>{
+      links.push({from:c,to:name});
+      traverse(c,depth+1,y+j);
     });
-  });
-  // create links: for each craftable item draw lines from inputs -> output
-  for(const it of ITEMS){
-    if(it.craft && it.craft.length){
-      for(const inp of it.craft){
-        if(POS[inp] && POS[it.name]) createLink(inp, it.name);
-      }
+  }
+  traverse(item.name);
+  drawTree();
+}
+
+function drawTree(){
+  ctx.clearRect(0,0,width,height);
+  ctx.save();
+  ctx.translate(offsetX,offsetY);
+  ctx.scale(scale,scale);
+  ctx.lineWidth=2;
+  ctx.strokeStyle='rgba(255,255,255,0.2)';
+  for(let l of links){
+    const a=nodes.find(n=>n.name===l.from);
+    const b=nodes.find(n=>n.name===l.to);
+    if(a&&b){
+      ctx.beginPath();
+      ctx.moveTo(a.x*160+60,a.y*80+60);
+      ctx.lineTo(b.x*160+60,b.y*80+60);
+      ctx.stroke();
     }
   }
-  resetView();
-}
-
-/* create a node element */
-function createNode(name,x,y){
-  const it = ITEM_MAP[name] || {name, image:'', description:''};
-  const node = create('div','node');
-  node.style.left = x + 'px'; node.style.top = y + 'px';
-  node.innerHTML = `<div class="nimg"><img src="${it.image}" alt="${it.name}" onerror="this.style.opacity=0.25"></div><div class="nt">${it.name}</div>`;
-  node.addEventListener('click', (e)=>{ e.stopPropagation(); openCard(name); highlightPath(name); panToNode(name); });
-  el('#graphContent').appendChild(node);
-  NODES[name] = node;
-}
-
-/* create svg path (cubic bezier) */
-function createLink(from,to){
-  const s = POS[from]; const t = POS[to];
-  if(!s||!t) return;
-  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-  const d = bezierD(s.x, s.y, t.x, t.y);
-  path.setAttribute('d', d);
-  path.setAttribute('stroke','rgba(255,255,255,0.06)');
-  path.setAttribute('stroke-width','3');
-  path.setAttribute('fill','none');
-  path.dataset.from=from; path.dataset.to=to;
-  el('#svgOverlay').appendChild(path);
-  LINKS.push({from,to,el:path});
-}
-function bezierD(x1,y1,x2,y2){
-  const dx = Math.max(80, Math.abs(x2-x1)/2);
-  const cx1 = x1 + dx;
-  const cx2 = x2 - dx;
-  return `M ${x1} ${y1} C ${cx1} ${y1} ${cx2} ${y2} ${x2} ${y2}`;
-}
-
-/* ========= Pan/Zoom & camera ========= */
-const graphArea = el('#graphArea');
-let isPanning=false, startPan={x:0,y:0}, startTransform={x:0,y:0};
-graphArea.addEventListener('mousedown', e=>{ isPanning=true; startPan={x:e.clientX,y:e.clientY}; startTransform={x:graphTransform.x,y:graphTransform.y}; });
-window.addEventListener('mousemove', e=>{ if(!isPanning) return; graphTransform.x = startTransform.x + (e.clientX - startPan.x); graphTransform.y = startTransform.y + (e.clientY - startPan.y); applyTransform(); });
-window.addEventListener('mouseup', ()=> isPanning=false);
-// touch pan
-graphArea.addEventListener('touchstart', e=>{ if(e.touches.length===1){ isPanning=true; startPan={x:e.touches[0].clientX,y:e.touches[0].clientY}; startTransform={x:graphTransform.x,y:graphTransform.y}; } }, {passive:true});
-graphArea.addEventListener('touchmove', e=>{ if(!isPanning||e.touches.length!==1) return; graphTransform.x = startTransform.x + (e.touches[0].clientX - startPan.x); graphTransform.y = startTransform.y + (e.touches[0].clientY - startPan.y); applyTransform(); }, {passive:true});
-graphArea.addEventListener('touchend', ()=> isPanning=false);
-
-// wheel zoom
-graphArea.addEventListener('wheel', e=>{ e.preventDefault(); const rect = graphArea.getBoundingClientRect(); const cx = e.clientX - rect.left; const cy = e.clientY - rect.top; zoomAt(e.deltaY>0?0.9:1.1, cx, cy); }, {passive:false});
-
-function applyTransform(){ el('#graphContent').style.transform = `translate(${graphTransform.x}px, ${graphTransform.y}px) scale(${graphTransform.scale})`; el('#svgOverlay').style.transform = `translate(${graphTransform.x}px, ${graphTransform.y}px) scale(${graphTransform.scale})`; }
-function zoomAt(factor, cx, cy){
-  const old = graphTransform.scale; const ns = clamp(old*factor, 0.35, 2.6);
-  graphTransform.x = (graphTransform.x - cx) * (ns/old) + cx;
-  graphTransform.y = (graphTransform.y - cy) * (ns/old) + cy;
-  graphTransform.scale = ns;
-  applyTransform();
-}
-el('#zoomIn').addEventListener('click', ()=> zoomAt(1.15, graphArea.clientWidth/2, graphArea.clientHeight/2));
-el('#zoomOut').addEventListener('click', ()=> zoomAt(0.88, graphArea.clientWidth/2, graphArea.clientHeight/2));
-el('#reset').addEventListener('click', resetView);
-
-function resetView(){ graphTransform = {x:40,y:20,scale:1}; applyTransform(); }
-
-/* smooth pan/zoom animation to target node */
-function panToNode(name, opts={scale:1.05,duration:600}){
-  const p = POS[name];
-  if(!p) return;
-  const vw = graphArea.clientWidth, vh = graphArea.clientHeight;
-  const targetX = - (p.x) * graphTransform.scale + vw/2;
-  const targetY = - (p.y) * graphTransform.scale + vh/2;
-  animateTransform(graphTransform.x, graphTransform.y, targetX, targetY, graphTransform.scale, opts.scale, opts.duration);
-}
-function animateTransform(sx,sy,tx,ty, ss, ts, duration){
-  cancelAnimationFrame(animHandle);
-  const start = performance.now();
-  const fromX = sx, fromY = sy, fromS = ss;
-  const toX = tx, toY = ty, toS = ts;
-  function step(t){
-    let p = Math.min(1,(t-start)/duration);
-    let ease = 0.5 - Math.cos(p*Math.PI)/2;
-    graphTransform.x = fromX + (toX-fromX)*ease;
-    graphTransform.y = fromY + (toY-fromY)*ease;
-    graphTransform.scale = fromS + (toS-fromS)*ease;
-    applyTransform();
-    if(p<1) animHandle = requestAnimationFrame(step);
+  for(let n of nodes){
+    const i=ITEM_MAP[n.name];
+    if(!i) continue;
+    const x=n.x*160+40, y=n.y*80+40;
+    ctx.fillStyle='rgba(255,255,255,0.07)';
+    ctx.fillRect(x,y,100,80);
+    const img=new Image();
+    img.src=i.image;
+    img.onload=()=>ctx.drawImage(img,x+24,y+8,48,48);
+    ctx.fillStyle='#fff';
+    ctx.font='12px Segoe UI';
+    ctx.fillText(i.name.slice(0,14),x+10,y+70);
   }
-  animHandle = requestAnimationFrame(step);
+  ctx.restore();
 }
 
-/* ========= Card / interactions ========= */
-function openCard(name){
-  const it = ITEM_MAP[name];
-  if(!it) return;
-  el('#cardTitle').textContent = it.name;
-  el('#cardDesc').textContent = it.description || '—';
-  el('#cardImage').src = it.image || '';
-  el('#tagComplexity').textContent = 'C: ' + (it.complexity===null||it.complexity===undefined? '—': it.complexity);
-  el('#tagTier').textContent = 'T: ' + (it.tier===null||it.tier===undefined? '—': it.tier);
-  el('#tagRarity').textContent = it.rarity || '—';
-  el('#cardType').textContent = it.itemType || '—';
-  // craft
-  const craftDiv = el('#cardCraft'); craftDiv.innerHTML = '';
-  if(it.craft && it.craft.length){
-    const row = create('div','craft-row');
-    it.craft.forEach(ing=>{
-      const b = create('button','craft-btn'); b.textContent = ing;
-      b.addEventListener('click', ()=>{ openCard(ing); panToNode(ing); });
-      row.appendChild(b);
-    });
-    craftDiv.appendChild(row);
-  } else {
-    craftDiv.textContent = 'This item cannot be crafted.';
-  }
-  // trivia
-  const tv = el('#cardTrivia'); tv.innerHTML = '';
-  (it.trivia||[]).forEach(t=>{ const li=document.createElement('li'); li.textContent=t; tv.appendChild(li); });
-}
-
-/* show all crafts using this item */
-el('#showAllUsing').addEventListener('click', ()=>{
-  const name = el('#cardTitle').textContent;
-  if(!name || name==='Select an item') return alert('Select an item first');
-  const results = ITEMS.filter(it => (it.craft||[]).includes(name));
-  if(!results.length) return alert('No crafts use this item');
-  // show suggestions modal area
-  suggestions.innerHTML=''; suggestions.style.display='block';
-  for(const r of results){
-    const s = create('div','sitem'); s.textContent = `${r.name} ← ${ (r.craft||[]).join(' + ') }`;
-    s.addEventListener('click', ()=>{ suggestions.style.display='none'; openCard(r.name); panToNode(r.name); });
-    suggestions.appendChild(s);
-  }
+// === INTERACTION ===
+canvas.addEventListener('mousedown',e=>{
+  drag=true; startX=e.clientX; startY=e.clientY;
+});
+canvas.addEventListener('mouseup',()=>drag=false);
+canvas.addEventListener('mousemove',e=>{
+  if(!drag)return;
+  offsetX+=e.movementX;
+  offsetY+=e.movementY;
+  drawTree();
+});
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const delta=e.deltaY>0?0.9:1.1;
+  scale*=delta;
+  drawTree();
 });
 
-/* highlight path of ancestors & descendants */
-function highlightPath(name){
-  // clear
-  Object.values(NODES).forEach(n=>n.classList.remove('highlight'));
-  LINKS.forEach(l=> l.el.setAttribute('stroke','rgba(255,255,255,0.06)'));
-  const ancestors = new Set(); const descendants = new Set();
-  // walk up
-  (function up(nm){
-    const it = ITEM_MAP[nm]; if(!it||!it.craft) return;
-    for(const inp of it.craft){
-      if(!ancestors.has(inp)){ ancestors.add(inp); up(inp); }
-    }
-  })(name);
-  // walk down
-  (function down(nm){
-    for(const it of ITEMS){
-      if((it.craft||[]).includes(nm)){
-        if(!descendants.has(it.name)){ descendants.add(it.name); down(it.name); }
-      }
-    }
-  })(name);
-  // apply
-  ancestors.forEach(a=>{ if(NODES[a]) NODES[a].classList.add('highlight'); });
-  descendants.forEach(d=>{ if(NODES[d]) NODES[d].classList.add('highlight'); });
-  if(NODES[name]) NODES[name].classList.add('highlight');
-  LINKS.forEach(l=>{
-    if((ancestors.has(l.from) && l.to===name) || (l.to===name) || (descendants.has(l.to)&& (descendants.has(l.from)||l.from===name))) {
-      l.el.setAttribute('stroke','rgba(40,209,255,0.22)');
-    }
-  });
-}
-
-/* ========= Import / Export / Clear cache ========= */
-el('#importBtn').addEventListener('click', ()=> el('#fileInput').click());
-el('#fileInput').addEventListener('change', (ev)=>{
-  const f = ev.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = ()=> {
-    try{
-      const json = JSON.parse(r.result);
-      ITEMS = Array.isArray(json)? json : (json.items || []);
-      // normalize
-      ITEM_MAP={}; ITEMS.forEach(it=>{ if(!it.slug) it.slug = slug(it.name); if(!it.image) it.image = IMAGE_FOLDER + it.slug + '.png'; ITEM_MAP[it.name]=it; });
-      renderList(); buildGraph();
-      alert('Imported JSON and rebuilt graph');
-    }catch(e){ alert('Invalid JSON file'); }
-  };
-  r.readAsText(f);
-});
-el('#exportBtn').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(ITEMS, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='items_export.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-});
-
-el('#clearCacheBtn').addEventListener('click', async ()=>{
-  if('caches' in window){
-    const keys = await caches.keys(); for(const k of keys) await caches.delete(k);
-    alert('Cache cleared');
-  }else alert('Cache API not supported');
-});
-
-/* center button */
-el('#btnCenter').addEventListener('click', ()=>{ resetView(); });
-
-/* show global tree (full) */
-el('#showTreeBtn').addEventListener('click', ()=>{
-  // toggle expand: we'll scroll to top and ensure graph is visible; user can zoom/pan
-  // For convenience, center on a high-level node (first craftable)
-  const craftable = ITEMS.find(it=>it.craftable);
-  if(craftable) { panToNode(craftable.name, {scale:1.0,duration:700}); highlightPath(craftable.name); openCard(craftable.name); }
-  // visually indicate (flash)
-  el('#graphContent').style.transition='box-shadow .3s'; el('#graphContent').style.boxShadow='0 30px 80px rgba(0,0,0,0.6)'; setTimeout(()=>el('#graphContent').style.boxShadow='',500);
-});
-
-/* ========= Service Worker registration (cache images + items.json) ========= */
-async function registerSW(){
-  if(!('serviceWorker' in navigator)) return;
-  const swCode = `
-  const CACHE_NAME = '${CACHE_NAME}';
-  self.addEventListener('install', e=> e.waitUntil(self.skipWaiting()));
-  self.addEventListener('activate', e=> e.waitUntil(self.clients.claim()));
-  self.addEventListener('fetch', e=>{
-    const req = e.request;
-    const url = new URL(req.url);
-    // only cache same-origin png/jpg/json/images
-    if(url.origin === location.origin && (url.pathname.endsWith('.png') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('/${DATA_URL}'))) {
-      e.respondWith(caches.open(CACHE_NAME).then(async cache=>{
-        const cached = await cache.match(req);
-        if(cached) return cached;
-        try{
-          const resp = await fetch(req);
-          cache.put(req, resp.clone());
-          return resp;
-        }catch(err){
-          return cached || Response.error();
-        }
-      }));
-    }
-  });
-  `;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  try{
-    await navigator.serviceWorker.register(swUrl);
-    console.log('SW registered');
-  }catch(e){ console.warn('SW reg failed', e); }
-}
-
-/* ========= Init ========= */
-window.addEventListener('load', async ()=>{
-  await loadData();
-  // click on blank area clears highlights
-  document.body.addEventListener('click', ()=>{ Object.values(NODES).forEach(n=>n.classList.remove('highlight')); LINKS.forEach(l=> l.el.setAttribute('stroke','rgba(255,255,255,0.06)')); });
-  // ensure initial transform applied
-  applyTransform();
-});
-
-/* ========= Utilities for large graphs (avoid freeze) ========= */
-/* If dataset is extremely large, layout can be heavy — but this uses simple grouping which should handle ~600 nodes */
 </script>
 </body>
 </html>
