@@ -1,39 +1,249 @@
-{
-  "items": {
-    "lava": {
-      "name": "Lava",
-      "desc": "Burning molten fluid found deep underground.",
-      "image": "images/lava.png",
-      "rarity": "common"
-    },
-    "marble": {
-      "name": "Marble",
-      "desc": "Smooth decorative block for construction.",
-      "image": "images/marble.png",
-      "rarity": "uncommon"
-    },
-    "obsidian": {
-      "name": "Obsidian",
-      "desc": "Hardened volcanic glass formed from lava and marble.",
-      "image": "images/obsidian.png",
-      "rarity": "rare"
-    },
-    "crystal": {
-      "name": "Crystal",
-      "desc": "Rare shiny mineral used in advanced crafts.",
-      "image": "images/crystal.png",
-      "rarity": "epic"
-    }
-  },
+Полный промпт (ready-to-paste) — «Сделай мне сайт-Вики по Pixel Worlds (всё: frontend, JSON, парсер, кэш, UI, mobile, global craft tree)»
 
-  "recipes": [
-    {
-      "inputs": ["lava", "marble"],
-      "output": "obsidian"
-    },
-    {
-      "inputs": ["obsidian", "marble"],
-      "output": "crystal"
-    }
-  ]
-}
+Ниже — универсальный, подробный промпт, который ты можешь вставить в любую мощную нейросеть (GPT, Claude, Llama, др.) или в задание разработчику. Он описывает всю систему: фронтенд (один HTML-файл + внешние JSON/изображения), формат JSON, парсер для fandom, Service Worker / кэш, UI-поведение, тесты и критерии приёмки. Проси LLM вернуть: 1) готовый index.html (всё в одном файле, если возможно), 2) пример items.json, 3) парсер pixelworlds_parser_full.py, 4) инструкции по размещению и по загрузке данных/images.
+
+Скопируй всё ниже и вставь в модель — она должна вернуть файлы/код прямо в ответе.
+
+⸻
+
+Инструкция-промпт (на русском)
+
+Контекст: Нужно сделать локальную Вики/справочник по предметам (Blocks) из Pixel Worlds. Сайт одностраничный, тёмная тема, мобильный-first, работает без сервера (static hosting). Данные хранятся в items.json (внешний файл). Парсер для fandom нужен отдельно (Python), чтобы спарсить страницы категории Category:Blocks и создать items.json и папку images/. UI должен поддерживать интерактивный глобальный граф крафтов, карточки предметов, fuzzy-поиск с подсказками, импорт/экспорт JSON, кеширование изображений и фон-гифки.
+
+Техническое ТЗ (с минимально необходимыми и опциональными фичами)
+	1.	Frontend
+	•	Заголовок + кнопки: Import JSON, Export JSON, Clear cache, Show Global Craft Tree.
+	•	Левая панель: поиск (fuzzy), список предметов (с миниатюрой).
+	•	Центр: интерактивный Global Craft Tree (SVG), pan/zoom (drag + wheel + buttons), плавная анимация камеры на объект при поиске/клике.
+	•	Правая панель: карточка предмета (как на fandom): image, name, description, Complexity, Tier, Rarity, Item Type, Farmability, Growth Time, craft (если есть) — ингредиенты как кликабельные кнопки, Trivia список, кнопка “Show all crafts using this item”.
+	•	Карточка должна выглядеть в стиле fandom (инфобокс), но упрощённо: тёмная тема, плавные тени, hover эффекты.
+	•	UI должен быть полностью адаптивным: на мобиле левый список сверху, карточка под графом.
+	•	Поиск: fuzzy matching (Levenshtein или subsequence), suggestions всплывают под строкой; при клике на suggestion — камера плавно едет к ноде и открывает карточку.
+	•	При клике на ноду: карточка открывается, все ноды в цепочке (входящие/исходящие) подсвечиваются; линии вдоль пути подсвечиваются.
+	•	Export/Import JSON: экспортирует items.json (весь массив), импорт заменяет текущие данные (с валидацией). Также кнопка для загрузки локального JSON-файла.
+	•	Левый верхний логотип — <img>; путь к иконке задаётся в HTML (заменяется пользователем).
+	2.	Data format — items.json (массив объектов)
+Укажи точную JSON-схему. Пример записи (обязательные поля помечены):
+
+[
+  {
+    "name": "Grey Block",                 // string, unique
+    "slug": "Grey_Block",                // string, optional (если нет, генерировать)
+    "image": "images/Grey_Block.png",    // relative path or URL
+    "description": "Blocks are building materials ...",
+    "complexity": 8,                     // number | null | "-"
+    "tier": 4,                           // number | "N/A" | null
+    "rarity": "Common",                  // string
+    "itemType": "Blocks",                // string
+    "farmability": "Farmable",           // string
+    "growthTime": "22m 7s",              // string
+    "craft": ["Black Block","White Block"], // array of ingredient names; empty or absent => uncraftable
+    "craftable": true,                   // boolean (true if craft exists)
+    "trivia": ["This item can never drop any seeds.", "Takes 5 Hits to break."]
+  }
+]
+
+	•	craft — массив строк ингредиентов в порядке (если отсутствует или пуст — craftable:false).
+	•	slug опционально — полезен для имен файлов/идентификаторов.
+
+	3.	Парсер (Python) — требования
+	•	Языки/библиотеки: Python 3.9+, requests, beautifulsoup4, lxml, tqdm (optional).
+	•	Функционал:
+	•	Обойти https://pixelworlds.fandom.com/wiki/Category:Blocks (включая пагинацию).
+	•	Для каждой ссылки — открыть страницу блока, спарсить:
+	•	title (h1)
+	•	description (первый параграф .mw-parser-output > p)
+	•	infobox: portable-infobox (.portable-infobox, .pi-data, data-source), извлечь: Complexity, Tier, Rarity, Item Type, Farmability, Growth Time (safefallback ищем по ключевым словам в тексте).
+	•	craft detection:
+	•	первичный: секция с заголовком Crossbreed / Cross-breed / Cross breed — найти A + B (текст) или изображения/ссылки в той секции (img[alt] или  text) — собрать ингредиенты;
+	•	fallback: искать в первых блоках текста паттерн X + Y (синонимы, разные разделители +, =, ‘,’) — но фильтровать (требовать слово «Block», «Trap», «Soil», или TitleCase).
+	•	запрещать false positives: если page содержит non-crossbreedable / non crossbreedable / obtainable from / cannot be crossbred — пометить craftable:false.
+	•	trivia: секция Trivia -> li’s
+	•	image: prefer .pi-image-thumbnail img src; fallback: first img in infobox; fallback: first image whose filename matches slug/name.
+	•	Скачивает изображение (relative path images/<filename>). Не перезаписывать существующие.
+	•	Создаёт три файла в pixelworlds_data/: blocks_all.json, blocks_craftable.json, blocks_uncraftable.json.
+	•	Resume support: resume.json с done_urls (если перезапуск — пропускать).
+	•	log file parser_log.txt с ошибками и пропусками.
+	•	Пауза между запросами configurable (по умолчанию 0.8s).
+	•	Возвращаемый объект/пример записи см. формат JSON выше.
+	•	Парсер должен логировать каждую страницу в формате:
+🔍 Parsing [i/N]: <Title>  ✅ craftable или ❌ uncraftable и записывать ошибки в parser_log.txt.
+	•	Указать инструкцию: pip install requests beautifulsoup4 lxml tqdm и команда запуска.
+	4.	Frontend — технические детали реализации
+	•	Single-page HTML (vanilla JS, no frameworks required), модульный код, разделение CSS и JS внутри того же файла разрешено (для простоты).
+	•	Подключаем items.json асинхронно (fetch), fallback — встроенный демо-массив.
+	•	Graph layout:
+	•	compute levels (BFS/DFS): nodes without inputs = level 0; item.level = max(level(inputs))+1; unresolved cycles placed on incremental fallback level.
+	•	Render nodes as absolutely positioned divs inside a pan/zoom container; draw connectors as SVG <path> (cubic bezier). Use requestAnimationFrame to recalc after layout.
+	•	Camera: implement graphTransform = {x,y,scale} and applyTransform() with CSS transform for both graph content and svg overlay.
+	•	Pan: mousedown / touch drag; Zoom: wheel + pinch (mobile) + buttons.
+	•	On search suggestion click: animate camera to node center with ease (lerp/easeOutCubic) and open card.
+	•	Highlight path: when clicking a node, compute ancestors & descendants and add .highlight class to nodes, change stroke color of path elements along chain.
+	•	Performance: lazy load images in nodes (use loading="lazy") and Service Worker to cache images + items.json.
+	•	Mobile: responsive breakpoints; collapse right card under graph; list becomes top strip.
+	5.	Caching / Offline
+	•	Implement Service Worker (in JS) to cache: index.html (or root), items.json, images (/images/*.png), and background gif. SW registers on load, caches files on fetch (Cache-first for images and JSON).
+	•	Add Clear Cache button that calls caches.keys() and deletes the named cache.
+	•	On JSON update: provide a mechanism to bypass cache (version check or timestamp in JSON). Add version field in items.json optional.
+	6.	Admin / Data editing
+	•	Add a modal form “Add Item / Edit Item” that updates in-memory ITEMS and allows Export JSON; no backend required. Imported JSON replaces current data in-memory.
+	•	Validate fields (name unique, image path string, craft array items exist or warn).
+	7.	Accessibility & small UX
+	•	Buttons keyboard accessible; aria labels for main controls.
+	•	Use contrast for dark theme, font-size adjustable.
+	•	Fuzzy search should support typos (Levenshtein or subsequence match).
+	8.	Acceptance tests (what must be true)
+	•	After loading items.json, the left list shows all craftable items (or all items if filter off).
+	•	Clicking a list item calls panToNode(name) and opens card; the node gets .highlight.
+	•	Importing a JSON file replaces data and re-renders graph; Export downloads a file with identical JSON.
+	•	Service Worker caches images and items.json; Clear Cache removes them.
+	•	blocks_craftable.json contains only craftable items (craft array non-empty).
+	•	Parser resume works: if script terminated, re-run continues from last unprocessed link.
+
+⸻
+
+Примеры кода (короткие, обязательные фрагменты для LLM — вставить в результат)
+
+1) HTML skeleton — вставить как index.html (примерный, минимальный, LLM должен отдать полный):
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OGPS — Pixel Worlds Craft Wiki</title>
+<!-- styles ... (dark theme) -->
+</head>
+<body>
+  <header> ... logo, search, global tree btn, import/export ... </header>
+  <div class="layout">
+    <aside id="sidebar"> <!-- items list --> </aside>
+    <main id="main">
+      <div id="controls"></div>
+      <div id="graphArea"><svg id="svgOverlay"></svg><div id="graphContent"></div></div>
+    </main>
+    <aside id="card"> <!-- item card --> </aside>
+  </div>
+  <script>
+    // fetch('items.json').then(...); // build itemMap, renderList(), buildGraph()
+    // functions: fuzzySearch(), buildGraph(), createNode(), createLink(), panToNode(), highlightPath()
+    // service worker registration
+  </script>
+</body>
+</html>
+
+2) Service worker (sw.js) snippet — cache image+json:
+
+const CACHE = 'ogps-cache-v1';
+self.addEventListener('install', e=> e.waitUntil(caches.open(CACHE)));
+self.addEventListener('fetch', e=>{
+  const url = new URL(e.request.url);
+  if(url.pathname.endsWith('.png') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('/items.json')){
+    e.respondWith(caches.open(CACHE).then(c=> c.match(e.request).then(r=> r || fetch(e.request).then(res=>{c.put(e.request,res.clone());return res}))));
+  }
+});
+
+3) Parser — ключевые функции (Python, вставить как pixelworlds_parser_full.py)
+
+(LLM должен вернуть рабочий код; ниже — краткий шаблон, требуемая логика — нужно чтобы модель сгенерировала полноценную версию)
+
+import requests, time, json, os, re
+from bs4 import BeautifulSoup
+BASE='https://pixelworlds.fandom.com'
+CATEGORY=BASE+'/wiki/Category:Blocks'
+# get category links (handle pagination)
+# for each link:
+#   soup = requests.get().text -> BeautifulSoup
+#   title = h1
+#   description = .mw-parser-output > p
+#   infobox: .portable-infobox [data-source] / .pi-data
+#   craft = find_crossbreed_ingredients(soup, title)
+#   image = select .pi-image-thumbnail img src or img whose filename contains slug
+#   download image if not exists
+#   populate record
+# write blocks_all.json, blocks_craftable.json, blocks_uncraftable.json
+
+4) JSON example (small)
+
+[
+  {
+    "name": "Grey Block",
+    "slug": "Grey_Block",
+    "image": "images/Grey_Block.png",
+    "description": "Blocks are building materials that are easy to obtain. This one is grey.",
+    "complexity": 8,
+    "tier": 4,
+    "rarity": "Common",
+    "itemType": "Blocks",
+    "farmability": "Farmable",
+    "growthTime": "22m 7s",
+    "craft": ["Black Block", "White Block"],
+    "craftable": true,
+    "trivia": ["This item has a chance to drop a Spray Can.","Takes 5 Hits to break."]
+  }
+]
+
+
+⸻
+
+Что должен вернуть LLM (точно, без вопросов)
+	1.	Готовый index.html (полный, self-contained; CSS + JS inline допустимы).
+	2.	Пример items.json (минимум 8–12 реальных демонстрационных записей, включая: craftable, uncraftable, different edge cases: missing fields, multiple ingredients, special names).
+	3.	Финальный рабочий Python-скрипт pixelworlds_parser_full.py (полностью реализованный, с resume, logging, image download, паузой и retry).
+	4.	sw.js (Service Worker код) или регистрация прямо в index.html.
+	5.	Инструкция (README): как установить зависимости pip install ..., как запустить парсер, как положить items.json и images/ рядом с index.html, где клиенты смогут хостить (GitHub Pages, Netlify) и чеклисты acceptance tests.
+	6.	Дополнительно: краткие unit-tests / manual tests (описание сценариев тестирования UI и парсера).
+
+⸻
+
+Acceptance критерии (чётко)
+	•	index.html загружается без сервера (открыть file:/// или через simple static host) и подтягивает items.json рядом (или использует встроенный fallback).
+	•	Левый список, граф и карточка работают, поиск фуззи и suggestions работают.
+	•	Global Craft Tree отображает все craftable предметы как ноды и соединения между ингредиентами и результатом.
+	•	Кликая suggestion/ноду — камера плавно едет к ноде, карточка открывается.
+	•	Service Worker кеширует items.json и картинки; кнопка Clear Cache очищает кеш.
+	•	Parser запускается и создаёт blocks_all.json, blocks_craftable.json, blocks_uncraftable.json + images/ + resume.json + parser_log.txt.
+	•	Parser пропускает уже обработанные страницы при повторном запуске (resume) и логирует прогресс в том формате:
+🔍 Parsing [54/278]: Wood Panel  ✅ craftable
+
+⸻
+
+Примеры UX-сценариев (для теста)
+	1.	Открыть страницу, ввести в поиск gry blok → suggestion показывает Grey Block → клик → камера плавно наводится → карточка открыта.
+	2.	На карточке Grey Block нажать “Show all crafts using this” → появляется список рецептов, клик на любой — ведёт к карточке и к ноде в дереве.
+	3.	Нажать Global Craft Tree → разворачивается полноэкранный интерактив; выбрать ноду → подсветка пути (входящие→выходящие).
+	4.	Загрузить items_export.json через Import → данные перерисовываются; Export скачивает текущий JSON.
+	5.	Запустить parser (на ПК/Colab/Pyto) — убедиться, что скачаны изображения, создан JSON. При обрыве перезапустить — процесс продолжает с последней незавершённой ссылки.
+
+⸻
+
+Комментарии по безопасности и этикету парсинга
+	•	Использовать User-Agent и паузы (0.5–1.5s) между запросами, не перегружать fandom; при ошибках делать retry с backoff.
+	•	Логи ошибок в parser_log.txt и возможность фильтра ошибок.
+	•	Если сайт блокирует — прекратить и сообщить в лог.
+
+⸻
+
+Дополнительные пожелания (опционально; если можно — реализовать)
+	•	Подсветка rarity (common/rare/epic) цветом в карточке и в узлах (не агрессивно).
+	•	Экспорт CSV.
+	•	Мини-редактор на сайте (Add Item) с drag&drop изображения (сохраняет в браузер, экспорт JSON).
+	•	Поддержка multi-ingredient recipes (A + B + C).
+
+⸻
+
+Шаблон сообщения для вставки в модель (copy-paste)
+
+(ниже собранное короткое сообщение — вставь в LLM и попроси вернуть файлы)
+
+Сделай мне полный проект: статический одностраничный сайт (index.html) + service worker + пример items.json + работающий Python-парсер (pixelworlds_parser_full.py) для pixelworlds.fandom.com Category:Blocks. 
+Требования: тёмная тема, mobile-first, карточки предметов в стиле fandom, интерактивный глобальный craft-tree (SVG, pan/zoom), fuzzy search с подсказками, плавная камера-навигация к узлу, highlight path, import/export JSON, caching (Service Worker). 
+Формат JSON — как в примере в ТЗ (вставь 8-12 демо-записей). Парсер должен скачивать изображения, поддерживать resume, логировать и сохранять три файла: blocks_all.json, blocks_craftable.json, blocks_uncraftable.json. 
+Отдавай: 1) полный index.html (всё, CSS+JS), 2) sw.js или встроенную регистрацию sw, 3) items.json демонстрационный, 4) pixelworlds_parser_full.py (полный рабочий), 5) README с инструкциями запуска и критериями приёмки. 
+
+
+⸻
+
+Если хочешь — я сейчас сгенерирую:
+	•	полный index.html + sw.js + пример items.json + pixelworlds_parser_full.py прямо здесь (в сообщении) — всё готовое к копированию.
+Скажи одно слово: «Генерируй» — и я выплюну весь код прямо в ответ (включая файлы).
