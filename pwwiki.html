@@ -1,329 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OGPS Wiki — Pixel Worlds Crafts</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OGPS Wiki — Pixel Worlds</title>
+  <style>
+    :root {
+      --bg: #070c15;
+      --panel: #0c1524;
+      --accent: #28d1ff;
+      --accent2: #9b5cff;
+      --text: #e8f2ff;
+      --muted: #9aaac5;
+      --common: #c0c0c0;
+      --uncommon: #5cff73;
+      --rare: #5ca8ff;
+      --epic: #d25cff;
+    }
 
-<style>
-:root {
-  --bg: #070c15;
-  --panel: #0c1524;
-  --accent: #28d1ff;
-  --accent2: #9b5cff;
-  --text: #e8f2ff;
-  --muted: #9aaac5;
-  --common: #c0c0c0;
-  --uncommon: #5cff73;
-  --rare: #5ca8ff;
-  --epic: #d25cff;
-}
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg) url('bg.gif') center/cover fixed;
+      color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(7, 12, 21, 0.88);
+      pointer-events: none;
+      z-index: -1;
+    }
 
-body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  overflow: hidden;
-}
+    header {
+      display: flex;
+      align-items: center;
+      background: var(--panel);
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      gap: 12px;
+    }
 
-/* === HEADER === */
-header {
-  display: flex;
-  align-items: center;
-  background: var(--panel);
-  padding: 8px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
+    #search {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: none;
+      border-radius: 8px;
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: 16px;
+      outline: none;
+      transition: background 0.3s;
+    }
+    #search:focus {
+      background: rgba(255,255,255,0.1);
+    }
 
-#siteIcon {
-  height: 40px;
-  width: 40px;
-  margin-right: 12px;
-}
+    #showTreeBtn {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #showTreeBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 12px rgba(40, 209, 255, 0.4);
+    }
 
-#search {
-  flex: 1;
-  background: rgba(255,255,255,0.05);
-  border: none;
-  border-radius: 8px;
-  color: var(--text);
-  padding: 8px 12px;
-  font-size: 16px;
-  outline: none;
-}
+    main {
+      display: grid;
+      grid-template-columns: 260px 1fr 320px;
+      height: calc(100vh - 64px);
+    }
 
-/* === LAYOUT === */
-main {
-  display: grid;
-  grid-template-columns: 250px 1fr 300px;
-  height: calc(100vh - 60px);
-}
+    @media (max-width: 960px) {
+      main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+      }
+      #itemList { order: 1; max-height: 180px; overflow-y: auto; }
+      #details { order: 2; }
+      #treePanel { order: 3; height: auto; }
+    }
 
-aside {
-  background: var(--panel);
-  border-right: 1px solid rgba(255,255,255,0.1);
-  overflow-y: auto;
-  padding: 10px;
-}
+    #itemList {
+      background: var(--panel);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      overflow-y: auto;
+      padding: 12px;
+    }
 
-#itemsList div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-#itemsList div:hover { background: rgba(255,255,255,0.05); }
+    #itemList div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+    }
+    #itemList div:hover {
+      background: rgba(255,255,255,0.07);
+      transform: translateX(4px);
+    }
 
-#itemsList img {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-}
+    #itemList img {
+      width: 36px;
+      height: 36px;
+      image-rendering: pixelated;
+      border-radius: 4px;
+    }
 
-/* === ITEM DETAILS === */
-#details {
-  padding: 20px;
-  overflow-y: auto;
-}
+    #details {
+      padding: 24px;
+      overflow-y: auto;
+    }
 
-#details img {
-  width: 64px;
-  height: 64px;
-}
+    #details img {
+      width: 72px;
+      height: 72px;
+      image-rendering: pixelated;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
 
-#details h2 {
-  margin: 0;
-  font-size: 24px;
-}
+    #details h2 {
+      margin: 0 0 16px 0;
+      font-size: 26px;
+      color: var(--accent);
+    }
 
-/* === TREE VIEW === */
-#tree {
-  position: relative;
-  overflow: auto;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%);
-  border-left: 1px solid rgba(255,255,255,0.1);
-}
+    .field {
+      margin: 8px 0;
+      color: var(--muted);
+    }
+    .field strong { color: var(--text); }
 
-.tree-node {
-  position: absolute;
-  text-align: center;
-  padding: 8px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.05);
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
-  transition: transform 0.2s, background 0.2s;
-}
+    .craft-ingredients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .craft-ingredients button {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .craft-ingredients button:hover {
+      background: rgba(255,255,255,0.12);
+    }
 
-.tree-node:hover {
-  background: rgba(255,255,255,0.1);
-  transform: scale(1.05);
-}
+    #treePanel {
+      position: relative;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 70%);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      overflow: auto;
+      display: none;
+    }
+    #treePanel.active {
+      display: block;
+    }
 
-.tree-node img {
-  width: 48px;
-  height: 48px;
-  display: block;
-  margin: auto;
-}
+    .tree-node {
+      position: absolute;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.38, 0.96), background 0.3s;
+      cursor: pointer;
+    }
+    .tree-node:hover {
+      background: rgba(255,255,255,0.1);
+      transform: scale(1.08);
+      z-index: 10;
+    }
 
-/* === TRENDING === */
-#trending {
-  padding: 10px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-#trending h3 { margin-top: 10px; }
+    .tree-node img {
+      width: 52px;
+      height: 52px;
+      image-rendering: pixelated;
+      display: block;
+      margin: 0 auto 6px;
+    }
 
-.trend-item {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-</style>
+    .rarity-common { color: var(--common); }
+    .rarity-uncommon { color: var(--uncommon); }
+    .rarity-rare { color: var(--rare); }
+    .rarity-epic { color: var(--epic); }
+  </style>
 </head>
 <body>
+  <header>
+    <input type="text" id="search" placeholder="Search items (e.g. gry blok)" autocomplete="off">
+    <button id="showTreeBtn">Show Global Craft Tree</button>
+  </header>
 
-<header>
-  <!-- Иконка сайта -->
-  <img id="siteIcon" src="assets/icon.png" alt="Site icon">
-  <input type="text" id="search" placeholder="Search items...">
-</header>
+  <main>
+    <aside id="itemList"></aside>
+    <section id="details">
+      <h2>Welcome to OGPS Wiki</h2>
+      <p>Select an item from the list to view its details and craft tree.</p>
+    </section>
+    <section id="treePanel">
+      <svg id="treeLines" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></svg>
+    </section>
+  </main>
 
-<main>
-  <!-- Список предметов -->
-  <aside>
-    <div id="itemsList"></div>
-    <div id="trending">
-      <h3>🔥 Trending</h3>
-      <div id="trendList"></div>
-    </div>
-  </aside>
+  <script>
+    let ITEMS = [];
+    let ITEM_MAP = {};
 
-  <!-- Информация о предмете -->
-  <section id="details">
-    <h2>Select an item</h2>
-    <p>Click an item to view its recipe tree.</p>
-  </section>
+    const searchInput = document.getElementById('search');
+    const itemList = document.getElementById('itemList');
+    const details = document.getElementById('details');
+    const treePanel = document.getElementById('treePanel');
+    const treeLines = document.getElementById('treeLines');
+    const showTreeBtn = document.getElementById('showTreeBtn');
 
-  <!-- Дерево крафта -->
-  <section id="tree">
-    <svg id="treeLines" width="100%" height="100%" style="position:absolute;top:0;left:0;"></svg>
-  </section>
-</main>
-
-<script>
-let items = {};
-let recipes = [];
-let trending = JSON.parse(localStorage.getItem("trending") || "{}");
-const listDiv = document.getElementById("itemsList");
-const details = document.getElementById("details");
-const trendDiv = document.getElementById("trendList");
-const treeDiv = document.getElementById("tree");
-const treeLines = document.getElementById("treeLines");
-
-/* ====== Load crafts.json ====== */
-async function loadData() {
-  try {
-    const res = await fetch("crafts.json");
-    const data = await res.json();
-    items = data.items;
-    recipes = data.recipes;
-  } catch {
-    console.warn("crafts.json not found, using demo data");
-    items = {
-      "lava": {name:"Lava",desc:"Burning molten fluid",image:"images/lava.png",rarity:"common"},
-      "marble": {name:"Marble",desc:"Smooth decorative block",image:"images/marble.png",rarity:"uncommon"},
-      "obsidian": {name:"Obsidian",desc:"Hardened volcanic glass",image:"images/obsidian.png",rarity:"rare"}
-    };
-    recipes = [{inputs:["lava","marble"],output:"obsidian"}];
-  }
-  renderList();
-  renderTrending();
-}
-
-/* ====== Render item list ====== */
-function renderList(filter="") {
-  listDiv.innerHTML = "";
-  const normalized = filter.toLowerCase();
-  for (let id in items) {
-    const item = items[id];
-    if (fuzzyMatch(item.name.toLowerCase(), normalized)) {
-      const div = document.createElement("div");
-      div.innerHTML = `<img src="${item.image}"><span>${item.name}</span>`;
-      div.onclick = () => showItem(id);
-      listDiv.appendChild(div);
+    // === LOAD DATA ===
+    async function loadData() {
+      try {
+        const res = await fetch('items.json?_=' + Date.now());
+        ITEMS = await res.json();
+        ITEM_MAP = {};
+        ITEMS.forEach(item => ITEM_MAP[item.name] = item);
+        renderList();
+      } catch (e) {
+        details.innerHTML = `<h2>❌ Error</h2><p>Failed to load items.json. Make sure it's in the same folder.</p>`;
+      }
     }
-  }
-}
 
-/* ====== Simple fuzzy match ====== */
-function fuzzyMatch(str, pattern) {
-  let i=0,j=0;
-  while (i<str.length && j<pattern.length) {
-    if (str[i]===pattern[j]) j++;
-    i++;
-  }
-  return j===pattern.length;
-}
+    // === FUZZY SEARCH ===
+    function fuzzyMatch(query, text) {
+      query = query.toLowerCase();
+      text = text.toLowerCase();
+      let j = 0;
+      for (let i = 0; i < query.length; i++) {
+        const idx = text.indexOf(query[i], j);
+        if (idx === -1) return false;
+        j = idx + 1;
+      }
+      return true;
+    }
 
-/* ====== Show item details ====== */
-function showItem(id) {
-  const item = items[id];
-  trending[id] = (trending[id]||0)+1;
-  localStorage.setItem("trending", JSON.stringify(trending));
-  renderTrending();
-
-  details.innerHTML = `
-    <img src="${item.image}">
-    <h2>${item.name}</h2>
-    <p>${item.desc}</p>
-    <p><b>Rarity:</b> <span style="color:var(--${item.rarity||'common'})">${item.rarity||'common'}</span></p>
-  `;
-  drawTree(id);
-}
-
-/* ====== Render Trending ====== */
-function renderTrending() {
-  const sorted = Object.entries(trending).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  trendDiv.innerHTML = sorted.map(([id,v])=>`<div class="trend-item">${items[id]?.name || id} (${v})</div>`).join("");
-}
-
-/* ====== Draw Craft Tree ====== */
-function drawTree(id) {
-  treeDiv.querySelectorAll(".tree-node").forEach(e=>e.remove());
-  treeLines.innerHTML="";
-  const levels = buildTreeLevels(id);
-  const nodePositions = {};
-  const levelHeight = 150;
-  const nodeWidth = 120;
-  const startY = 50;
-  levels.forEach((level,i)=>{
-    const y = startY + i*levelHeight;
-    const totalWidth = level.length * (nodeWidth + 60);
-    const startX = (treeDiv.clientWidth - totalWidth)/2;
-    level.forEach((node,j)=>{
-      const x = startX + j*(nodeWidth+60);
-      const div = document.createElement("div");
-      div.className="tree-node";
-      div.style.left=x+"px";
-      div.style.top=y+"px";
-      div.innerHTML=`<img src="${items[node]?.image||''}"><div>${items[node]?.name||node}</div>`;
-      div.onclick=()=>showItem(node);
-      treeDiv.appendChild(div);
-      nodePositions[node]={x:x+nodeWidth/2, y:y+40};
-    });
-  });
-  // Draw lines
-  recipes.forEach(r=>{
-    if (r.output===id || levels.flat().includes(r.output)) {
-      r.inputs.forEach(inp=>{
-        if (nodePositions[inp] && nodePositions[r.output]) {
-          const line = document.createElementNS("http://www.w3.org/2000/svg","line");
-          line.setAttribute("x1", nodePositions[inp].x);
-          line.setAttribute("y1", nodePositions[inp].y);
-          line.setAttribute("x2", nodePositions[r.output].x);
-          line.setAttribute("y2", nodePositions[r.output].y);
-          line.setAttribute("stroke", "rgba(255,255,255,0.3)");
-          line.setAttribute("stroke-width", "2");
-          treeLines.appendChild(line);
-        }
+    // === RENDER LIST ===
+    function renderList(filter = '') {
+      itemList.innerHTML = '';
+      const itemsToShow = filter
+        ? ITEMS.filter(i => fuzzyMatch(filter, i.name))
+        : ITEMS;
+      itemsToShow.forEach(item => {
+        const div = document.createElement('div');
+        div.innerHTML = `<img src="${item.image || 'images/missing.png'}" alt="${item.name}"><span>${item.name}</span>`;
+        div.onclick = () => showItem(item.name);
+        itemList.appendChild(div);
       });
     }
-  });
-}
 
-/* ====== Build tree levels ====== */
-function buildTreeLevels(target) {
-  let levels = [[target]];
-  let visited = new Set([target]);
-  for (let i=0; i<5; i++) {
-    let prev = levels[i];
-    let next = [];
-    recipes.forEach(r=>{
-      if (prev.includes(r.output)) {
-        r.inputs.forEach(inp=>{
-          if (!visited.has(inp)) {
-            next.push(inp);
-            visited.add(inp);
+    // === SHOW ITEM ===
+    function showItem(name) {
+      const item = ITEM_MAP[name];
+      if (!item) return;
+
+      let html = `
+        <img src="${item.image || 'images/missing.png'}" alt="${item.name}">
+        <h2>${item.name}</h2>
+        <p>${item.description || 'No description.'}</p>
+        <div class="field"><strong>Complexity:</strong> ${item.complexity !== undefined ? item.complexity : 'N/A'}</div>
+        <div class="field"><strong>Tier:</strong> ${item.tier !== undefined ? item.tier : 'N/A'}</div>
+        <div class="field"><strong>Rarity:</strong> <span class="rarity-${(item.rarity || 'common').toLowerCase()}">${item.rarity || 'Common'}</span></div>
+        <div class="field"><strong>Item Type:</strong> ${item.itemType || 'N/A'}</div>
+        <div class="field"><strong>Farmability:</strong> ${item.farmability || 'N/A'}</div>
+        <div class="field"><strong>Growth Time:</strong> ${item.growthTime || 'N/A'}</div>
+      `;
+
+      if (item.craftable && item.craft && item.craft.length > 0) {
+        html += `<div class="field"><strong>Craft:</strong></div><div class="craft-ingredients">`;
+        item.craft.forEach(ing => {
+          html += `<button onclick="showItem('${ing.replace(/'/g, "\\'")}')">${ing}</button>`;
+        });
+        html += `</div>`;
+      }
+
+      if (item.trivia && item.trivia.length > 0) {
+        html += `<div class="field"><strong>Trivia:</strong></div><ul>`;
+        item.trivia.forEach(t => html += `<li>${t}</li>`);
+        html += `</ul>`;
+      }
+
+      details.innerHTML = html;
+    }
+
+    // === TREE LOGIC ===
+    function buildTreeLevels(target) {
+      let levels = [[target]];
+      let visited = new Set([target]);
+      for (let depth = 0; depth < 5; depth++) {
+        let current = levels[depth];
+        let next = [];
+        ITEMS.forEach(item => {
+          if (item.craft && item.craft.includes(target)) {
+            if (!visited.has(item.name)) {
+              next.push(item.name);
+              visited.add(item.name);
+            }
           }
+        });
+        if (next.length === 0) break;
+        levels.push(next);
+        target = next[0]; // simplistic — for full tree, use BFS from root
+      }
+      return levels.reverse();
+    }
+
+    function drawTree(rootName) {
+      treePanel.querySelectorAll('.tree-node').forEach(e => e.remove());
+      treeLines.innerHTML = '';
+
+      const levels = buildTreeLevels(rootName);
+      const nodeWidth = 130;
+      const nodeHeight = 100;
+      const hSpacing = 160;
+      const vSpacing = 140;
+      const startX = 100;
+      const startY = 80;
+
+      const nodePositions = {};
+
+      levels.forEach((level, i) => {
+        const y = startY + i * vSpacing;
+        const totalWidth = level.length * hSpacing;
+        const levelStartX = startX + (treePanel.clientWidth - totalWidth) / 2;
+        level.forEach((name, j) => {
+          const x = levelStartX + j * hSpacing;
+          const item = ITEM_MAP[name];
+          if (!item) return;
+
+          const node = document.createElement('div');
+          node.className = 'tree-node';
+          node.style.left = x + 'px';
+          node.style.top = y + 'px';
+          node.innerHTML = `<img src="${item.image || 'images/missing.png'}"><div>${item.name}</div>`;
+          node.onclick = () => showItem(name);
+          treePanel.appendChild(node);
+          nodePositions[name] = { x: x + nodeWidth / 2, y: y + 60 };
+        });
+      });
+
+      // Draw lines (simple: from ingredient to result)
+      ITEMS.forEach(item => {
+        if (!item.craft || !nodePositions[item.name]) return;
+        item.craft.forEach(ing => {
+          if (nodePositions[ing]) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', nodePositions[ing].x);
+            line.setAttribute('y1', nodePositions[ing].y);
+            line.setAttribute('x2', nodePositions[item.name].x);
+            line.setAttribute('y2', nodePositions[item.name].y);
+            line.setAttribute('stroke', 'rgba(255,255,255,0.35)');
+            line.setAttribute('stroke-width', '2');
+            treeLines.appendChild(line);
+          }
+        });
+      });
+    }
+
+    // === EVENTS ===
+    searchInput.addEventListener('input', (e) => {
+      renderList(e.target.value.trim());
+    });
+
+    showTreeBtn.addEventListener('click', () => {
+      treePanel.classList.toggle('active');
+      if (treePanel.classList.contains('active')) {
+        // Draw full craft tree (all craftable items)
+        treePanel.querySelectorAll('.tree-node').forEach(e => e.remove());
+        treeLines.innerHTML = '';
+
+        const craftable = ITEMS.filter(i => i.craftable);
+        const nodeWidth = 120;
+        const spacing = 140;
+        const startX = 100;
+        const startY = 100;
+
+        craftable.forEach((item, i) => {
+          const x = startX + (i % 6) * spacing;
+          const y = startY + Math.floor(i / 6) * spacing;
+          const node = document.createElement('div');
+          node.className = 'tree-node';
+          node.style.left = x + 'px';
+          node.style.top = y + 'px';
+          node.innerHTML = `<img src="${item.image || 'images/missing.png'}"><div>${item.name}</div>`;
+          node.onclick = () => {
+            showItem(item.name);
+            treePanel.classList.remove('active');
+          };
+          treePanel.appendChild(node);
         });
       }
     });
-    if (next.length===0) break;
-    levels.push(next);
-  }
-  return levels.reverse();
-}
 
-/* ====== SEARCH ====== */
-document.getElementById("search").addEventListener("input", e=>{
-  renderList(e.target.value);
-});
-
-loadData();
-</script>
+    loadData();
+  </script>
 </body>
 </html>
