@@ -1,408 +1,329 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>OGPS — Craft Wiki (demo)</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGPS Wiki — Pixel Worlds Crafts</title>
+
 <style>
-:root{
-  --bg:#071428;
-  --panel:#0c1f2b;
-  --muted:#9fb1c0;
-  --accent:#28d1ff;
-  --accent2:#9b5cff;
-  --card:#0b1622;
-  --glass: rgba(255,255,255,0.03);
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: Inter, Roboto, Arial, sans-serif;
-  background:var(--bg);
-  color:#e6eef6;
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
+:root {
+  --bg: #070c15;
+  --panel: #0c1524;
+  --accent: #28d1ff;
+  --accent2: #9b5cff;
+  --text: #e8f2ff;
+  --muted: #9aaac5;
+  --common: #c0c0c0;
+  --uncommon: #5cff73;
+  --rare: #5ca8ff;
+  --epic: #d25cff;
 }
 
-/* GIF background placeholder: add your GIF URL to --gif-url variable below */
-.bg-gif {
-  --gif-url: "";
-  position:fixed; inset:0; z-index:-1;
-  background-image: linear-gradient(180deg, rgba(2,6,15,0.45), rgba(2,6,15,0.6)), url(var(--gif-url));
-  background-size:cover; background-position:center;
-  filter: saturate(1.05) blur(0.0px);
-  pointer-events:none;
-  opacity:0.9;
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
 }
 
-/* layout */
-.header {
-  display:flex; align-items:center; justify-content:center;
-  padding:12px 18px; border-bottom:1px solid rgba(255,255,255,0.03);
-}
-.header h1{margin:0;font-size:18px}
-.container{display:flex;flex:1;gap:16px;padding:18px;background:transparent}
-.sidebar{
-  width:300px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03);box-shadow: 0 8px 30px rgba(2,6,23,0.45);
-  display:flex;flex-direction:column;
-}
-#search{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-bottom:10px}
-.item-list{list-style:none;padding:0;margin:0;overflow:auto;flex:1}
-.item-list li{display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;margin-bottom:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,transparent, rgba(255,255,255,0.01))}
-.item-list li:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.5)}
-.item-art{width:44px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#0f2a36,#071220);font-weight:700}
-.item-name{flex:1}
-
-.sidebar-foot{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.btn{padding:8px;border-radius:8px;border:0;background:var(--accent);color:#022431;font-weight:700;cursor:pointer}
-
-/* main */
-.main{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-.detail-top{display:flex;gap:14px;align-items:center}
-.item-art.large{width:120px;height:96px;border-radius:10px;background:linear-gradient(180deg,#082a36,#04141a);display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900}
-.detail-info h2{margin:0}
-.muted{color:var(--muted)}
-.tags{margin-top:8px}
-.tag{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--glass);color:var(--muted);margin-right:8px;font-size:12px}
-
-/* recipes */
-.recipes{display:flex;gap:12px;margin-top:12px}
-.col{flex:1}
-.recipes-list{list-style:none;padding:8px;margin:0;border-radius:8px;background:rgba(0,0,0,0.15);min-height:80px}
-.recipes-list li{padding:8px;border-radius:6px;margin-bottom:8px;background:transparent;cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
-.recipes-list button.link{background:none;border:0;color:var(--accent);cursor:pointer;font-weight:700}
-
-/* tree */
-.tree{margin-top:12px}
-.tree-wrap{display:flex;gap:12px}
-.tree-col{flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;min-height:160px;overflow:auto}
-.tree-box ul{list-style:none;padding-left:16px}
-.tree-box li{padding:6px 4px;cursor:pointer}
-.tree-box button.link{background:none;border:0;color:var(--accent);cursor:pointer;font-weight:700}
-
-/* trending */
-.trending{margin-top:12px}
-.trending h3{margin:8px 0}
-
-/* animations */
-.pulse { animation: pulse 420ms ease; }
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: none; }
-  50% { transform: scale(1.035); box-shadow: 0 10px 30px rgba(40,209,255,0.08); }
-  100% { transform: scale(1); box-shadow: none; }
+/* === HEADER === */
+header {
+  display: flex;
+  align-items: center;
+  background: var(--panel);
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-/* responsive */
-@media (max-width:900px){
-  .container{flex-direction:column;padding:12px}
-  .sidebar{width:100%}
+#siteIcon {
+  height: 40px;
+  width: 40px;
+  margin-right: 12px;
 }
+
+#search {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: none;
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+/* === LAYOUT === */
+main {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px;
+  height: calc(100vh - 60px);
+}
+
+aside {
+  background: var(--panel);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  overflow-y: auto;
+  padding: 10px;
+}
+
+#itemsList div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#itemsList div:hover { background: rgba(255,255,255,0.05); }
+
+#itemsList img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+/* === ITEM DETAILS === */
+#details {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#details img {
+  width: 64px;
+  height: 64px;
+}
+
+#details h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* === TREE VIEW === */
+#tree {
+  position: relative;
+  overflow: auto;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%);
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.tree-node {
+  position: absolute;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.tree-node:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.05);
+}
+
+.tree-node img {
+  width: 48px;
+  height: 48px;
+  display: block;
+  margin: auto;
+}
+
+/* === TRENDING === */
+#trending {
+  padding: 10px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+#trending h3 { margin-top: 10px; }
+
+.trend-item {
+  font-size: 14px;
+  color: var(--muted);
+}
+
 </style>
 </head>
 <body>
-<div class="bg-gif" id="bgGif"></div>
 
-<header class="header">
-  <h1>OGPS — Craft Wiki (demo)</h1>
+<header>
+  <!-- Иконка сайта -->
+  <img id="siteIcon" src="assets/icon.png" alt="Site icon">
+  <input type="text" id="search" placeholder="Search items...">
 </header>
 
-<div class="container">
-  <aside class="sidebar card" aria-label="Sidebar">
-    <input id="search" placeholder="Search items (fuzzy)" />
-    <ul id="itemList" class="item-list" role="list"></ul>
-
-    <div class="trending card" id="trendingCard">
+<main>
+  <!-- Список предметов -->
+  <aside>
+    <div id="itemsList"></div>
+    <div id="trending">
       <h3>🔥 Trending</h3>
-      <ol id="trendingList"></ol>
-    </div>
-
-    <div class="sidebar-foot">
-      <button id="exportBtn" class="btn">Export JSON</button>
-      <small class="muted">Local demo data. Add your GIF by editing the HTML.</small>
+      <div id="trendList"></div>
     </div>
   </aside>
 
-  <main class="main">
-    <section id="welcome" class="card">
-      <h2>Welcome — choose an item</h2>
-      <p class="muted">This is a demo wiki with fuzzy search, craft-tree, reverse paths and trending (local).</p>
-    </section>
+  <!-- Информация о предмете -->
+  <section id="details">
+    <h2>Select an item</h2>
+    <p>Click an item to view its recipe tree.</p>
+  </section>
 
-    <section id="detail" class="card hidden" aria-live="polite">
-      <div class="detail-top">
-        <div id="itemArt" class="item-art large">?</div>
-        <div class="detail-info">
-          <h2 id="itemName">Name</h2>
-          <p id="itemDesc" class="muted">Description</p>
-          <div class="tags"><span id="itemType" class="tag">type</span><span id="itemRarity" class="tag">rarity</span></div>
-        </div>
-      </div>
-
-      <div class="recipes">
-        <div class="col">
-          <h3>Inputs (what creates this)</h3>
-          <ul id="inputsList" class="recipes-list"></ul>
-        </div>
-        <div class="col">
-          <h3>Outputs (what uses this)</h3>
-          <ul id="outputsList" class="recipes-list"></ul>
-        </div>
-      </div>
-
-      <div class="tree">
-        <h3>Craft tree</h3>
-        <div class="tree-wrap">
-          <div class="tree-col"><h4>From</h4><div id="treeFrom" class="tree-box"></div></div>
-          <div class="tree-col"><h4>To</h4><div id="treeTo" class="tree-box"></div></div>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
-
-<footer style="padding:10px 18px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)">Demo — all data local. Hash links support: add #/item_id to open directly.</footer>
+  <!-- Дерево крафта -->
+  <section id="tree">
+    <svg id="treeLines" width="100%" height="100%" style="position:absolute;top:0;left:0;"></svg>
+  </section>
+</main>
 
 <script>
-/* Demo data */
-const data = {
-  items: {
-    lava: {name:'Lava',desc:'Burning molten fluid',art:'🌋',type:'liquid',rarity:'common'},
-    marble: {name:'Marble',desc:'Smooth decorative block',art:'◼',type:'block',rarity:'uncommon'},
-    obsidian: {name:'Obsidian',desc:'Hard black volcanic glass',art:'⬛',type:'block',rarity:'rare'},
-    brick: {name:'Brick',desc:'Baked clay brick',art:'▦',type:'block',rarity:'common'},
-    furnace: {name:'Furnace',desc:'Device used to smelt materials',art:'♨',type:'device',rarity:'uncommon'},
-    ember_shard: {name:'Ember Shard',desc:'A shard containing heat',art:'✦',type:'material',rarity:'rare'},
-    flame_gem: {name:'Flame Gem',desc:'Concentrated flame essence',art:'♦',type:'gem',rarity:'epic'},
-    sky_crystal: {name:'Sky Crystal',desc:'A crystal from the skies',art:'✺',type:'gem',rarity:'rare'},
-    cloud_block: {name:'Cloud Block',desc:'Soft floating block',art:'☁',type:'block',rarity:'uncommon'},
-    aeroblade: {name:'Aero Blade',desc:'Blade infused with wind and sky crystal',art:'⚔',type:'weapon',rarity:'epic'}
-  },
-  recipes: [
-    {inputs:['lava','marble'], output:'obsidian'},
-    {inputs:['brick','lava'], output:'furnace'},
-    {inputs:['obsidian','ember_shard'], output:'flame_gem'},
-    {inputs:['sky_crystal','cloud_block'], output:'aeroblade'},
-    {inputs:['lava','ember_shard'], output:'flame_gem'},
-    {inputs:['marble','brick'], output:'cloud_block'}
-  ]
-};
+let items = {};
+let recipes = [];
+let trending = JSON.parse(localStorage.getItem("trending") || "{}");
+const listDiv = document.getElementById("itemsList");
+const details = document.getElementById("details");
+const trendDiv = document.getElementById("trendList");
+const treeDiv = document.getElementById("tree");
+const treeLines = document.getElementById("treeLines");
 
-/* build maps */
-const items = data.items;
-const recipes = data.recipes;
-const fromMap = {}; // item -> recipes where used as input
-const toMap = {};   // item -> recipes that produce it
-recipes.forEach(r=>{
-  r.inputs.forEach(i=> { fromMap[i]=fromMap[i]||[]; fromMap[i].push(r); });
-  toMap[r.output]=toMap[r.output]||[]; toMap[r.output].push(r);
-});
-
-/* DOM refs */
-const itemListEl = document.getElementById('itemList');
-const searchEl = document.getElementById('search');
-const detailEl = document.getElementById('detail');
-const welcomeEl = document.getElementById('welcome');
-const itemArt = document.getElementById('itemArt');
-const itemName = document.getElementById('itemName');
-const itemDesc = document.getElementById('itemDesc');
-const itemType = document.getElementById('itemType');
-const itemRarity = document.getElementById('itemRarity');
-const inputsList = document.getElementById('inputsList');
-const outputsList = document.getElementById('outputsList');
-const treeFrom = document.getElementById('treeFrom');
-const treeTo = document.getElementById('treeTo');
-const trendingListEl = document.getElementById('trendingList');
-const exportBtn = document.getElementById('exportBtn');
-
-/* Trending (localStorage) */
-const TREND_KEY = 'ogps_trending_v1';
-function readTrending(){ try{ return JSON.parse(localStorage.getItem(TREND_KEY) || '{}'); }catch(e){return{}} }
-function bumpTrending(id){
-  const t = readTrending();
-  t[id] = (t[id]||0)+1;
-  try{ localStorage.setItem(TREND_KEY, JSON.stringify(t)); }catch(e){/* ignore */ }
+/* ====== Load crafts.json ====== */
+async function loadData() {
+  try {
+    const res = await fetch("crafts.json");
+    const data = await res.json();
+    items = data.items;
+    recipes = data.recipes;
+  } catch {
+    console.warn("crafts.json not found, using demo data");
+    items = {
+      "lava": {name:"Lava",desc:"Burning molten fluid",image:"images/lava.png",rarity:"common"},
+      "marble": {name:"Marble",desc:"Smooth decorative block",image:"images/marble.png",rarity:"uncommon"},
+      "obsidian": {name:"Obsidian",desc:"Hardened volcanic glass",image:"images/obsidian.png",rarity:"rare"}
+    };
+    recipes = [{inputs:["lava","marble"],output:"obsidian"}];
+  }
+  renderList();
   renderTrending();
 }
-function renderTrending(){
-  const t = readTrending();
-  const arr = Object.keys(t).map(k=>({id:k,count:t[k],name: items[k]?.name||k})).sort((a,b)=>b.count-a.count).slice(0,7);
-  trendingListEl.innerHTML='';
-  if(arr.length===0){ trendingListEl.innerHTML='<li class="muted">No views yet. Open items to populate trending.</li>'; return; }
-  arr.forEach(a=>{
-    const li = document.createElement('li');
-    li.innerHTML = `<button class="link" data-key="${a.id}">${a.name}</button> <small class="muted">(${a.count})</small>`;
-    li.querySelector('button').addEventListener('click', ()=> showItem(a.id));
-    trendingListEl.appendChild(li);
+
+/* ====== Render item list ====== */
+function renderList(filter="") {
+  listDiv.innerHTML = "";
+  const normalized = filter.toLowerCase();
+  for (let id in items) {
+    const item = items[id];
+    if (fuzzyMatch(item.name.toLowerCase(), normalized)) {
+      const div = document.createElement("div");
+      div.innerHTML = `<img src="${item.image}"><span>${item.name}</span>`;
+      div.onclick = () => showItem(id);
+      listDiv.appendChild(div);
+    }
+  }
+}
+
+/* ====== Simple fuzzy match ====== */
+function fuzzyMatch(str, pattern) {
+  let i=0,j=0;
+  while (i<str.length && j<pattern.length) {
+    if (str[i]===pattern[j]) j++;
+    i++;
+  }
+  return j===pattern.length;
+}
+
+/* ====== Show item details ====== */
+function showItem(id) {
+  const item = items[id];
+  trending[id] = (trending[id]||0)+1;
+  localStorage.setItem("trending", JSON.stringify(trending));
+  renderTrending();
+
+  details.innerHTML = `
+    <img src="${item.image}">
+    <h2>${item.name}</h2>
+    <p>${item.desc}</p>
+    <p><b>Rarity:</b> <span style="color:var(--${item.rarity||'common'})">${item.rarity||'common'}</span></p>
+  `;
+  drawTree(id);
+}
+
+/* ====== Render Trending ====== */
+function renderTrending() {
+  const sorted = Object.entries(trending).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  trendDiv.innerHTML = sorted.map(([id,v])=>`<div class="trend-item">${items[id]?.name || id} (${v})</div>`).join("");
+}
+
+/* ====== Draw Craft Tree ====== */
+function drawTree(id) {
+  treeDiv.querySelectorAll(".tree-node").forEach(e=>e.remove());
+  treeLines.innerHTML="";
+  const levels = buildTreeLevels(id);
+  const nodePositions = {};
+  const levelHeight = 150;
+  const nodeWidth = 120;
+  const startY = 50;
+  levels.forEach((level,i)=>{
+    const y = startY + i*levelHeight;
+    const totalWidth = level.length * (nodeWidth + 60);
+    const startX = (treeDiv.clientWidth - totalWidth)/2;
+    level.forEach((node,j)=>{
+      const x = startX + j*(nodeWidth+60);
+      const div = document.createElement("div");
+      div.className="tree-node";
+      div.style.left=x+"px";
+      div.style.top=y+"px";
+      div.innerHTML=`<img src="${items[node]?.image||''}"><div>${items[node]?.name||node}</div>`;
+      div.onclick=()=>showItem(node);
+      treeDiv.appendChild(div);
+      nodePositions[node]={x:x+nodeWidth/2, y:y+40};
+    });
+  });
+  // Draw lines
+  recipes.forEach(r=>{
+    if (r.output===id || levels.flat().includes(r.output)) {
+      r.inputs.forEach(inp=>{
+        if (nodePositions[inp] && nodePositions[r.output]) {
+          const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+          line.setAttribute("x1", nodePositions[inp].x);
+          line.setAttribute("y1", nodePositions[inp].y);
+          line.setAttribute("x2", nodePositions[r.output].x);
+          line.setAttribute("y2", nodePositions[r.output].y);
+          line.setAttribute("stroke", "rgba(255,255,255,0.3)");
+          line.setAttribute("stroke-width", "2");
+          treeLines.appendChild(line);
+        }
+      });
+    }
   });
 }
 
-/* fuzzy search (levenshtein) */
-function levenshtein(a,b){
-  if(!a) return b.length;
-  if(!b) return a.length;
-  a=a.toLowerCase(); b=b.toLowerCase();
-  const m=a.length, n=b.length;
-  const dp = Array.from({length:m+1}, ()=> new Array(n+1).fill(0));
-  for(let i=0;i<=m;i++) dp[i][0]=i;
-  for(let j=0;j<=n;j++) dp[0][j]=j;
-  for(let i=1;i<=m;i++){
-    for(let j=1;j<=n;j++){
-      const cost = a[i-1]===b[j-1] ? 0 : 1;
-      dp[i][j] = Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
-      if(i>1 && j>1 && a[i-1]===b[j-2] && a[i-2]===b[j-1]){
-        dp[i][j] = Math.min(dp[i][j], dp[i-2][j-2]+cost);
+/* ====== Build tree levels ====== */
+function buildTreeLevels(target) {
+  let levels = [[target]];
+  let visited = new Set([target]);
+  for (let i=0; i<5; i++) {
+    let prev = levels[i];
+    let next = [];
+    recipes.forEach(r=>{
+      if (prev.includes(r.output)) {
+        r.inputs.forEach(inp=>{
+          if (!visited.has(inp)) {
+            next.push(inp);
+            visited.add(inp);
+          }
+        });
       }
-    }
-  }
-  return dp[m][n];
-}
-
-function scoreMatch(query, itemKey){
-  if(!query) return 1;
-  const name = items[itemKey].name.toLowerCase();
-  const key = itemKey.toLowerCase();
-  const q = query.toLowerCase();
-  if(name.includes(q) || key.includes(q)) return 100;
-  if(name.startsWith(q) || key.startsWith(q)) return 80;
-  const dName = levenshtein(q, name);
-  const dKey = levenshtein(q, key);
-  const best = Math.min(dName, dKey);
-  const maxLen = Math.max(q.length, name.length, key.length, 1);
-  const score = Math.max(1, Math.round(60 - (best / maxLen) * 60));
-  return score;
-}
-
-function renderItemList(filter=''){
-  itemListEl.innerHTML='';
-  const keys = Object.keys(items);
-  const arr = keys.map(k=>({k,score:scoreMatch(filter,k)})).filter(x=> x.score>0).sort((a,b)=> b.score - a.score || items[a.k].name.localeCompare(items[b.k]));
-  for(const it of arr){
-    const key = it.k;
-    const li = document.createElement('li');
-    li.dataset.key = key;
-    li.innerHTML = `<div class="item-art">${items[key].art}</div><div class="item-name">${items[key].name}</div>`;
-    li.addEventListener('click', ()=> showItem(key));
-    itemListEl.appendChild(li);
-  }
-}
-
-function showItem(key){
-  if(!items[key]) return;
-  welcomeEl.style.display='none';
-  detailEl.classList.remove('hidden');
-  const d = items[key];
-  itemArt.textContent = d.art || key[0].toUpperCase();
-  itemName.textContent = d.name;
-  itemDesc.textContent = d.desc || '';
-  itemType.textContent = d.type || '';
-  itemRarity.textContent = d.rarity || '';
-  itemArt.classList.remove('pulse'); void itemArt.offsetWidth; itemArt.classList.add('pulse');
-  inputsList.innerHTML='';
-  const producers = toMap[key] || [];
-  if(producers.length===0){
-    inputsList.innerHTML = '<li class="muted">No known recipes produce this item.</li>';
-  } else {
-    producers.forEach(r=>{
-      const li = document.createElement('li');
-      li.innerHTML = `${r.inputs.map(i=>`<button class="link" data-key="${i}">${items[i]?.name||i}</button>`).join(' + ')} → <strong>${items[r.output]?.name||r.output}</strong>`;
-      li.querySelectorAll('button.link').forEach(b=> b.addEventListener('click', ()=> showItem(b.dataset.key)));
-      inputsList.appendChild(li);
     });
+    if (next.length===0) break;
+    levels.push(next);
   }
-  outputsList.innerHTML='';
-  const consumers = fromMap[key] || [];
-  if(consumers.length===0){
-    outputsList.innerHTML = '<li class="muted">This item is not used in any recipe.</li>';
-  } else {
-    consumers.forEach(r=>{
-      const li = document.createElement('li');
-      li.innerHTML = `${r.inputs.map(i=>`<button class="link" data-key="${i}">${items[i]?.name||i}</button>`).join(' + ')} → <strong><button class="link" data-key="${r.output}">${items[r.output]?.name||r.output}</button></strong>`;
-      li.querySelectorAll('button.link').forEach(b=> b.addEventListener('click', ()=> showItem(b.dataset.key)));
-      outputsList.appendChild(li);
-    });
-  }
-  treeFrom.innerHTML = buildTreeFrom(key,0,new Set());
-  treeTo.innerHTML = buildTreeTo(key,0,new Set());
-  treeFrom.querySelectorAll('button.link').forEach(b=> b.addEventListener('click', ()=> showItem(b.dataset.key)));
-  treeTo.querySelectorAll('button.link').forEach(b=> b.addEventListener('click', ()=> showItem(b.dataset.key)));
-  bumpTrending(key);
-  window.location.hash = '#/' + encodeURIComponent(key);
+  return levels.reverse();
 }
 
-function buildTreeFrom(key, depth, visited){
-  if(depth>6) return '<div>…</div>';
-  if(visited.has(key)) return `<ul><li>${items[key]?.name||key} (cycle)</li></ul>`;
-  visited.add(key);
-  const producers = toMap[key] || [];
-  if(producers.length===0){
-    visited.delete(key);
-    return `<ul><li><button class="link" data-key="${key}">${items[key]?.name||key}</button></li></ul>`;
-  }
-  let html = `<ul><li><button class="link" data-key="${key}">${items[key]?.name||key}</button>`;
-  for(const r of producers){
-    html += `<ul><li>from: ${r.inputs.map(i=>`<button class="link" data-key="${i}">${items[i]?.name||i}</button>`).join(' + ')}</li>`;
-    for(const i of r.inputs){
-      html += buildTreeFrom(i, depth+1, visited);
-    }
-    html += `</ul>`;
-  }
-  html += `</li></ul>`;
-  visited.delete(key);
-  return html;
-}
-
-function buildTreeTo(key, depth, visited){
-  if(depth>6) return '<div>…</div>';
-  if(visited.has(key)) return `<ul><li>${items[key]?.name||key} (cycle)</li></ul>`;
-  visited.delete(key);
-  const consumers = fromMap[key] || [];
-  if(consumers.length===0){
-    return `<ul><li><button class="link" data-key="${key}">${items[key]?.name||key}</button></li></ul>`;
-  }
-  let html = `<ul><li><button class="link" data-key="${key}">${items[key]?.name||key}</button>`;
-  for(const r of consumers){
-    html += `<ul><li>→ ${r.output} (${r.inputs.map(i=>items[i]?.name||i).join(' + ')}) <button class="link" data-key="${r.output}">open</button></li>`;
-    html += buildTreeTo(r.output, depth+1, visited);
-    html += '</ul>';
-  }
-  html += `</li></ul>`;
-  return html;
-}
-
-let searchTimer = null;
-searchEl.addEventListener('input', ()=>{
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(()=> {
-    renderItemList(searchEl.value.trim());
-  }, 120);
+/* ====== SEARCH ====== */
+document.getElementById("search").addEventListener("input", e=>{
+  renderList(e.target.value);
 });
 
-exportBtn.addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'ogps_crafts_demo.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-});
-
-renderItemList();
-renderTrending();
-function handleHash(){
-  const h = window.location.hash || '';
-  if(h.startsWith('#/')) {
-    const key = decodeURIComponent(h.slice(2));
-    if(items[key]) showItem(key);
-  }
-}
-window.addEventListener('hashchange', handleHash);
-handleHash();
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'f' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); searchEl.focus(); searchEl.select(); }
-});
+loadData();
 </script>
 </body>
 </html>
