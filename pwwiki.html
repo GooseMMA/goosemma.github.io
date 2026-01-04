@@ -2,214 +2,275 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>ATLAS — Multiplayer Sandbox MMO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OGPS Pixel Worlds Wiki</title>
+
 <style>
-  :root {
-    --bg: #0b111c;
-    --panel: #101a2e;
-    --text: #e8f2ff;
-    --muted: #9aaac5;
-    --accent: #28d1ff;
-    --accent2: #9b5cff;
-  }
-  * {box-sizing:border-box;}
-  body {
-    margin:0; font-family: "Segoe UI", system-ui;
-    background: var(--bg); color: var(--text);
-    height:100vh; display:flex; flex-direction:column;
-    overflow:hidden;
-  }
-  header {
-    display:flex; align-items:center; padding:10px 16px;
-    background:var(--panel); gap:10px; border-bottom:1px solid rgba(255,255,255,0.1);
-  }
-  input {
-    flex:1; background:#13213c; border:none; border-radius:6px;
-    padding:10px 12px; color:var(--text); font-size:15px;
-  }
-  button {
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    border:none; border-radius:6px; color:#000;
-    font-weight:bold; padding:8px 14px; cursor:pointer;
-  }
-  main {flex:1; display:grid; grid-template-columns:250px 1fr 350px;}
-  #list {background:var(--panel); overflow-y:auto; padding:10px;}
-  #list div {
-    display:flex; align-items:center; gap:10px;
-    padding:6px; border-radius:8px; cursor:pointer;
-    transition:background 0.2s, transform 0.2s;
-  }
-  #list div:hover {background:rgba(255,255,255,0.07); transform:translateX(3px);}
-  #list img {width:32px; height:32px; image-rendering:pixelated;}
-  #details {padding:20px; overflow:auto;}
-  #details img {width:72px; height:72px; image-rendering:pixelated;}
-  h2 {color:var(--accent);}
-  .field {margin:6px 0; color:var(--muted);}
-  .field strong {color:var(--text);}
-  .craft {display:flex; flex-wrap:wrap; gap:6px;}
-  .craft button {
-    background:rgba(255,255,255,0.08); border:none;
-    color:var(--text); border-radius:6px; padding:4px 8px; font-size:14px;
-  }
-  #tree {position:relative; background:#0c1525; border-left:1px solid rgba(255,255,255,0.1);}
-  #tree canvas {width:100%; height:100%; background:#0c1525; cursor:grab;}
-  #tree canvas:active {cursor:grabbing;}
-  @media(max-width:900px){
-    main{grid-template-columns:1fr;}
-    #tree{display:none;}
-  }
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #0b0b0b;
+    color: #d6d6d6;
+    overflow-x: hidden;
+}
+
+/* ===== PARALLAX BACKGROUND ===== */
+.parallax {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    background-image: url("background.jpg"); /* позже заменишь на gif */
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.35);
+    z-index: -1;
+    transform: translateY(0px);
+}
+
+/* ===== GLOBAL ===== */
+section {
+    padding: 100px 10%;
+}
+
+h1, h2 {
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 64px;
+}
+
+h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+p {
+    max-width: 700px;
+    line-height: 1.7;
+    color: #bdbdbd;
+}
+
+/* ===== HERO ===== */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero h1 {
+    margin-bottom: 20px;
+}
+
+.hero span {
+    color: #a83232;
+}
+
+.hero p {
+    margin-bottom: 40px;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.download-btn {
+    width: fit-content;
+    padding: 18px 42px;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #a83232;
+    background: rgba(168, 50, 50, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.download-btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(168, 50, 50, 0.4);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    transition: 0.6s;
+}
+
+.download-btn:hover::before {
+    width: 400px;
+    height: 400px;
+}
+
+.download-btn:hover {
+    box-shadow: 0 0 25px rgba(168, 50, 50, 0.6);
+}
+
+/* ===== FEATURES ===== */
+.features {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.feature {
+    margin-bottom: 40px;
+}
+
+.feature h3 {
+    color: #a83232;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+/* ===== ATMOSPHERE ===== */
+.atmosphere {
+    text-align: center;
+}
+
+.atmosphere p {
+    margin: 0 auto;
+}
+
+/* ===== DOWNLOAD SECTION ===== */
+.download-section {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* ===== WIKI ===== */
+.wiki {
+    text-align: center;
+}
+
+.wiki a {
+    color: #a83232;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: 0.3s;
+}
+
+.wiki a:hover {
+    border-bottom: 1px solid #a83232;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    padding: 40px 10%;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 42px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    section {
+        padding: 80px 8%;
+    }
+}
 </style>
 </head>
-<body>
-<header>
-  <input id="search" placeholder="Search items...">
-  <button id="toggleTree">Show Tree</button>
-</header>
 
-<main>
-  <aside id="list"></aside>
-  <section id="details"><h2>Welcome</h2><p>Select an item to view details.</p></section>
-  <section id="tree"><canvas id="treeCanvas"></canvas></section>
-</main>
+<body>
+
+<div class="parallax" id="parallax"></div>
+
+<section class="hero">
+    <h1>ATLAS</h1>
+    <p>Multiplayer Sandbox MMO<br>Every world must be conquered.</p>
+    <a href="DOWNLOAD_LINK" class="download-btn">DOWNLOAD ATLAS</a>
+</section>
+
+<section>
+    <h2>About the Game</h2>
+    <p>
+        Atlas is a multiplayer sandbox MMO set in a dark and dangerous universe.
+        Explore worlds, build, farm, trade and fight while carving your own path
+        through progression and discovery.
+        <br><br>
+        Not every world is safe. Power is earned.
+    </p>
+</section>
+
+<section class="features">
+    <h2>Core Features</h2>
+
+    <div class="feature">
+        <h3>Dangerous Worlds</h3>
+        <p>Exploration often leads to conflict. Safety is never guaranteed.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Sandbox Building</h3>
+        <p>Shape worlds using blocks and items obtained through gameplay.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Player Economy</h3>
+        <p>Trade freely with other players using in-game currency.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Progression Through Action</h3>
+        <p>Some systems are discovered, not explained.</p>
+    </div>
+</section>
+
+<section class="atmosphere">
+    <h2>Atmosphere</h2>
+    <p>
+        Dark fantasy inspired world filled with ruins, monsters and silent danger.
+        <br>
+        This is not a safe sandbox.
+    </p>
+</section>
+
+<section class="download-section">
+    <h2>Download</h2>
+    <p>Enter the world of Atlas.</p>
+    <br>
+    <a href="DOWNLOAD_LINK" class="download-btn">DOWNLOAD GAME</a>
+</section>
+
+<section class="wiki">
+    <h2>Wiki</h2>
+    <p>
+        Looking for deeper knowledge?<br>
+        Lore, mechanics and guides are documented on the Atlas Wiki.
+    </p>
+    <br>
+    <a href="WIKI_LINK">OPEN ATLAS WIKI</a>
+</section>
+
+<footer>
+    Atlas © All rights reserved
+</footer>
 
 <script>
-// === GLOBAL ===
-let ITEMS = JSON.parse(localStorage.getItem('PIXEL_ITEMS') || '[]');
-let ITEM_MAP = {};
-const list = document.getElementById('list');
-const details = document.getElementById('details');
-const search = document.getElementById('search');
-const canvas = document.getElementById('treeCanvas');
-const ctx = canvas.getContext('2d');
-let width, height;
-let nodes = [], links = [];
-let offsetX=0, offsetY=0, scale=1;
-let drag=false, startX=0, startY=0;
-
-// === INIT ===
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-if(ITEMS.length===0){
-  fetch('items.json').then(r=>r.json()).then(d=>{
-    ITEMS=d; localStorage.setItem('PIXEL_ITEMS',JSON.stringify(d));
-    buildMap(); renderList();
-  });
-}else{
-  buildMap(); renderList();
-}
-
-function buildMap(){ITEMS.forEach(i=>ITEM_MAP[i.name]=i);}
-
-// === UI ===
-function renderList(filter=''){
-  list.innerHTML='';
-  let f=filter.toLowerCase();
-  ITEMS.filter(i=>i.name.toLowerCase().includes(f)).forEach(i=>{
-    let d=document.createElement('div');
-    d.innerHTML=`<img src="${i.image}"><span>${i.name}</span>`;
-    d.onclick=()=>showItem(i.name);
-    list.appendChild(d);
-  });
-}
-
-search.oninput=()=>renderList(search.value);
-
-function showItem(name){
-  const i=ITEM_MAP[name]; if(!i)return;
-  let html=`<img src="${i.image}"><h2>${i.name}</h2>`;
-  html+=`<div class="field"><strong>Complexity:</strong> ${i.complexity??'N/A'}</div>`;
-  html+=`<div class="field"><strong>Tier:</strong> ${i.tier??'N/A'}</div>`;
-  html+=`<div class="field"><strong>Rarity:</strong> ${i.rarity??'N/A'}</div>`;
-  html+=`<div class="field"><strong>Farmability:</strong> ${i.farmability??'N/A'}</div>`;
-  html+=`<div class="field"><strong>Growth Time:</strong> ${i.growthTime??'N/A'}</div>`;
-  if(i.craftable && i.craft.length){
-    html+=`<div class="field"><strong>Craft:</strong></div><div class="craft">`;
-    i.craft.forEach(c=>{ html+=`<button onclick="showItem('${c}')">${c}</button>`;});
-    html+=`</div>`;
-  }
-  details.innerHTML=html;
-  drawTreeForItem(i);
-}
-
-// === TREE ===
-function resizeCanvas(){
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
-  width=canvas.width; height=canvas.height;
-  drawTree();
-}
-
-function drawTreeForItem(item){
-  // build tree graph
-  nodes=[]; links=[];
-  const visited=new Set();
-  function traverse(name,depth=0,x=0,y=0){
-    if(visited.has(name)) return;
-    visited.add(name);
-    const i=ITEM_MAP[name]; if(!i || !i.craftable) return;
-    nodes.push({name,x:depth,y});
-    i.craft.forEach((c,j)=>{
-      links.push({from:c,to:name});
-      traverse(c,depth+1,y+j);
-    });
-  }
-  traverse(item.name);
-  drawTree();
-}
-
-function drawTree(){
-  ctx.clearRect(0,0,width,height);
-  ctx.save();
-  ctx.translate(offsetX,offsetY);
-  ctx.scale(scale,scale);
-  ctx.lineWidth=2;
-  ctx.strokeStyle='rgba(255,255,255,0.2)';
-  for(let l of links){
-    const a=nodes.find(n=>n.name===l.from);
-    const b=nodes.find(n=>n.name===l.to);
-    if(a&&b){
-      ctx.beginPath();
-      ctx.moveTo(a.x*160+60,a.y*80+60);
-      ctx.lineTo(b.x*160+60,b.y*80+60);
-      ctx.stroke();
-    }
-  }
-  for(let n of nodes){
-    const i=ITEM_MAP[n.name];
-    if(!i) continue;
-    const x=n.x*160+40, y=n.y*80+40;
-    ctx.fillStyle='rgba(255,255,255,0.07)';
-    ctx.fillRect(x,y,100,80);
-    const img=new Image();
-    img.src=i.image;
-    img.onload=()=>ctx.drawImage(img,x+24,y+8,48,48);
-    ctx.fillStyle='#fff';
-    ctx.font='12px Segoe UI';
-    ctx.fillText(i.name.slice(0,14),x+10,y+70);
-  }
-  ctx.restore();
-}
-
-// === INTERACTION ===
-canvas.addEventListener('mousedown',e=>{
-  drag=true; startX=e.clientX; startY=e.clientY;
+/* ===== PARALLAX SCRIPT ===== */
+window.addEventListener("scroll", function () {
+    const parallax = document.getElementById("parallax");
+    let offset = window.pageYOffset;
+    parallax.style.transform = "translateY(" + offset * 0.3 + "px)";
 });
-canvas.addEventListener('mouseup',()=>drag=false);
-canvas.addEventListener('mousemove',e=>{
-  if(!drag)return;
-  offsetX+=e.movementX;
-  offsetY+=e.movementY;
-  drawTree();
-});
-canvas.addEventListener('wheel',e=>{
-  e.preventDefault();
-  const delta=e.deltaY>0?0.9:1.1;
-  scale*=delta;
-  drawTree();
-});
-
 </script>
+
 </body>
 </html>
