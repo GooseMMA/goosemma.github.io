@@ -14,34 +14,43 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #0a0a0a;
-    color: #e0e0e0;
+    background: #0a1f3d;
+    color: #e0e0ff;
     overflow-x: hidden;
     scroll-behavior: smooth;
 }
 
+/* Dynamic blue background */
 .background {
     position: fixed;
     inset: 0;
-    background:
-        radial-gradient(circle at 50% 30%, rgba(80, 0, 0, 0.2), transparent 60%),
-        linear-gradient(180deg, #0a0a0a 0%, #101010 50%, #0a0a0a 100%);
-    z-index: -2;
+    background: linear-gradient(135deg, #0a1f3d 0%, #0c2447 50%, #081a33 100%);
+    z-index: -3;
 }
 
-.fog {
+.dynamic-bg {
     position: fixed;
     inset: 0;
-    background:
-        repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,0.01), transparent 100px);
-    opacity: 0.1;
-    animation: fogMove 45s linear infinite;
-    z-index: -1;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(30, 80, 160, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(50, 100, 200, 0.1), transparent 50%);
+    z-index: -2;
+    animation: moveBg 20s linear infinite;
 }
 
-@keyframes fogMove {
-    from { transform: translateX(0); }
-    to { transform: translateX(-150px); }
+@keyframes moveBg {
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(-20px) translateY(-20px); }
+}
+
+.particles {
+    position: fixed;
+    inset: 0;
+    background-image: 
+        repeating-radial-gradient(circle at 10% 15%, rgba(255,255,255,0.02), transparent 30px),
+        repeating-radial-gradient(circle at 90% 85%, rgba(255,255,255,0.015), transparent 40px);
+    opacity: 0.2;
+    z-index: -1;
 }
 
 section {
@@ -61,22 +70,38 @@ h1 {
     font-size: 48px;
     letter-spacing: 3px;
     margin-bottom: 15px;
-    color: #d04040;
-    text-shadow: 0 0 15px rgba(208, 64, 64, 0.4);
+    color: #4cc9f0;
+    text-shadow: 0 0 20px rgba(76, 201, 240, 0.4);
+    font-weight: 300;
 }
 
 h2 {
     font-size: 32px;
     letter-spacing: 2px;
     margin-bottom: 25px;
-    color: #d04040;
+    color: #4361ee;
+}
+
+h3 {
+    font-size: 24px;
+    color: #4cc9f0;
+    margin-bottom: 15px;
+    font-weight: 400;
 }
 
 p {
     line-height: 1.6;
-    color: #c0c0c0;
+    color: #a9d6e5;
     max-width: 700px;
     margin: 0 auto 20px;
+}
+
+.subtitle {
+    color: #7209b7;
+    font-size: 18px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    font-style: italic;
 }
 
 .hero {
@@ -102,6 +127,7 @@ p {
 .hero-text p {
     margin: 15px 0 30px;
     font-size: 16px;
+    line-height: 1.7;
 }
 
 .trailer-container {
@@ -113,14 +139,15 @@ p {
 .trailer-placeholder {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(80, 0, 0, 0.15), rgba(0,0,0,0.8));
-    border: 1px solid rgba(208, 64, 64, 0.3);
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.15), rgba(0,0,0,0.8));
+    border: 1px solid rgba(76, 201, 240, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #d04040;
+    color: #4cc9f0;
     letter-spacing: 2px;
     font-size: 16px;
+    border-radius: 4px;
 }
 
 .buttons {
@@ -134,8 +161,8 @@ p {
     color: #fff;
     text-decoration: none;
     letter-spacing: 2px;
-    border: 1px solid #d04040;
-    background: rgba(208, 64, 64, 0.1);
+    border: 1px solid #4361ee;
+    background: rgba(67, 97, 238, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
     font-weight: 600;
@@ -146,58 +173,130 @@ p {
 
 .btn.primary {
     animation: pulse 3s infinite;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.2), rgba(76, 201, 240, 0.2));
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 rgba(208, 64, 64, 0); }
-    50% { box-shadow: 0 0 20px rgba(208, 64, 64, 0.5); }
-    100% { box-shadow: 0 0 0 rgba(208, 64, 64, 0); }
+    0% { box-shadow: 0 0 0 rgba(67, 97, 238, 0); }
+    50% { box-shadow: 0 0 20px rgba(67, 97, 238, 0.5); }
+    100% { box-shadow: 0 0 0 rgba(67, 97, 238, 0); }
 }
 
 .btn:hover {
-    background: rgba(208, 64, 64, 0.2);
+    background: rgba(67, 97, 238, 0.3);
     transform: translateY(-2px);
-    border-color: #d04040;
+    border-color: #4cc9f0;
+}
+
+/* Feature cards container with centered alignment */
+.features-container {
+    width: 100%;
+    max-width: 1000px;
+    padding: 0 20px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 25px;
     margin-top: 30px;
 }
 
 .feature-card {
-    background: rgba(255,255,255,0.02);
+    background: rgba(20, 30, 50, 0.4);
     padding: 25px;
-    border: 1px solid rgba(208, 64, 64, 0.2);
+    border: 1px solid rgba(67, 97, 238, 0.2);
     border-radius: 8px;
     transition: all 0.3s ease;
     text-align: left;
+    width: 100%;
+    max-width: 280px;
+    min-width: 280px;
+    box-sizing: border-box;
 }
 
 .feature-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(208, 64, 64, 0.4);
-    background: rgba(208, 64, 64, 0.03);
+    border-color: rgba(76, 201, 240, 0.4);
+    background: rgba(30, 40, 60, 0.5);
 }
 
-.feature-card h3 {
-    color: #d04040;
-    margin-bottom: 12px;
-    font-size: 18px;
-    font-weight: 600;
+.exclusive {
+    background: rgba(25, 35, 65, 0.5);
+    border-color: rgba(109, 40, 217, 0.3);
 }
 
-.multiplayer,
-.atmosphere,
-.download,
-.wiki {
-    background: rgba(0,0,0,0.2);
+.exclusive h3 {
+    color: #7209b7;
+}
+
+.exclusive:hover {
+    border-color: rgba(109, 40, 217, 0.5);
+    background: rgba(35, 45, 75, 0.6);
+}
+
+/* Screenshots Gallery */
+.screenshots {
+    background: rgba(15, 25, 50, 0.4);
+    padding: 60px 0;
+}
+
+.gallery {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 20px 0;
+    margin-top: 30px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #4361ee #0a1f3d;
+}
+
+.gallery::-webkit-scrollbar {
+    height: 8px;
+}
+
+.gallery::-webkit-scrollbar-track {
+    background: rgba(10, 31, 61, 0.3);
+    border-radius: 4px;
+}
+
+.gallery::-webkit-scrollbar-thumb {
+    background: #4361ee;
+    border-radius: 4px;
+}
+
+.gallery-item {
+    flex: 0 0 auto;
+    width: 280px;
+    height: 180px;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(30, 40, 70, 0.8));
+    border: 1px solid rgba(67, 97, 238, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4cc9f0;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    border-color: rgba(76, 201, 240, 0.5);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
 .download-section {
     text-align: center;
+    background: rgba(15, 25, 50, 0.6);
+    border: 1px solid rgba(67, 97, 238, 0.3);
+    border-radius: 12px;
+    padding: 40px;
 }
 
 .download-section .btn {
@@ -206,7 +305,7 @@ p {
 }
 
 .wiki-section a {
-    color: #d04040;
+    color: #4361ee;
     text-decoration: none;
     letter-spacing: 2px;
     font-weight: 600;
@@ -215,22 +314,22 @@ p {
     margin-top: 15px;
     display: inline-block;
     padding: 10px 20px;
-    border: 1px solid rgba(208, 64, 64, 0.3);
-    border-radius: 4px;
+    border: 1px solid rgba(67, 97, 238, 0.3);
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
 .wiki-section a:hover {
-    background: rgba(208, 64, 64, 0.1);
+    background: rgba(67, 97, 238, 0.2);
     color: #fff;
 }
 
-footer {
+.footer {
     padding: 30px 0;
     text-align: center;
     font-size: 13px;
-    color: #777;
-    border-top: 1px solid rgba(208, 64, 64, 0.1);
+    color: #8ecae6;
+    border-top: 1px solid rgba(67, 97, 238, 0.2);
 }
 
 /* Mobile and Tablet Responsiveness */
@@ -266,6 +365,7 @@ footer {
     .feature-card {
         padding: 20px;
         font-size: 14px;
+        min-width: 250px;
     }
     
     .btn {
@@ -275,6 +375,15 @@ footer {
     
     section {
         padding: 60px 0;
+    }
+    
+    .subtitle {
+        font-size: 16px;
+    }
+    
+    .gallery-item {
+        width: 240px;
+        height: 160px;
     }
 }
 
@@ -295,6 +404,7 @@ footer {
     .feature-card {
         padding: 18px;
         font-size: 13px;
+        min-width: 220px;
     }
     
     .btn {
@@ -309,6 +419,20 @@ footer {
     section {
         padding: 50px 0;
     }
+    
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .download-section {
+        padding: 25px 15px;
+    }
+    
+    .gallery-item {
+        width: 220px;
+        height: 140px;
+    }
 }
 </style>
 </head>
@@ -316,14 +440,16 @@ footer {
 <body>
 
 <div class="background"></div>
-<div class="fog"></div>
+<div class="dynamic-bg"></div>
+<div class="particles"></div>
 
 <!-- HERO -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-text">
             <h1>ATLAS</h1>
-            <p>Multiplayer Sandbox MMO<br>Every world must be conquered.</p>
+            <div class="subtitle">Multiplayer • MMO • Sandbox</div>
+            <p>Forge your legend in a world where every block must be earned, every monster conquered, and every victory is yours alone.</p>
             <div class="buttons">
                 <a href="#download" class="btn primary">DOWNLOAD</a>
                 <a href="#wiki" class="btn">WIKI</a>
@@ -332,64 +458,99 @@ footer {
         
         <div class="trailer-container">
             <div class="trailer-placeholder">
-                TRAILER LOADING...
+                GAME TRAILER
             </div>
         </div>
     </div>
 </section>
 
-<!-- ABOUT -->
+<!-- EXCLUSIVE FEATURES -->
 <section>
-    <div class="container">
-        <h2>About the Game</h2>
-        <p>
-            Atlas is a multiplayer sandbox MMO set in a dark and dangerous universe. 
-            Explore worlds, build, trade and fight while carving your own path 
-            through progression and discovery.
-            <br><br>
-            Not every world is safe. Power is earned.
-        </p>
+    <div class="features-container">
+        <h2>Atlas Exclusive Features</h2>
+        <div class="features-grid">
+            <div class="feature-card exclusive">
+                <h3>World Conquest System</h3>
+                <p>When you type in a world name, you don't just spawn in. New worlds contain monsters and dungeon layouts that must be cleared to make the world a "Safe Spot".</p>
+            </div>
+            <div class="feature-card exclusive">
+                <h3>World Ownership</h3>
+                <p>After clearing all monsters and defeating the boss, you can lock the world and become its owner, creating your personal territory.</p>
+            </div>
+            <div class="feature-card exclusive">
+                <h3>Monster Killer Ranks</h3>
+                <p>From E to S rank, your Monster Killer progression unlocks higher-tier content and rewards based on monsters defeated.</p>
+            </div>
+            <div class="feature-card exclusive">
+                <h3>Guild Raids & Ranks</h3>
+                <p>Guilds can participate in challenging raids to fight powerful monsters and clear dungeons within time limits, with their own E-S ranking system.</p>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- FEATURES -->
+<!-- PROGRESSION SYSTEMS -->
 <section>
-    <div class="container">
+    <div class="features-container">
+        <h2>Deep Progression Systems</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Dual Leveling</h3>
+                <p>Separate leveling system from Monster Killer ranks, providing additional bonuses and progression paths.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Legendary Items</h3>
+                <p>Obtained exclusively through Guild Raids, these rare items (only 1-3 exist) provide powerful guild-wide buffs and are held for limited time.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Item Acquisition</h3>
+                <p>Special items can be purchased via IAPs or earned through monster drops, with varying drop rates from common to extremely rare.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Customization</h3>
+                <p>Purchase basic clothing packs or splice them with seeds for unique appearances and combinations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CORE FEATURES -->
+<section>
+    <div class="features-container">
         <h2>Core Features</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <h3>Dangerous Worlds</h3>
-                <p>Exploration often leads to conflict. Safety is never guaranteed.</p>
+                <h3>Player Trading</h3>
+                <p>Trade freely with other players using in-game currency earned through gameplay, just like in Pixel Worlds and Growtopia.</p>
             </div>
             <div class="feature-card">
-                <h3>Sandbox Building</h3>
-                <p>Shape worlds using blocks and items obtained through gameplay.</p>
+                <h3>World Building</h3>
+                <p>Build your worlds using blocks obtained through splicing or purchased in shop packs, creating unique environments.</p>
             </div>
             <div class="feature-card">
-                <h3>Player Economy</h3>
-                <p>Trade freely with other players using in-game currency.</p>
+                <h3>Farming & Resources</h3>
+                <p>Harvest resources, farm materials, and craft items to enhance your gameplay and trading capabilities.</p>
             </div>
             <div class="feature-card">
-                <h3>Progression Through Action</h3>
-                <p>Some systems are discovered, not explained.</p>
+                <h3>Community Driven</h3>
+                <p>Join guilds, participate in events, and collaborate with other players to unlock the full potential of Atlas.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- MULTIPLAYER -->
-<section class="multiplayer">
+<!-- SCREENSHOTS GALLERY -->
+<section class="screenshots">
     <div class="container">
-        <h2>Multiplayer</h2>
-        <p>Play solo or together. Cooperation unlocks deeper challenges.</p>
-    </div>
-</section>
-
-<!-- ATMOSPHERE -->
-<section class="atmosphere">
-    <div class="container">
-        <h2>Atmosphere</h2>
-        <p>This is not a safe sandbox.</p>
+        <h2>Screenshots</h2>
+        <div class="gallery">
+            <div class="gallery-item">GAME SCREENSHOT 1</div>
+            <div class="gallery-item">GAME SCREENSHOT 2</div>
+            <div class="gallery-item">GAME SCREENSHOT 3</div>
+            <div class="gallery-item">GAME SCREENSHOT 4</div>
+            <div class="gallery-item">GAME SCREENSHOT 5</div>
+            <div class="gallery-item">GAME SCREENSHOT 6</div>
+        </div>
     </div>
 </section>
 
@@ -397,7 +558,7 @@ footer {
 <section class="download" id="download">
     <div class="container download-section">
         <h2>Download Atlas</h2>
-        <p>Enter the world and begin your journey.</p>
+        <p>Enter the world and begin your journey of conquest and discovery.</p>
         <a href="DOWNLOAD_LINK" class="btn primary">DOWNLOAD GAME</a>
     </div>
 </section>
@@ -411,7 +572,7 @@ footer {
     </div>
 </section>
 
-<footer>
+<footer class="footer">
     Atlas © All rights reserved
 </footer>
 
