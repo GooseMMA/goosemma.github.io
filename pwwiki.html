@@ -13,176 +13,188 @@
     box-sizing: border-box;
 }
 
+/* ===== BODY ===== */
 body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #0b0b0b;
-    color: #d6d6d6;
+    background: #050505;
+    color: #d0d0d0;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
-/* ===== PARALLAX BACKGROUND ===== */
-.parallax {
+/* ===== BACKGROUND ===== */
+.background {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 120%;
-    background-image: url("background.jpg"); /* позже заменишь на gif */
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.35);
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(120, 0, 0, 0.15), transparent 60%),
+        linear-gradient(180deg, #050505 0%, #0b0b0b 50%, #050505 100%);
+    z-index: -2;
+}
+
+.fog {
+    position: fixed;
+    inset: 0;
+    background:
+        repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,0.02), transparent 120px);
+    opacity: 0.15;
+    animation: fogMove 60s linear infinite;
     z-index: -1;
-    transform: translateY(0px);
+}
+
+@keyframes fogMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(-200px); }
 }
 
 /* ===== GLOBAL ===== */
 section {
-    padding: 100px 10%;
+    padding: 120px 0;
+    display: flex;
+    justify-content: center;
 }
 
-h1, h2 {
-    letter-spacing: 2px;
-    font-weight: 600;
+.container {
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 60px;
+    text-align: center;
 }
 
+/* ===== TYPOGRAPHY ===== */
 h1 {
-    font-size: 64px;
+    font-size: 72px;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
 }
 
 h2 {
     font-size: 36px;
+    letter-spacing: 2px;
     margin-bottom: 30px;
 }
 
 p {
-    max-width: 700px;
-    line-height: 1.7;
-    color: #bdbdbd;
+    line-height: 1.8;
+    color: #bcbcbc;
 }
 
 /* ===== HERO ===== */
 .hero {
     height: 100vh;
+    align-items: center;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.hero-text {
+    text-align: left;
+}
+
+.hero-text p {
+    margin: 20px 0 40px;
+}
+
+/* ===== TRAILER PLACEHOLDER ===== */
+.trailer {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid rgba(138, 31, 31, 0.4);
+    background: linear-gradient(
+        135deg,
+        rgba(138,31,31,0.15),
+        rgba(0,0,0,0.8)
+    );
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-}
-
-.hero h1 {
-    margin-bottom: 20px;
-}
-
-.hero span {
-    color: #a83232;
-}
-
-.hero p {
-    margin-bottom: 40px;
-}
-
-/* ===== DOWNLOAD BUTTON ===== */
-.download-btn {
-    width: fit-content;
-    padding: 18px 42px;
-    font-size: 16px;
+    color: #8a1f1f;
     letter-spacing: 2px;
+}
+
+/* ===== BUTTONS ===== */
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn {
+    padding: 18px 46px;
     color: #fff;
     text-decoration: none;
-    border: 1px solid #a83232;
-    background: rgba(168, 50, 50, 0.1);
-    position: relative;
-    overflow: hidden;
-    transition: 0.3s;
+    letter-spacing: 3px;
+    border: 1px solid #8a1f1f;
+    background: rgba(138, 31, 31, 0.15);
+    transition: 0.4s;
+    cursor: pointer;
 }
 
-.download-btn::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(168, 50, 50, 0.4);
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    transition: 0.6s;
+.btn.primary {
+    animation: pulse 3s infinite;
 }
 
-.download-btn:hover::before {
-    width: 400px;
-    height: 400px;
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 rgba(138,31,31,0); }
+    50% { box-shadow: 0 0 30px rgba(138,31,31,0.6); }
+    100% { box-shadow: 0 0 0 rgba(138,31,31,0); }
 }
 
-.download-btn:hover {
-    box-shadow: 0 0 25px rgba(168, 50, 50, 0.6);
+.btn:hover {
+    background: rgba(138, 31, 31, 0.3);
 }
 
 /* ===== FEATURES ===== */
-.features {
-    background: rgba(0, 0, 0, 0.6);
+.features .block {
+    margin-bottom: 50px;
 }
 
-.feature {
-    margin-bottom: 40px;
-}
-
-.feature h3 {
-    color: #a83232;
+.features h3 {
+    color: #8a1f1f;
     margin-bottom: 10px;
-    letter-spacing: 1px;
 }
 
-/* ===== ATMOSPHERE ===== */
-.atmosphere {
-    text-align: center;
+/* ===== DOWNLOAD ===== */
+.download {
+    background: rgba(0,0,0,0.5);
 }
 
-.atmosphere p {
-    margin: 0 auto;
-}
-
-/* ===== DOWNLOAD SECTION ===== */
-.download-section {
-    text-align: center;
-    background: rgba(0, 0, 0, 0.7);
+.download .btn {
+    margin-top: 30px;
 }
 
 /* ===== WIKI ===== */
-.wiki {
-    text-align: center;
-}
-
 .wiki a {
-    color: #a83232;
+    color: #8a1f1f;
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: 0.3s;
-}
-
-.wiki a:hover {
-    border-bottom: 1px solid #a83232;
+    letter-spacing: 2px;
 }
 
 /* ===== FOOTER ===== */
 footer {
-    padding: 40px 10%;
+    padding: 40px 0;
     text-align: center;
     font-size: 14px;
     color: #666;
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 42px;
+@media (max-width: 900px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
 
-    h2 {
-        font-size: 28px;
+    .hero-text {
+        text-align: center;
     }
 
-    section {
-        padding: 80px 8%;
+    .buttons {
+        justify-content: center;
     }
 }
 </style>
@@ -190,87 +202,102 @@ footer {
 
 <body>
 
-<div class="parallax" id="parallax"></div>
+<div class="background"></div>
+<div class="fog"></div>
 
+<!-- HERO -->
 <section class="hero">
-    <h1>ATLAS</h1>
-    <p>Multiplayer Sandbox MMO<br>Every world must be conquered.</p>
-    <a href="DOWNLOAD_LINK" class="download-btn">DOWNLOAD ATLAS</a>
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-text">
+                <h1>ATLAS</h1>
+                <p>
+                    Multiplayer Sandbox MMO<br>
+                    Every world must be conquered.
+                </p>
+
+                <div class="buttons">
+                    <!-- FAKE DOWNLOAD (SCROLL) -->
+                    <a href="#download" class="btn primary">DOWNLOAD</a>
+                    <a href="#wiki" class="btn">WIKI</a>
+                </div>
+            </div>
+
+            <!-- TRAILER PLACE -->
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+        </div>
+    </div>
 </section>
 
+<!-- ABOUT -->
 <section>
-    <h2>About the Game</h2>
-    <p>
-        Atlas is a multiplayer sandbox MMO set in a dark and dangerous universe.
-        Explore worlds, build, farm, trade and fight while carving your own path
-        through progression and discovery.
-        <br><br>
-        Not every world is safe. Power is earned.
-    </p>
+    <div class="container">
+        <h2>About the Game</h2>
+        <p>
+            Atlas is a multiplayer sandbox MMO set in a dark and dangerous universe.
+            Explore worlds, build, trade and fight while carving your own path
+            through progression and discovery.
+            <br><br>
+            Not every world is safe. Power is earned.
+        </p>
+    </div>
 </section>
 
+<!-- FEATURES -->
 <section class="features">
-    <h2>Core Features</h2>
+    <div class="container">
+        <h2>Core Features</h2>
 
-    <div class="feature">
-        <h3>Dangerous Worlds</h3>
-        <p>Exploration often leads to conflict. Safety is never guaranteed.</p>
-    </div>
+        <div class="block">
+            <h3>Dangerous Worlds</h3>
+            <p>Exploration often leads to conflict. Safety is never guaranteed.</p>
+        </div>
 
-    <div class="feature">
-        <h3>Sandbox Building</h3>
-        <p>Shape worlds using blocks and items obtained through gameplay.</p>
-    </div>
+        <div class="block">
+            <h3>Sandbox Building</h3>
+            <p>Shape worlds using blocks and items obtained through gameplay.</p>
+        </div>
 
-    <div class="feature">
-        <h3>Player Economy</h3>
-        <p>Trade freely with other players using in-game currency.</p>
-    </div>
+        <div class="block">
+            <h3>Player Economy</h3>
+            <p>Trade freely with other players using in-game currency.</p>
+        </div>
 
-    <div class="feature">
-        <h3>Progression Through Action</h3>
-        <p>Some systems are discovered, not explained.</p>
+        <div class="block">
+            <h3>Progression Through Action</h3>
+            <p>Some systems are discovered, not explained.</p>
+        </div>
     </div>
 </section>
 
-<section class="atmosphere">
-    <h2>Atmosphere</h2>
-    <p>
-        Dark fantasy inspired world filled with ruins, monsters and silent danger.
-        <br>
-        This is not a safe sandbox.
-    </p>
+<!-- DOWNLOAD -->
+<section class="download" id="download">
+    <div class="container">
+        <h2>Download Atlas</h2>
+        <p>Enter the world and begin your journey.</p>
+        <a href="DOWNLOAD_LINK" class="btn primary">DOWNLOAD GAME</a>
+    </div>
 </section>
 
-<section class="download-section">
-    <h2>Download</h2>
-    <p>Enter the world of Atlas.</p>
-    <br>
-    <a href="DOWNLOAD_LINK" class="download-btn">DOWNLOAD GAME</a>
-</section>
-
-<section class="wiki">
-    <h2>Wiki</h2>
-    <p>
-        Looking for deeper knowledge?<br>
-        Lore, mechanics and guides are documented on the Atlas Wiki.
-    </p>
-    <br>
-    <a href="WIKI_LINK">OPEN ATLAS WIKI</a>
+<!-- WIKI -->
+<section class="wiki" id="wiki">
+    <div class="container">
+        <h2>Wiki</h2>
+        <p>
+            Lore, mechanics and guides<br>
+            are documented on the Atlas Wiki.
+        </p>
+        <a href="WIKI_LINK">OPEN ATLAS WIKI</a>
+    </div>
 </section>
 
 <footer>
     Atlas © All rights reserved
 </footer>
-
-<script>
-/* ===== PARALLAX SCRIPT ===== */
-window.addEventListener("scroll", function () {
-    const parallax = document.getElementById("parallax");
-    let offset = window.pageYOffset;
-    parallax.style.transform = "translateY(" + offset * 0.3 + "px)";
-});
-</script>
 
 </body>
 </html>
