@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ATLAS — Multiplayer Sandbox MMO</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="description" content="Atlas — Multiplayer Sandbox MMO. Forge your legend in dangerous worlds, conquer monsters, build, trade, and explore.">
 
 <style>
@@ -13,12 +13,15 @@
   padding:0; 
   box-sizing:border-box;
   image-rendering: pixelated; /* КРИТИЧЕСКИ ВАЖНО! */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
   font-family: 'Press Start 2P', monospace; /* Пиксельный шрифт */
 }
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 body { 
-  background: #0f0f0f url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat; 
+  background: #0f0f0f; 
   color:#e0e0e0; 
   overflow-x:hidden; 
   scroll-behavior:smooth;
@@ -33,17 +36,10 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: -1;
-  background: 
-    /* Углы */
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') top left no-repeat,
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') top right no-repeat,
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') bottom left no-repeat,
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') bottom right no-repeat,
-    /* Стороны */
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') top center repeat-x,
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') bottom center repeat-x,
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') left center repeat-y,
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') right center repeat-y;
+}
+.frame-corners, .frame-sides {
+  position: absolute;
+  image-rendering: pixelated;
 }
 
 /* ===== HEADER ===== */
@@ -58,17 +54,17 @@ header {
   padding:10px 20px; 
   background:rgba(10,10,20,0.9);
   z-index:999; 
-  border-bottom: 2px solid #5d4037;
+  border-bottom: 2px solid #8a1f1f;
   height: 48px; /* 1.5 блока */
 }
 header h1 { 
   font-size:20px; 
-  color: #ffcc80;
+  color: #ff5555;
   text-shadow: 2px 2px 0 #000;
 }
 header nav a {
   margin-left:15px; 
-  color:#ffcc80; 
+  color:#ff5555; 
   text-decoration:none; 
   font-size:12px;
   position: relative;
@@ -81,7 +77,7 @@ header nav a::after {
   left: 0;
   width: 100%; 
   height: 2px;
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat-x;
+  background: #8a1f1f;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -97,9 +93,7 @@ header nav a:hover::after {
   justify-content:center; 
   position:relative;
   overflow:hidden;
-  background: 
-    linear-gradient(to bottom, #0a0a15 0%, #000000 100%),
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat;
+  background: #0a0a15;
 }
 .hero::before {
   content:""; 
@@ -139,10 +133,9 @@ header nav a:hover::after {
   max-width:650px; 
   margin:0 auto 25px; 
   background:rgba(0,0,0,0.5);
-  border: 2px solid #5d4037;
+  border: 2px solid #8a1f1f;
   padding:15px; 
   border-radius:0;
-  border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') 10 repeat;
 }
 
 /* ===== ПИКСЕЛЬНЫЕ КНОПКИ ===== */
@@ -152,8 +145,8 @@ header nav a:hover::after {
   margin:0 5px; 
   color:#fff; 
   text-decoration:none;
-  border: none;
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat;
+  border: 2px solid #8a1f1f;
+  background: transparent;
   text-transform:uppercase; 
   font-weight:600; 
   letter-spacing:1px;
@@ -161,6 +154,7 @@ header nav a:hover::after {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  transition: all 0.3s;
 }
 .btn::before {
   content: ''; 
@@ -169,19 +163,21 @@ header nav a:hover::after {
   left: 0;
   width: 100%; 
   height: 100%;
-  background: rgba(0,0,0,0.3);
+  background: rgba(138,31,31,0.8);
   opacity: 0;
   transition: opacity 0.3s;
 }
 .btn:hover::before { 
   opacity: 1; 
 }
+.btn:hover {
+  transform: translateY(-2px);
+}
 .btn:active { 
   transform: translateY(2px); 
 }
 
 .btn.primary { 
-  border: 2px solid #8a1f1f;
   animation:pulse 3s infinite; 
 }
 @keyframes pulse {
@@ -198,15 +194,15 @@ section {
   align-items:center; 
   position:relative;
   background: rgba(15, 12, 10, 0.7);
-  border-top: 2px solid #5d4037;
-  border-bottom: 2px solid #5d4037;
+  border-top: 2px solid #8a1f1f;
+  border-bottom: 2px solid #8a1f1f;
 }
 section h2 { 
   font-size:24px; 
   margin-bottom:20px; 
   color:#ff5555; 
   text-align:center; 
-  text-shadow: 2px 2px 0 #5d4037;
+  text-shadow: 2px 2px 0 #000;
   letter-spacing: 2px;
 }
 section p { 
@@ -229,50 +225,147 @@ section p {
 .feature-card { 
   background:rgba(25,21,15,0.8); 
   padding:15px; 
-  border: 2px solid #5d4037;
+  border: 2px solid #8a1f1f;
   width:250px; 
   transition:0.3s; 
   text-align:left;
-  border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') 10 repeat;
 }
 .feature-card h3 { 
   color:#ff5555; 
   margin-bottom:8px; 
   font-size:16px;
-  text-shadow: 1px 1px 0 #5d4037;
+  text-shadow: 1px 1px 0 #000;
 }
 .feature-card:hover { 
   transform:translateY(-2px); 
-  border-color: #8a1f1f;
+  border-color: #ff5555;
 }
 
-/* ===== ГАЛЕРЕЯ ===== */
-.gallery { 
-  display:flex; 
-  gap:10px; 
-  overflow-x:auto; 
-  padding:15px 0; 
-  scroll-behavior:smooth; 
-  -webkit-overflow-scrolling:touch;
+/* ===== ПРОКРУЧИВАЮЩАЯСЯ ГАЛЕРЕЯ ===== */
+.gallery-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.gallery-item { 
-  flex:0 0 auto; 
-  width:200px; 
-  height:120px; 
-  background:rgba(25,21,15,0.8);
-  border: 2px solid #5d4037;
-  display:flex; 
-  align-items:center; 
-  justify-content:center; 
-  color:#ff5555; 
-  font-size:10px; 
-  transition:0.3s;
-  background-size: cover;
+
+.gallery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
-.gallery-item:hover { 
-  transform:scale(1.03); 
-  border-color: #8a1f1f;
-  box-shadow: 0 0 5px rgba(138,31,31,0.5);
+
+.gallery-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.gallery-btn {
+  width: 32px;
+  height: 32px;
+  background: #8a1f1f;
+  border: 2px solid #ff5555;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.gallery-btn:hover {
+  background: #ff5555;
+  transform: scale(1.1);
+}
+
+.gallery-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid #8a1f1f;
+  background: rgba(0,0,0,0.3);
+}
+
+.gallery-scrollbar {
+  width: 100%;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.gallery-scrollbar-thumb {
+  height: 100%;
+  background: #8a1f1f;
+  border-radius: 4px;
+  width: 30%;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+  .gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 15px;
+    padding: 10px 10px 20px 10px;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .gallery::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .gallery-item {
+    flex: 0 0 auto;
+    width: 280px;
+    height: 160px;
+    border: 2px solid #8a1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    color: #ff5555;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Для десктопа */
+@media (min-width: 769px) {
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .gallery-item {
+    height: 160px;
+    border: 2px solid #8a1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    color: #ff5555;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    transition: all 0.3s;
+  }
+  
+  .gallery-item:hover {
+    transform: scale(1.03);
+    border-color: #ff5555;
+    box-shadow: 0 0 10px rgba(138,31,31,0.5);
+  }
 }
 
 /* ===== ФУТЕР ===== */
@@ -281,34 +374,45 @@ footer {
   text-align:center; 
   font-size:10px; 
   color:#aaa; 
-  border-top: 2px solid #5d4037;
+  border-top: 2px solid #8a1f1f;
 }
-
-/* ===== АНИМАЦИИ ===== */
-@keyframes glow {
-  0%, 100% { text-shadow: 0 0 5px rgba(255, 200, 0, 0.8); }
-  50% { text-shadow: 0 0 15px rgba(255, 200, 0, 1); }
-}
-.glow { animation: glow 2s infinite; }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
   .hero-content h1{ font-size:36px; }
   .features-grid{ flex-direction:column; align-items:center; }
-  .gallery-item{ width:180px; height:100px; }
   header h1 { font-size:16px; }
+  section h2 { font-size:18px; }
 }
+
 @media(max-width:480px){
   .hero-content h1{ font-size:28px; }
   .btn{ padding:6px 12px; font-size:10px; }
   section { padding:30px 10px; }
+  .gallery-item { width: 90%; }
+  .features-grid { gap: 10px; }
+  .feature-card { width: 100%; max-width: 300px; }
 }
 </style>
 </head>
 
 <body>
   <!-- ПИКСЕЛЬНАЯ РАМКА ВОКРУГ ВСЕГО САЙТА -->
-  <div class="pixel-frame"></div>
+  <div class="pixel-frame">
+    <!-- Верхняя часть рамки -->
+    <div class="frame-corners" style="top:0; left:0; width:32px; height:32px; background: url('frame-corners.png') 0 0 no-repeat;"></div>
+    <div class="frame-corners" style="top:0; right:0; width:32px; height:32px; background: url('frame-corners.png') -32px 0 no-repeat;"></div>
+    <div class="frame-sides" style="top:0; left:32px; right:32px; height:32px; background: url('frame-top.png') repeat-x;"></div>
+    
+    <!-- Нижняя часть рамки -->
+    <div class="frame-corners" style="bottom:0; left:0; width:32px; height:32px; background: url('frame-corners.png') 0 -32px no-repeat;"></div>
+    <div class="frame-corners" style="bottom:0; right:0; width:32px; height:32px; background: url('frame-corners.png') -32px -32px no-repeat;"></div>
+    <div class="frame-sides" style="bottom:0; left:32px; right:32px; height:32px; background: url('frame-bottom.png') repeat-x;"></div>
+    
+    <!-- Левая и правая части рамки -->
+    <div class="frame-sides" style="top:32px; bottom:32px; left:0; width:32px; background: url('frame-side.png') repeat-y;"></div>
+    <div class="frame-sides" style="top:32px; bottom:32px; right:0; width:32px; background: url('frame-side.png') repeat-y;"></div>
+  </div>
 
   <!-- HEADER -->
   <header>
@@ -359,27 +463,43 @@ footer {
   <section id="trailer">
     <h2>Game Trailer</h2>
     <div class="trailer-container">
-      <div style="background: #1a120b; border: 2px solid #5d4037; width: 100%; max-width: 640px; height: 360px; display: flex; align-items: center; justify-content: center; margin: 20px auto;">
-        <span class="glow" style="color: #8a1f1f; font-size: 24px;">TRAILER COMING SOON</span>
+      <div style="background: #1a120b; border: 2px solid #8a1f1f; width: 100%; max-width: 640px; height: 360px; display: flex; align-items: center; justify-content: center; margin: 20px auto;">
+        <span style="color: #8a1f1f; font-size: 24px; text-shadow: 0 0 10px rgba(138,31,31,0.7);">TRAILER COMING SOON</span>
       </div>
     </div>
   </section>
 
   <!-- GALLERY -->
-  <section>
-    <h2>Screenshots</h2>
-    <div class="gallery">
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 1</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 2</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 3</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 4</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 5</div>
+  <section class="gallery-section">
+    <div class="gallery-header">
+      <h2>Screenshots</h2>
+      <div class="gallery-nav">
+        <button class="gallery-btn" id="prevBtn">&lt;</button>
+        <button class="gallery-btn" id="nextBtn">&gt;</button>
+      </div>
+    </div>
+    
+    <div class="gallery-container">
+      <div class="gallery" id="gallery">
+        <div class="gallery-item">IN-GAME<br>(World Conquest)</div>
+        <div class="gallery-item">MINING<br>(Resource Gathering)</div>
+        <div class="gallery-item">BOSSES<br>(World Owners)</div>
+        <div class="gallery-item">BUILDING<br>(Personal Territory)</div>
+        <div class="gallery-item">RAIDS<br>(Guild Dungeons)</div>
+        <div class="gallery-item">MARKET<br>(Player Trading)</div>
+        <div class="gallery-item">RANKS<br>(Monster Hunter)</div>
+        <div class="gallery-item">TERRITORY<br>(World Control)</div>
+      </div>
+    </div>
+    
+    <div class="gallery-scrollbar">
+      <div class="gallery-scrollbar-thumb" id="scrollThumb"></div>
     </div>
   </section>
 
   <!-- SOON... -->
   <section id="download">
-    <div class="download-section" style="background: rgba(25,21,15,0.8); border: 2px solid #5d4037; padding: 30px; text-align: center; max-width: 700px;">
+    <div style="background: rgba(25,21,15,0.8); border: 2px solid #8a1f1f; padding: 30px; text-align: center; max-width: 700px;">
       <h2>Coming Soon</h2>
       <p>Enter the world and begin your journey of conquest and discovery. Join our Discord to stay updated on the development progress.</p>
       <a href="https://discord.gg/YOUR_SERVER" target="_blank" class="btn primary" style="margin-top: 15px;">JOIN DISCORD</a>
@@ -392,29 +512,59 @@ footer {
   </footer>
 
   <script>
-    // Простая анимация для пиксельных элементов
+    // Прокручивающаяся галерея для мобильных
     document.addEventListener('DOMContentLoaded', function() {
-      const glowElements = document.querySelectorAll('.glow');
-      glowElements.forEach(el => {
-        el.addEventListener('click', function() {
+      const gallery = document.getElementById('gallery');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const scrollThumb = document.getElementById('scrollThumb');
+      
+      // Для мобильных устройств
+      if (window.innerWidth <= 768) {
+        // Плавная прокрутка кнопками
+        let scrollAmount = 280 + 15; // ширина элемента + gap
+        
+        prevBtn.addEventListener('click', () => {
+          gallery.scrollBy({ 
+            left: -scrollAmount, 
+            behavior: 'smooth' 
+          });
+        });
+        
+        nextBtn.addEventListener('click', () => {
+          gallery.scrollBy({ 
+            left: scrollAmount, 
+            behavior: 'smooth' 
+          });
+        });
+        
+        // Обновление скроллбара
+        gallery.addEventListener('scroll', () => {
+          const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+          const scrollPercent = gallery.scrollLeft / maxScroll;
+          scrollThumb.style.transform = `translateX(${scrollPercent * (gallery.clientWidth - scrollThumb.offsetWidth)}px)`;
+        });
+      }
+      
+      // Анимация для кнопок
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
           this.style.animation = 'none';
-          setTimeout(() => {
-            this.style.animation = 'glow 2s infinite';
-          }, 10);
+          this.offsetHeight; // триггер перерисовки
+          this.style.animation = 'pulse 0.5s infinite';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+          this.style.animation = '';
         });
       });
       
-      // Эффект "дрожания" для кнопок в стиле пиксельной игры
-      const buttons = document.querySelectorAll('.btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('mouseover', function() {
-          this.style.animation = 'none';
-          setTimeout(() => {
-            this.style.animation = 'pulse 0.5s infinite';
-          }, 10);
-        });
-        btn.addEventListener('mouseout', function() {
-          this.style.animation = '';
+      // Parallax эффект для фона (опционально)
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        document.querySelectorAll('.feature-card').forEach((card, i) => {
+          card.style.transform = `translateY(${scrolled * 0.02 * (i % 2 === 0 ? 1 : -1)}px)`;
         });
       });
     });
