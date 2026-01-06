@@ -7,208 +7,425 @@
 <meta name="description" content="Atlas — Multiplayer Sandbox MMO. Forge your legend in dangerous worlds, conquer monsters, build, trade, and explore.">
 
 <style>
-/* ===== RESET ===== */
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Segoe UI', sans-serif; background:#050505; color:#e0e0e0; overflow-x:hidden; scroll-behavior:smooth; }
+/* ===== ПИКСЕЛЬНЫЙ РЕСЕТ ===== */
+* { 
+  margin:0; 
+  padding:0; 
+  box-sizing:border-box;
+  image-rendering: pixelated; /* КРИТИЧЕСКИ ВАЖНО! */
+  font-family: 'Press Start 2P', monospace; /* Пиксельный шрифт */
+}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body { 
+  background: #0f0f0f url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat; 
+  color:#e0e0e0; 
+  overflow-x:hidden; 
+  scroll-behavior:smooth;
+}
+
+/* ===== ПИКСЕЛЬНАЯ РАМКА ===== */
+.pixel-frame {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background: 
+    /* Углы */
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') top left no-repeat,
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') top right no-repeat,
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') bottom left no-repeat,
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') bottom right no-repeat,
+    /* Стороны */
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') top center repeat-x,
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') bottom center repeat-x,
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') left center repeat-y,
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') right center repeat-y;
+}
 
 /* ===== HEADER ===== */
 header {
-    position: fixed;
-    top:0; left:0; width:100%;
-    display:flex; justify-content:space-between; align-items:center;
-    padding:15px 40px; background:rgba(5,5,5,0.8);
-    z-index:999; border-bottom:1px solid rgba(138,31,31,0.2);
+  position: fixed;
+  top:0; 
+  left:0; 
+  width:100%;
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center;
+  padding:10px 20px; 
+  background:rgba(10,10,20,0.9);
+  z-index:999; 
+  border-bottom: 2px solid #5d4037;
+  height: 48px; /* 1.5 блока */
 }
-header h1 { font-size:24px; letter-spacing:2px; color:#e0e0ff; }
+header h1 { 
+  font-size:20px; 
+  color: #ffcc80;
+  text-shadow: 2px 2px 0 #000;
+}
 header nav a {
-    margin-left:20px; color:#e0e0ff; text-decoration:none; text-transform:uppercase; font-weight:600; transition:0.3s;
+  margin-left:15px; 
+  color:#ffcc80; 
+  text-decoration:none; 
+  font-size:12px;
+  position: relative;
+  padding: 4px 8px;
 }
-header nav a:hover { color:#8a1f1f; }
+header nav a::after {
+  content: ''; 
+  position: absolute; 
+  bottom: -2px; 
+  left: 0;
+  width: 100%; 
+  height: 2px;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat-x;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+header nav a:hover::after { 
+  opacity: 1; 
+}
 
 /* ===== HERO ===== */
 .hero {
-    height:100vh; display:flex; align-items:center; justify-content:center; position:relative;
-    overflow:hidden;
+  height:100vh; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  position:relative;
+  overflow:hidden;
+  background: 
+    linear-gradient(to bottom, #1a237e 0%, #0d47a1 100%),
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat;
 }
-.hero video {
-    position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.3; z-index:-2;
+.hero::before {
+  content:""; 
+  position:absolute; 
+  top:0; 
+  left:0; 
+  width:100%; 
+  height:100%;
+  background:linear-gradient(to bottom, rgba(5,5,5,0), rgba(0,0,0,0.8));
 }
-.hero::after {
-    content:""; position:absolute; top:0; left:0; width:100%; height:100%;
-    background:linear-gradient(to bottom, rgba(5,5,5,0.6), rgba(5,5,5,0.9)); z-index:-1;
+.hero-content { 
+  max-width:900px; 
+  text-align:center; 
+  color:#e0e0ff; 
+  padding:0 20px; 
+  position: relative;
+  z-index: 2;
+  text-shadow: 2px 2px 0 #000;
 }
-.hero-content { max-width:1000px; text-align:center; color:#e0e0ff; padding:0 20px; }
-.hero-content h1 { font-size:72px; margin-bottom:15px; color:#8a1f1f; text-shadow:0 0 20px rgba(138,31,31,0.5); }
-.hero-content .subtitle { font-size:22px; margin-bottom:25px; color:#ff5555; letter-spacing:2px; }
-.hero-content p { font-size:18px; line-height:1.6; max-width:650px; margin:0 auto 35px; background:rgba(0,0,0,0.5); padding:20px; border-radius:15px; }
+.hero-content h1 { 
+  font-size:48px; 
+  margin-bottom:10px; 
+  color:#d32f2f; 
+  text-shadow: 0 0 10px rgba(211,47,47,0.7);
+  letter-spacing: 2px;
+}
+.hero-content .subtitle { 
+  font-size:16px; 
+  margin-bottom:20px; 
+  color:#ffab91; 
+  letter-spacing:3px;
+  text-transform: uppercase;
+}
+.hero-content p { 
+  font-size:14px; 
+  line-height:1.6; 
+  max-width:650px; 
+  margin:0 auto 25px; 
+  background:rgba(25, 21, 15, 0.7);
+  border: 2px solid #5d4037;
+  padding:15px; 
+  border-radius:0;
+  border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') 10 repeat;
+}
 
-/* ===== BUTTONS ===== */
+/* ===== ПИКСЕЛЬНЫЕ КНОПКИ ===== */
 .btn {
-    display:inline-block; padding:16px 40px; margin:0 10px; color:#fff; text-decoration:none;
-    border:1px solid #8a1f1f; border-radius:25px; text-transform:uppercase; font-weight:600; letter-spacing:2px;
-    position:relative; overflow:hidden; transition:0.3s;
+  display:inline-block; 
+  padding:8px 20px; 
+  margin:0 5px; 
+  color:#fff; 
+  text-decoration:none;
+  border: none;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat;
+  text-transform:uppercase; 
+  font-weight:600; 
+  letter-spacing:1px;
+  font-size:12px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
-.btn:hover { background:rgba(138,31,31,0.3); transform:translateY(-2px); }
-.btn.primary { animation:pulse 3s infinite; background:rgba(138,31,31,0.2); }
+.btn::before {
+  content: ''; 
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn:hover::before { 
+  opacity: 1; 
+}
+.btn:active { 
+  transform: translateY(2px); 
+}
+
+.btn.primary { 
+  border: 2px solid #d32f2f;
+  animation:pulse 3s infinite; 
+}
 @keyframes pulse {
-  0%,100%{box-shadow:0 0 0 rgba(138,31,31,0);}
-  50%{box-shadow:0 0 25px rgba(138,31,31,0.5);}
+  0%,100%{box-shadow:0 0 0 rgba(211,47,47,0);}
+  50%{box-shadow:0 0 10px rgba(211,47,47,0.7);}
 }
 
-/* ===== SECTIONS ===== */
-section { padding:100px 20px; display:flex; justify-content:center; flex-direction:column; align-items:center; position:relative; }
-section h2 { font-size:36px; margin-bottom:25px; color:#ff5555; text-align:center; }
-section p { font-size:16px; max-width:700px; text-align:center; line-height:1.7; margin-bottom:20px; }
+/* ===== СЕКЦИИ С РАМКАМИ ===== */
+section { 
+  padding:40px 20px; 
+  display:flex; 
+  justify-content:center; 
+  flex-direction:column; 
+  align-items:center; 
+  position:relative;
+  background: rgba(15, 12, 10, 0.7);
+  border-top: 2px solid #5d4037;
+  border-bottom: 2px solid #5d4037;
+}
+section h2 { 
+  font-size:24px; 
+  margin-bottom:20px; 
+  color:#ffab91; 
+  text-align:center; 
+  text-shadow: 2px 2px 0 #5d4037;
+  letter-spacing: 2px;
+}
+section p { 
+  font-size:12px; 
+  max-width:650px; 
+  text-align:center; 
+  line-height:1.6; 
+  margin-bottom:15px; 
+  color: #e0d3c5;
+}
 
-/* ===== FEATURES ===== */
-.features-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; margin-top:30px; }
-.feature-card { background:rgba(20,20,30,0.5); padding:25px; border-radius:15px; border:1px solid rgba(138,31,31,0.2); width:280px; transition:0.3s; text-align:left; }
-.feature-card h3 { color:#ff5555; margin-bottom:10px; }
-.feature-card:hover { transform:translateY(-3px); background:rgba(30,30,45,0.6); border-color:rgba(138,31,31,0.4); }
+/* ===== КАРТОЧКИ ФИЧ ===== */
+.features-grid { 
+  display:flex; 
+  flex-wrap:wrap; 
+  justify-content:center; 
+  gap:15px; 
+  margin-top:20px; 
+}
+.feature-card { 
+  background:rgba(25,21,15,0.8); 
+  padding:15px; 
+  border: 2px solid #5d4037;
+  width:250px; 
+  transition:0.3s; 
+  text-align:left;
+  border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') 10 repeat;
+}
+.feature-card h3 { 
+  color:#ffab91; 
+  margin-bottom:8px; 
+  font-size:16px;
+  text-shadow: 1px 1px 0 #5d4037;
+}
+.feature-card:hover { 
+  transform:translateY(-2px); 
+  border-color: #d32f2f;
+}
 
-/* ===== TRAILER ===== */
-.trailer-container { max-width:800px; width:100%; aspect-ratio:16/9; margin:30px auto; border-radius:15px; overflow:hidden; border:1px solid rgba(138,31,31,0.3); }
-.trailer-container iframe { width:100%; height:100%; border:none; }
+/* ===== ГАЛЕРЕЯ ===== */
+.gallery { 
+  display:flex; 
+  gap:10px; 
+  overflow-x:auto; 
+  padding:15px 0; 
+  scroll-behavior:smooth; 
+  -webkit-overflow-scrolling:touch;
+}
+.gallery-item { 
+  flex:0 0 auto; 
+  width:200px; 
+  height:120px; 
+  background:rgba(25,21,15,0.8);
+  border: 2px solid #5d4037;
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  color:#ffab91; 
+  font-size:10px; 
+  transition:0.3s;
+  background-size: cover;
+}
+.gallery-item:hover { 
+  transform:scale(1.03); 
+  border-color: #d32f2f;
+  box-shadow: 0 0 5px rgba(211,47,47,0.5);
+}
 
-/* ===== DOWNLOAD ===== */
-.download-section { background:rgba(15,15,30,0.6); border-radius:15px; padding:40px; text-align:center; margin-top:50px; border:1px solid rgba(138,31,31,0.2); }
-.download-section .btn { margin-top:20px; }
+/* ===== ФУТЕР ===== */
+footer { 
+  padding:20px 0; 
+  text-align:center; 
+  font-size:10px; 
+  color:#aaa; 
+  border-top: 2px solid #5d4037;
+}
 
-/* ===== WIKI ===== */
-.wiki-section a { color:#ff5555; text-decoration:none; border:1px solid rgba(138,31,31,0.3); padding:12px 28px; border-radius:20px; display:inline-block; transition:0.3s; }
-.wiki-section a:hover { background:rgba(138,31,31,0.2); color:#fff; }
-
-/* ===== GALLERY ===== */
-.gallery { display:flex; gap:15px; overflow-x:auto; padding:20px 0; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; }
-.gallery-item { flex:0 0 auto; width:280px; height:180px; background:rgba(30,30,50,0.4); border-radius:12px; border:1px solid rgba(138,31,31,0.2); display:flex; align-items:center; justify-content:center; color:#ff5555; font-size:14px; transition:0.3s; }
-.gallery-item:hover { transform:scale(1.05); border-color:rgba(138,31,31,0.4); box-shadow:0 8px 20px rgba(0,0,0,0.4); }
-
-/* ===== FOOTER ===== */
-footer { padding:30px 0; text-align:center; font-size:14px; color:#aaa; border-top:1px solid rgba(138,31,31,0.2); }
-
-/* ===== ANIMATIONS ===== */
-.fade-in { opacity:0; transform:translateY(30px); transition:opacity 0.8s ease, transform 0.8s ease; }
-.fade-in.appear { opacity:1; transform:translateY(0); }
-.fade-in.delay-1 { transition-delay:0.2s; }
-.fade-in.delay-2 { transition-delay:0.4s; }
-.fade-in.delay-3 { transition-delay:0.6s; }
-.fade-in.delay-4 { transition-delay:0.8s; }
+/* ===== АНИМАЦИИ ===== */
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 5px rgba(255, 200, 0, 0.8); }
+  50% { text-shadow: 0 0 15px rgba(255, 200, 0, 1); }
+}
+.glow { animation: glow 2s infinite; }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-  .hero-content h1{ font-size:48px; }
+  .hero-content h1{ font-size:36px; }
   .features-grid{ flex-direction:column; align-items:center; }
-  .gallery-item{ width:240px; height:160px; }
+  .gallery-item{ width:180px; height:100px; }
+  header h1 { font-size:16px; }
 }
 @media(max-width:480px){
-  .hero-content h1{ font-size:36px; }
-  .btn{ padding:12px 25px; font-size:13px; }
+  .hero-content h1{ font-size:28px; }
+  .btn{ padding:6px 12px; font-size:10px; }
+  section { padding:30px 10px; }
 }
 </style>
 </head>
 
 <body>
+  <!-- ПИКСЕЛЬНАЯ РАМКА ВОКРУГ ВСЕГО САЙТА -->
+  <div class="pixel-frame"></div>
 
-<!-- HEADER -->
-<header>
-  <h1>ATLAS</h1>
-  <nav>
-    <a href="#features">Features</a>
-    <a href="#trailer">Trailer</a>
-    <a href="#download">Download</a>
-    <a href="#wiki">Wiki</a>
-  </nav>
-</header>
-
-<!-- HERO -->
-<section class="hero">
-  <video autoplay muted loop playsinline>
-    <source src="VIDEO_PLACEHOLDER.mp4" type="video/mp4">
-  </video>
-  <div class="hero-content fade-in">
+  <!-- HEADER -->
+  <header>
     <h1>ATLAS</h1>
-    <div class="subtitle">Multiplayer • MMO • Sandbox</div>
-    <p>Forge your legend in a world where every block must be earned, every monster conquered, and every victory is yours alone.</p>
-    <a href="#download" class="btn primary">DOWNLOAD</a>
-    <a href="#wiki" class="btn">WIKI</a>
-  </div>
-</section>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#trailer">Trailer</a>
+      <a href="#download">Soon...</a>
+      <a href="https://discord.gg/YOUR_SERVER" target="_blank">Discord</a>
+    </nav>
+  </header>
 
-<!-- EXCLUSIVE FEATURES -->
-<section id="features">
-  <h2 class="fade-in">Atlas Exclusive Features</h2>
-  <div class="features-grid">
-    <div class="feature-card fade-in">
-      <h3>World Conquest</h3>
-      <p>New worlds contain monsters and dungeons that must be cleared to claim them as safe spots.</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>ATLAS</h1>
+      <div class="subtitle">Multiplayer • MMO • Sandbox</div>
+      <p>You've inherited your grandfather's old farm plot in Atlas Valley. Armed with hand-me-down tools and a few coins, you set out to begin your new life!</p>
+      <a href="#download" class="btn primary">SOON...</a>
+      <a href="https://discord.gg/YOUR_SERVER" target="_blank" class="btn">DISCORD</a>
     </div>
-    <div class="feature-card fade-in delay-1">
-      <h3>World Ownership</h3>
-      <p>Clear monsters and bosses to lock the world and become its owner, creating your personal territory.</p>
+  </section>
+
+  <!-- EXCLUSIVE FEATURES -->
+  <section id="features">
+    <h2>Atlas Exclusive Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>Create the farm of your dreams</h3>
+        <p>Turn your overgrown fields into a lively and bountiful farm!</p>
+      </div>
+      <div class="feature-card">
+        <h3>Learn to live off the land</h3>
+        <p>Raise animals, go fishing, tend to crops, craft items, or do it all! The choice is yours...</p>
+      </div>
+      <div class="feature-card">
+        <h3>Become a part of the local community</h3>
+        <p>Pelican Town is home to over 30 residents you can befriend!</p>
+      </div>
+      <div class="feature-card">
+        <h3>Meet someone special</h3>
+        <p>With 12 townsfolk to date, you may even find someone to start a family with!</p>
+      </div>
+      <div class="feature-card">
+        <h3>Explore vast, mysterious caves</h3>
+        <p>Encounter dangerous monsters & valuable treasures deep underground!</p>
+      </div>
+      <div class="feature-card">
+        <h3>Customize</h3>
+        <p>There are hundreds of character & home decoration options to choose from!</p>
+      </div>
     </div>
-    <div class="feature-card fade-in delay-2">
-      <h3>Monster Killer Ranks</h3>
-      <p>Progress from E to S rank by defeating monsters, unlocking new challenges and content.</p>
+  </section>
+
+  <!-- TRAILER -->
+  <section id="trailer">
+    <h2>Game Trailer</h2>
+    <div class="trailer-container">
+      <div style="background: #1a120b; border: 2px solid #5d4037; width: 100%; max-width: 640px; height: 360px; display: flex; align-items: center; justify-content: center; margin: 20px auto;">
+        <span class="glow" style="color: #d32f2f; font-size: 24px;">TRAILER COMING SOON</span>
+      </div>
     </div>
-    <div class="feature-card fade-in delay-3">
-      <h3>Guild Raids</h3>
-      <p>Participate in timed dungeons with your guild, fight powerful monsters, and earn unique rewards.</p>
+  </section>
+
+  <!-- GALLERY -->
+  <section>
+    <h2>Screenshots</h2>
+    <div class="gallery">
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">IN-GAME</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">MINING</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">BOSSES</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">BUILDING</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">RAIDS</div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- TRAILER -->
-<section id="trailer">
-  <h2 class="fade-in">Game Trailer</h2>
-  <div class="trailer-container fade-in delay-1">
-    <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
-  </div>
-</section>
+  <!-- DOWNLOAD -->
+  <section id="download">
+    <div class="download-section" style="background: rgba(25,21,15,0.8); border: 2px solid #5d4037; padding: 30px; text-align: center; max-width: 700px;">
+      <h2>Coming Soon</h2>
+      <p>Enter the world and begin your journey of conquest and discovery. Join our Discord to stay updated on the development progress.</p>
+      <a href="https://discord.gg/YOUR_SERVER" target="_blank" class="btn primary" style="margin-top: 15px;">JOIN DISCORD</a>
+    </div>
+  </section>
 
-<!-- GALLERY -->
-<section>
-  <h2 class="fade-in">Screenshots</h2>
-  <div class="gallery">
-    <div class="gallery-item fade-in">SCREENSHOT 1</div>
-    <div class="gallery-item fade-in delay-1">SCREENSHOT 2</div>
-    <div class="gallery-item fade-in delay-2">SCREENSHOT 3</div>
-    <div class="gallery-item fade-in delay-3">SCREENSHOT 4</div>
-    <div class="gallery-item fade-in">SCREENSHOT 5</div>
-  </div>
-</section>
+  <footer>
+    Atlas © All rights reserved<br>
+    Pixel art created with Aseprite
+  </footer>
 
-<!-- DOWNLOAD -->
-<section id="download">
-  <div class="download-section fade-in">
-    <h2>Download Atlas</h2>
-    <p>Enter the world and begin your journey of conquest and discovery.</p>
-    <a href="DOWNLOAD_LINK" class="btn primary">DOWNLOAD GAME</a>
-  </div>
-</section>
-
-<!-- WIKI -->
-<section id="wiki">
-  <div class="wiki-section fade-in">
-    <h2>Wiki</h2>
-    <p>Lore, mechanics, and guides are documented on the Atlas Wiki.</p>
-    <a href="WIKI_LINK">OPEN ATLAS WIKI</a>
-  </div>
-</section>
-
-<footer>
-  Atlas © All rights reserved
-</footer>
-
-<script>
-// Fade-in animations on scroll
-document.addEventListener('DOMContentLoaded', function(){
-  const fadeElements = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('appear'); });
-  }, {threshold:0.1});
-  fadeElements.forEach(el=>observer.observe(el));
-});
-</script>
-
+  <script>
+    // Простая анимация для пиксельных элементов
+    document.addEventListener('DOMContentLoaded', function() {
+      const glowElements = document.querySelectorAll('.glow');
+      glowElements.forEach(el => {
+        el.addEventListener('click', function() {
+          this.style.animation = 'none';
+          setTimeout(() => {
+            this.style.animation = 'glow 2s infinite';
+          }, 10);
+        });
+      });
+      
+      // Эффект "дрожания" для кнопок в стиле пиксельной игры
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('mouseover', function() {
+          this.style.animation = 'none';
+          setTimeout(() => {
+            this.style.animation = 'pulse 0.5s infinite';
+          }, 10);
+        });
+        btn.addEventListener('mouseout', function() {
+          this.style.animation = '';
+        });
+      });
+    });
+  </script>
 </body>
 </html>
