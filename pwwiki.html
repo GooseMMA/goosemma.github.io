@@ -98,7 +98,7 @@ header nav a:hover::after {
   position:relative;
   overflow:hidden;
   background: 
-    linear-gradient(to bottom, #1a237e 0%, #0d47a1 100%),
+    linear-gradient(to bottom, #0a0a15 0%, #000000 100%),
     url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') repeat;
 }
 .hero::before {
@@ -122,14 +122,14 @@ header nav a:hover::after {
 .hero-content h1 { 
   font-size:48px; 
   margin-bottom:10px; 
-  color:#d32f2f; 
-  text-shadow: 0 0 10px rgba(211,47,47,0.7);
+  color:#8a1f1f; 
+  text-shadow: 0 0 20px rgba(138,31,31,0.5);
   letter-spacing: 2px;
 }
 .hero-content .subtitle { 
   font-size:16px; 
   margin-bottom:20px; 
-  color:#ffab91; 
+  color:#ff5555; 
   letter-spacing:3px;
   text-transform: uppercase;
 }
@@ -138,7 +138,7 @@ header nav a:hover::after {
   line-height:1.6; 
   max-width:650px; 
   margin:0 auto 25px; 
-  background:rgba(25, 21, 15, 0.7);
+  background:rgba(0,0,0,0.5);
   border: 2px solid #5d4037;
   padding:15px; 
   border-radius:0;
@@ -181,12 +181,12 @@ header nav a:hover::after {
 }
 
 .btn.primary { 
-  border: 2px solid #d32f2f;
+  border: 2px solid #8a1f1f;
   animation:pulse 3s infinite; 
 }
 @keyframes pulse {
-  0%,100%{box-shadow:0 0 0 rgba(211,47,47,0);}
-  50%{box-shadow:0 0 10px rgba(211,47,47,0.7);}
+  0%,100%{box-shadow:0 0 0 rgba(138,31,31,0);}
+  50%{box-shadow:0 0 25px rgba(138,31,31,0.5);}
 }
 
 /* ===== СЕКЦИИ С РАМКАМИ ===== */
@@ -204,7 +204,7 @@ section {
 section h2 { 
   font-size:24px; 
   margin-bottom:20px; 
-  color:#ffab91; 
+  color:#ff5555; 
   text-align:center; 
   text-shadow: 2px 2px 0 #5d4037;
   letter-spacing: 2px;
@@ -236,14 +236,14 @@ section p {
   border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKElEQVRYR+3VwQkAIBDEwJ79l4YFCyOIZnQ+cM0h0LzbHtM9q/d7AQAAAAAAAAAAAAAAAPA0D5IB1Uy6K7wAAAAASUVORK5CYII=') 10 repeat;
 }
 .feature-card h3 { 
-  color:#ffab91; 
+  color:#ff5555; 
   margin-bottom:8px; 
   font-size:16px;
   text-shadow: 1px 1px 0 #5d4037;
 }
 .feature-card:hover { 
   transform:translateY(-2px); 
-  border-color: #d32f2f;
+  border-color: #8a1f1f;
 }
 
 /* ===== ГАЛЕРЕЯ ===== */
@@ -264,15 +264,15 @@ section p {
   display:flex; 
   align-items:center; 
   justify-content:center; 
-  color:#ffab91; 
+  color:#ff5555; 
   font-size:10px; 
   transition:0.3s;
   background-size: cover;
 }
 .gallery-item:hover { 
   transform:scale(1.03); 
-  border-color: #d32f2f;
-  box-shadow: 0 0 5px rgba(211,47,47,0.5);
+  border-color: #8a1f1f;
+  box-shadow: 0 0 5px rgba(138,31,31,0.5);
 }
 
 /* ===== ФУТЕР ===== */
@@ -326,7 +326,7 @@ footer {
     <div class="hero-content">
       <h1>ATLAS</h1>
       <div class="subtitle">Multiplayer • MMO • Sandbox</div>
-      <p>You've inherited your grandfather's old farm plot in Atlas Valley. Armed with hand-me-down tools and a few coins, you set out to begin your new life!</p>
+      <p>Forge your legend in a world where every block must be earned, every monster conquered, and every victory is yours alone.</p>
       <a href="#download" class="btn primary">SOON...</a>
       <a href="https://discord.gg/YOUR_SERVER" target="_blank" class="btn">DISCORD</a>
     </div>
@@ -337,28 +337,20 @@ footer {
     <h2>Atlas Exclusive Features</h2>
     <div class="features-grid">
       <div class="feature-card">
-        <h3>Create the farm of your dreams</h3>
-        <p>Turn your overgrown fields into a lively and bountiful farm!</p>
+        <h3>World Conquest</h3>
+        <p>New worlds contain monsters and dungeons that must be cleared to claim them as safe spots.</p>
       </div>
       <div class="feature-card">
-        <h3>Learn to live off the land</h3>
-        <p>Raise animals, go fishing, tend to crops, craft items, or do it all! The choice is yours...</p>
+        <h3>World Ownership</h3>
+        <p>Clear monsters and bosses to lock the world and become its owner, creating your personal territory.</p>
       </div>
       <div class="feature-card">
-        <h3>Become a part of the local community</h3>
-        <p>Pelican Town is home to over 30 residents you can befriend!</p>
+        <h3>Monster Killer Ranks</h3>
+        <p>Progress from E to S rank by defeating monsters, unlocking new challenges and content.</p>
       </div>
       <div class="feature-card">
-        <h3>Meet someone special</h3>
-        <p>With 12 townsfolk to date, you may even find someone to start a family with!</p>
-      </div>
-      <div class="feature-card">
-        <h3>Explore vast, mysterious caves</h3>
-        <p>Encounter dangerous monsters & valuable treasures deep underground!</p>
-      </div>
-      <div class="feature-card">
-        <h3>Customize</h3>
-        <p>There are hundreds of character & home decoration options to choose from!</p>
+        <h3>Guild Raids</h3>
+        <p>Participate in timed dungeons with your guild, fight powerful monsters, and earn unique rewards.</p>
       </div>
     </div>
   </section>
@@ -368,7 +360,7 @@ footer {
     <h2>Game Trailer</h2>
     <div class="trailer-container">
       <div style="background: #1a120b; border: 2px solid #5d4037; width: 100%; max-width: 640px; height: 360px; display: flex; align-items: center; justify-content: center; margin: 20px auto;">
-        <span class="glow" style="color: #d32f2f; font-size: 24px;">TRAILER COMING SOON</span>
+        <span class="glow" style="color: #8a1f1f; font-size: 24px;">TRAILER COMING SOON</span>
       </div>
     </div>
   </section>
@@ -377,15 +369,15 @@ footer {
   <section>
     <h2>Screenshots</h2>
     <div class="gallery">
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">IN-GAME</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">MINING</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">BOSSES</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">BUILDING</div>
-      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">RAIDS</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 1</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 2</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 3</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 4</div>
+      <div class="gallery-item" style="background: #1a120b; border: 2px solid #5d4037;">SCREENSHOT 5</div>
     </div>
   </section>
 
-  <!-- DOWNLOAD -->
+  <!-- SOON... -->
   <section id="download">
     <div class="download-section" style="background: rgba(25,21,15,0.8); border: 2px solid #5d4037; padding: 30px; text-align: center; max-width: 700px;">
       <h2>Coming Soon</h2>
